@@ -1,0 +1,11 @@
+package com.example.hotbedagrocontrolapp.domain
+
+interface Client {
+    suspend fun connect()
+    suspend fun publish(topic: String, message: String)
+    suspend fun disconnect()
+
+    companion object {
+        const val CLIENT_TAG = "Mqtt client"
+    }
+}
