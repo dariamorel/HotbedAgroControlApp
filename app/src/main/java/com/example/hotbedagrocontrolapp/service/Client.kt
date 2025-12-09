@@ -1,8 +1,8 @@
 package com.example.hotbedagrocontrolapp.service
 
 import android.util.Log
-import com.example.hotbedagrocontrolapp.domain.Client
-import com.example.hotbedagrocontrolapp.domain.Client.Companion.CLIENT_TAG
+import com.example.hotbedagrocontrolapp.domain.interfaces.Client
+import com.example.hotbedagrocontrolapp.domain.interfaces.Client.Companion.CLIENT_TAG
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttClient
@@ -61,11 +61,12 @@ class ClientImpl(
             override fun deliveryComplete(token: IMqttDeliveryToken?) {}
         })
 
-        mqttClient.subscribe(mainTopic, 1)
+        mqttClient.subscribe("$mainTopic/#", 1)
     }
 
     override suspend fun publish(topic: String, message: String) {
-        mqttClient.publish(topic, MqttMessage(message.toByteArray()))
+        mqttClient.publish("$mainTopic/$topic/cmd_t", MqttMessage(message.toByteArray()))
+        mqttClient.publish("$mainTopic/$topic/stat_t", MqttMessage(message.toByteArray()))
     }
 
     override suspend fun disconnect() = mqttClient.disconnect()

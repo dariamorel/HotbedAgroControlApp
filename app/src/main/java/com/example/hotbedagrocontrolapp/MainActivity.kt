@@ -14,7 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.example.hotbedagrocontrolapp.domain.Client.Companion.CLIENT_TAG
+import com.example.hotbedagrocontrolapp.domain.interfaces.Client.Companion.CLIENT_TAG
 import com.example.hotbedagrocontrolapp.service.ClientImpl
 import com.example.hotbedagrocontrolapp.ui.theme.HotbedAgroControlAppTheme
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
 
     val client = ClientImpl(
         "80.237.33.119",
-        "aha/HBed/#",
+        "aha/HBed",
         "user_umki11",
         "654321"
     ) { topic, message ->

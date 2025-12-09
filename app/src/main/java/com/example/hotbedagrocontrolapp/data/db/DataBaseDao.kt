@@ -1,4 +1,4 @@
-package com.example.hotbedagrocontrolapp.data
+package com.example.hotbedagrocontrolapp.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -8,7 +8,7 @@ import com.example.hotbedagrocontrolapp.domain.entities.HBedEntity
 
 @Dao
 interface DataBaseDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertData(hBedEntity: HBedEntity)
 
     @Query("""

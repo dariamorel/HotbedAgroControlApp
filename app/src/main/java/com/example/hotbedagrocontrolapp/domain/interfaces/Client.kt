@@ -1,4 +1,4 @@
-package com.example.hotbedagrocontrolapp.domain
+package com.example.hotbedagrocontrolapp.domain.interfaces
 
 interface Client {
     suspend fun connect()

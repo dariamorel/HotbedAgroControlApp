@@ -7,7 +7,7 @@ sealed class Response {
 data class SensorResponse(override val data: Double): Response()
 
 data class ControlResponse(override val data: Status): Response() {
-    enum class Status(message: String) {
+    enum class Status(val message: String) {
         ON("ON"), OFF("OFF")
     }
 }

@@ -5,10 +5,14 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hotbedagrocontrolapp.data.DataBaseManager
-import com.example.hotbedagrocontrolapp.data.DataBaseManager.Companion.DATA_BASE_TAG
+import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
+import com.example.hotbedagrocontrolapp.data.db.DataBaseManager.Companion.DATA_BASE_TAG
+import com.example.hotbedagrocontrolapp.domain.entities.Control
+import com.example.hotbedagrocontrolapp.domain.entities.ControlResponse
 import com.example.hotbedagrocontrolapp.domain.entities.Element
 import com.example.hotbedagrocontrolapp.domain.entities.Response
+import com.example.hotbedagrocontrolapp.domain.interfaces.Client.Companion.CLIENT_TAG
+import com.example.hotbedagrocontrolapp.domain.interfaces.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 class AgroControlViewModel(
-    private val dataBaseManager: DataBaseManager
+    private val repository: Repository
 ) : ViewModel() {
     private val _currentData = MutableStateFlow<MutableMap<Element, Response>>(mutableMapOf())
     val currentData = _currentData.asStateFlow()
@@ -29,11 +33,20 @@ class AgroControlViewModel(
     private fun insertCurrentData(element: Element, response: Response) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                _currentData.value[element] = response
                 val currentTime = LocalDateTime.now()
-                dataBaseManager.insertData(element, response, currentTime)
+                repository.insertData(element, response, currentTime)
             } catch (e: Exception) {
                 Log.e(DATA_BASE_TAG, "Error while inserting new data in db: ${e.message}.")
+            }
+        }
+    }
+
+    fun publish(control: Control, status: ControlResponse.Status) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.publish(control, status)
+            } catch (e: Exception) {
+                Log.e(CLIENT_TAG, "Error while publishing data: ${e.message}.")
             }
         }
     }

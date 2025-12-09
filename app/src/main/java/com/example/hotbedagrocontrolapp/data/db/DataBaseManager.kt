@@ -1,4 +1,4 @@
-package com.example.hotbedagrocontrolapp.data
+package com.example.hotbedagrocontrolapp.data.db
 
 import android.content.Context
 import android.util.Log
