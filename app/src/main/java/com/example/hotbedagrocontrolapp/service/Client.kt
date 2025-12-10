@@ -15,11 +15,10 @@ class ClientImpl(
     private val mainTopic: String,
     private val clientUserName: String,
     private val clientPassword: String,
-    private val onMessageReceived: (String, String) -> Unit
 ): Client {
     private lateinit var mqttClient: MqttClient
 
-    override suspend fun connect() {
+    override suspend fun connect(onMessageReceived: (String, String) -> Unit) {
         val serverUri = "tcp://$IPAddress:12883"
 
         val options = MqttConnectOptions().apply {
@@ -44,9 +43,9 @@ class ClientImpl(
                 topic: String?,
                 message: MqttMessage?
             ) {
-                Log.e(CLIENT_TAG, "Message was received.")
                 val topicString = topic.toString()
                 val messageString = message.toString()
+                Log.e(CLIENT_TAG, "Message received: $topicString, $messageString.")
                 if (topicString.isEmpty()) {
                     Log.e(CLIENT_TAG, "Received topic is null or empty.")
                     return

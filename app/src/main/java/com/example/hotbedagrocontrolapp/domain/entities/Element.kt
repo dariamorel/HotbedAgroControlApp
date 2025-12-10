@@ -1,17 +1,94 @@
 package com.example.hotbedagrocontrolapp.domain.entities
 
+import androidx.compose.ui.graphics.Color
+import com.example.hotbedagrocontrolapp.R
+import com.example.hotbedagrocontrolapp.ui.theme.BottlePurple
+import com.example.hotbedagrocontrolapp.ui.theme.SunYellow
+import com.example.hotbedagrocontrolapp.ui.theme.WaterBlue
+
 interface Element {
     val topic: String
+    val elementName: String
+    val iconInfo: IconInfo
 }
 
-enum class Sensor(override val topic: String): Element {
-    AIR_HUMIDITY("HBed_agr_h"), AIR_TEMPERATURE("HBed_agr_t"),
-    FLUID_TEMPERATURE("HBed_agr_tds"), FLUID_LEVEL("HBed_agr_lv"),
-    EC("HBed_agr_ec"), LUX("HBed_agr_l"), PH("HBed_agr_ph")
+enum class Sensor(
+    override val topic: String,
+    override val elementName: String,
+    override val iconInfo: IconInfo
+) : Element {
+    AIR_HUMIDITY(
+        "HBed_agr_h",
+        "Влажность воздуха",
+        IconInfo(R.drawable.air_humidity, WaterBlue)
+    ),
+    AIR_TEMPERATURE(
+        "HBed_agr_t",
+        "Температура воздуха",
+        IconInfo(R.drawable.air_temperature, BottlePurple)
+    ),
+    FLUID_TEMPERATURE(
+        "HBed_agr_tds",
+        "Температура раствора",
+        IconInfo(R.drawable.fluid_temperature, WaterBlue)
+    ),
+    FLUID_LEVEL(
+        "HBed_agr_lv",
+        "Уровень жидкости",
+        IconInfo(R.drawable.fluid_level, WaterBlue)
+    ),
+    EC(
+        "HBed_agr_ec",
+        "EC",
+        IconInfo(R.drawable.ec, SunYellow)
+    ),
+    LUX(
+        "HBed_agr_l",
+        "Lux",
+        IconInfo(R.drawable.sun, SunYellow)
+    ),
+    PH(
+        "HBed_agr_ph",
+        "PH",
+        IconInfo(R.drawable.ph, BottlePurple)
+    )
 }
 
-enum class Control(override val topic: String): Element {
-    CLEAR_CLOUDY("ClearCloudy"), RELAY_1("relay1"),
-    RELAY_2("relay2"), RELAY_3("relay3"),
-    IF_EC("IFEC"), IF_PH("IFPH");
+enum class Control(
+    override val topic: String,
+    override val elementName: String,
+    override val iconInfo: IconInfo
+) : Element {
+    CLEAR_CLOUDY(
+        "ClearCloudy",
+        "Ясно/Пасмурно",
+        IconInfo(R.drawable.sun, SunYellow)
+    ),
+    RELAY_1(
+        "relay1",
+        "Реле 1",
+        IconInfo(R.drawable.relay, Color.DarkGray)
+    ),
+    RELAY_2(
+        "relay2",
+        "Реле 2",
+        IconInfo(R.drawable.relay, Color.DarkGray)
+    ),
+    RELAY_3("relay3",
+        "Реле 3",
+        IconInfo(R.drawable.relay, Color.DarkGray)
+    ),
+    IF_EC("IFEC",
+        "EC",
+        IconInfo(R.drawable.ec, SunYellow)
+    ),
+    IF_PH("IFPH",
+        "PH",
+        IconInfo(R.drawable.ph, BottlePurple)
+    );
 }
+
+data class IconInfo(
+    val resourceId: Int,
+    val tint: Color
+)
