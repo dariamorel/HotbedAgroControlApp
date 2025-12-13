@@ -54,6 +54,10 @@ class DataBaseManager(ctx: Context) {
         }
     }
 
+    suspend fun clearDataBase() {
+        dataBase.dataBaseDao.cleanDataBase()
+    }
+
     private fun buildDataBase(ctx: Context): DataBase {
         return Room
             .databaseBuilder(
@@ -61,7 +65,7 @@ class DataBaseManager(ctx: Context) {
                 DataBase::class.java,
                 "h_bed.db"
             )
-            .fallbackToDestructiveMigration(dropAllTables = true)
+            .fallbackToDestructiveMigration()
             .build()
     }
 

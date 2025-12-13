@@ -21,9 +21,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
 import com.example.hotbedagrocontrolapp.domain.interfaces.Client.Companion.CLIENT_TAG
 import com.example.hotbedagrocontrolapp.presentation.ui.ElementsScreen
+import com.example.hotbedagrocontrolapp.presentation.ui.MainScreen
+import com.example.hotbedagrocontrolapp.presentation.ui.Screens
+import com.example.hotbedagrocontrolapp.presentation.ui.components.StatisticsScreen
 import com.example.hotbedagrocontrolapp.presentation.viewModel.AgroControlViewModel
 import com.example.hotbedagrocontrolapp.service.ClientImpl
 import com.example.hotbedagrocontrolapp.ui.theme.HotbedAgroControlAppTheme
@@ -63,15 +69,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HotbedAgroControlAppTheme(dynamicColor = false) {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    containerColor = MaterialTheme.colorScheme.background
-                ) { innerPadding ->
-                    ElementsScreen(
-                        viewModel = agroControlViewModel,
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MainScreen(
+                    agroControlViewModel = agroControlViewModel,
+                )
             }
         }
     }

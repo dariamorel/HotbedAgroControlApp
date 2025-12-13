@@ -7,7 +7,8 @@ import com.example.hotbedagrocontrolapp.domain.entities.HBedEntity
 
 @Database(
     entities = [HBedEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class DataBase: RoomDatabase() {
     abstract val dataBaseDao: DataBaseDao
