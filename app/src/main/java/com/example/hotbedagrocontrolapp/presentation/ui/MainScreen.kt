@@ -24,6 +24,7 @@ import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -63,7 +64,7 @@ fun MainScreen(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(
-                drawerContainerColor = MaterialTheme.colorScheme.background
+                drawerContainerColor = MaterialTheme.colorScheme.surface
             ) {
                 Spacer(Modifier.padding(8.dp))
                 Screens.entries.forEach { screen ->
@@ -78,7 +79,7 @@ fun MainScreen(
                             selectedScreen = screen
                             navController.navigate(screen.title) },
                         colors = NavigationDrawerItemDefaults.colors(
-                            selectedContainerColor = MaterialTheme.colorScheme.surface
+                            selectedContainerColor = MaterialTheme.colorScheme.background
                         ),
                         shape = ShapeDefaults.Small
                     )
@@ -99,6 +100,9 @@ fun MainScreen(
                             Icon(Icons.Filled.Menu, contentDescription = "Меню")
                         }
                     },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    )
                 )
             },
             modifier = Modifier.fillMaxSize(),

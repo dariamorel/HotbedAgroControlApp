@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            HotbedAgroControlAppTheme(dynamicColor = false) {
+            HotbedAgroControlAppTheme(dynamicColor = false, darkTheme = false) {
                 MainScreen(
                     agroControlViewModel = agroControlViewModel,
                 )

@@ -16,10 +16,6 @@ import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotbedagrocontrolapp.domain.entities.Control
 import com.example.hotbedagrocontrolapp.domain.entities.ControlResponse
+import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
+import com.example.hotbedagrocontrolapp.ui.theme.DarkGreen
+import com.example.hotbedagrocontrolapp.ui.theme.LightBrown
+import com.example.hotbedagrocontrolapp.ui.theme.LightGreen
 
 @Composable
 fun ControlComponent(
@@ -71,7 +71,12 @@ fun ControlComponent(
             ) {
                 Switch(
                     checked = response.data == ControlResponse.Status.ON,
-                    onCheckedChange = onStatusChanged
+                    onCheckedChange = onStatusChanged,
+                    colors = SwitchDefaults.colors(
+                        checkedTrackColor = DarkGreen,
+                        uncheckedTrackColor = LightGreen,
+                        checkedThumbColor = DarkBrown,
+                    )
                 )
             }
         }

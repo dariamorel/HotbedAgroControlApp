@@ -79,11 +79,11 @@ enum class Control(
         IconInfo(R.drawable.relay, Color.DarkGray)
     ),
     IF_EC("IFEC",
-        "EC",
+        "Вкл/Выкл\nEC",
         IconInfo(R.drawable.ec, SunYellow)
     ),
     IF_PH("IFPH",
-        "PH",
+        "Вкл/Выкл\nPH",
         IconInfo(R.drawable.ph, BottlePurple)
     );
 }
