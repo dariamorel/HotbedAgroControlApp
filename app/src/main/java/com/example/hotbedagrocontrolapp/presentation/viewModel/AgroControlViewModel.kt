@@ -17,7 +17,11 @@ import com.example.hotbedagrocontrolapp.domain.interfaces.Client
 import com.example.hotbedagrocontrolapp.domain.interfaces.Client.Companion.CLIENT_TAG
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
@@ -28,10 +32,7 @@ class AgroControlViewModel(
 ) : ViewModel() {
     private val _currentData = MutableStateFlow<MutableMap<Element, Response>>(mutableMapOf())
     val currentData = _currentData.asStateFlow()
-
-    private val _dataHistory =
-        MutableStateFlow<Map<LocalDateTime, Map<Element, Response>>>(emptyMap())
-    val dataHistory = _dataHistory.asStateFlow()
+    private val _dataHistory = mutableMapOf<Element, StateFlow<List<Pair<LocalDateTime, Response>>>>()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -42,6 +43,20 @@ class AgroControlViewModel(
                 Log.e(CLIENT_TAG, "Connection error: ${e.message}")
             }
         }
+    }
+
+    fun getDataHistory(element: Element): StateFlow<List<Pair<LocalDateTime, Response>>> {
+        if (_dataHistory[element] != null) {
+            return _dataHistory[element]!!
+        }
+        val flow = dataBaseManager.dataHistory[element] ?: emptyFlow()
+        val stateFlow = flow.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = emptyList()
+        )
+        _dataHistory[element] = stateFlow
+        return stateFlow
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -81,7 +96,7 @@ class AgroControlViewModel(
         val newMap = _currentData.value.toMutableMap()
         newMap[element] = response
         _currentData.value = newMap
-//        insertCurrentData(element, response)
+        insertCurrentData(element, response)
     }
 
     fun onStatusChanged(control: Control, isControlOn: Boolean) {
