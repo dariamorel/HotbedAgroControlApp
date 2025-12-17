@@ -39,7 +39,7 @@ class AgroControlViewModel(
     private val _currentData = MutableStateFlow<MutableMap<Element, Response>>(mutableMapOf())
     val currentData = _currentData.asStateFlow()
     private val _dataHistory =
-        mutableMapOf<Element, StateFlow<Map<String, Response>>>()
+        mutableMapOf<HistoryItem, StateFlow<Map<String, Response>>>()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -57,8 +57,8 @@ class AgroControlViewModel(
         by: HistoryBy,
         dateTime: LocalDateTime
     ): StateFlow<Map<String, Response>> {
-        if (_dataHistory[element] != null) {
-            return _dataHistory[element]!!
+        _dataHistory[HistoryItem(element, by, dateTime)]?.let {
+            return it
         }
         val flow = filterBy(dataBaseManager.dataHistory[element] ?: emptyFlow(), by, dateTime)
 
@@ -67,7 +67,7 @@ class AgroControlViewModel(
             started = SharingStarted.Lazily,
             initialValue = emptyMap()
         )
-        _dataHistory[element] = stateFlow
+        _dataHistory[HistoryItem(element, by, dateTime)] = stateFlow
         return stateFlow
     }
 
@@ -240,3 +240,9 @@ class AgroControlViewModel(
         }
     }
 }
+
+data class HistoryItem(
+    val element: Element,
+    val by: HistoryBy,
+    val dateTime: LocalDateTime
+)

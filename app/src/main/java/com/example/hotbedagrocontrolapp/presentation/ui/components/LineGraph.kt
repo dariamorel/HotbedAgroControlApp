@@ -45,9 +45,6 @@ fun LineGraph(
     values: Map<String, Response>,
     modifier: Modifier = Modifier
 ) {
-    val state = rememberScrollState()
-    LaunchedEffect(Unit) { state.animateScrollTo(100) }
-
     LineChart(
         modifier = Modifier
             .fillMaxSize()
