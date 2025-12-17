@@ -46,9 +46,10 @@ fun StatisticsScreen(
     modifier: Modifier = Modifier
 ) {
     val element = Sensor.AIR_TEMPERATURE
-    val dateTime = setCorrectDateTime(2025, 12, 17, 22)
     var historyBy by remember { mutableStateOf(HistoryBy.DAY) }
+    val dateTime = setCorrectDateTime(LocalDateTime.now(), historyBy)
     val values by viewModel.getDataHistory(element, historyBy, dateTime).collectAsState()
+    Log.d("Statistics", "Size: ${values.size}.")
 
     Column(
         modifier = modifier.fillMaxSize().padding(20.dp),
@@ -59,6 +60,7 @@ fun StatisticsScreen(
         ) { selected ->
             historyBy = selected
         }
+        Text(dateTime.toString())
 
         LineGraph(Sensor.AIR_TEMPERATURE, values)
     }
@@ -66,12 +68,15 @@ fun StatisticsScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun setCorrectDateTime(
-    year: Int,
-    month: Int = 1,
-    day: Int = 1,
-    hour: Int = 0,
-    minute: Int = 0
-): LocalDateTime = LocalDateTime.of(year, month, day, hour, minute)
+    dateTime: LocalDateTime,
+    historyBy: HistoryBy
+): LocalDateTime =
+    when (historyBy) {
+        HistoryBy.YEAR -> LocalDateTime.of(dateTime.year, 1, 1, 0, 0)
+        HistoryBy.MONTH -> LocalDateTime.of(dateTime.year, dateTime.month, 1, 0, 0)
+        HistoryBy.DAY -> LocalDateTime.of(dateTime.year, dateTime.month, dateTime.dayOfMonth, 0, 0)
+        HistoryBy.HOUR -> LocalDateTime.of(dateTime.year, dateTime.month, dateTime.dayOfMonth, dateTime.hour, 0)
+}
 
 @Composable
 fun ChooseAnaliseMenu(

@@ -102,7 +102,6 @@ class AgroControlViewModel(
                         .associate { it.first.format(DateTimeFormatter.ofPattern("dd")) to it.second }
                         .toSortedMap()
                     for (i in 1L until 31L step 2) {
-                        Log.d("Statistics", "i: $i")
                         val dateItem = dateTime.plusDays(i)
                             .format(DateTimeFormatter.ofPattern("dd"))
 
