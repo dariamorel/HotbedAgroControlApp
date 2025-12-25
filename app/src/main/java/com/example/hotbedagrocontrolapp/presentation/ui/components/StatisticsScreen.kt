@@ -55,23 +55,26 @@ fun StatisticsScreen(
     viewModel: AgroControlViewModel,
     modifier: Modifier = Modifier
 ) {
-    val element = Sensor.AIR_TEMPERATURE
-    var historyBy by remember { mutableStateOf(HistoryBy.HOUR) }
+    var sensor by remember { mutableStateOf(Sensor.AIR_TEMPERATURE) }
+    var historyBy by remember { mutableStateOf(HistoryBy.DAY) }
     var dateTime by remember { mutableStateOf(setCorrectDateTime(LocalDateTime.now(), historyBy)) }
-    val values by viewModel.getDataHistory(element, historyBy, dateTime).collectAsState()
+    val values by viewModel.getDataHistory(sensor, historyBy, dateTime).collectAsState()
     Log.d("Statistics", "Size: ${values.size}.")
 
     Column(
         modifier = modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        ChooseAnaliseMenu(
-            modifier = Modifier
-        ) { selected ->
-            historyBy = selected
+        SwitchSensor { selected ->
+            sensor = selected
         }
 
-        SwitchDateTime(historyBy) { newDateTime ->
+        SwitchHistoryBy { selected ->
+            historyBy = selected
+            dateTime = setCorrectDateTime(LocalDateTime.now(), historyBy)
+        }
+
+        SwitchDateTime(historyBy, dateTime) { newDateTime ->
             dateTime = newDateTime
         }
 
@@ -94,7 +97,7 @@ fun setCorrectDateTime(
 }
 
 @Composable
-fun ChooseAnaliseMenu(
+fun SwitchHistoryBy(
     modifier: Modifier = Modifier,
     onSelectedChange: (HistoryBy) -> Unit = {}
 ) {
@@ -145,27 +148,24 @@ fun ChooseAnaliseMenu(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SwitchDateTime(
     historyBy: HistoryBy,
+    dateTime: LocalDateTime,
     modifier: Modifier = Modifier,
     onSelectedChange: (LocalDateTime) -> Unit = {}
 ) {
-    var dateTime by remember { mutableStateOf(setCorrectDateTime(LocalDateTime.now(), historyBy)) }
-
     Row {
          Icon(
              imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
              modifier = Modifier.clickable {
                  when (historyBy) {
-                     HistoryBy.HOUR -> { dateTime = dateTime.minusHours(1) }
-                     HistoryBy.DAY -> { dateTime = dateTime.minusDays(1) }
-                     HistoryBy.MONTH -> { dateTime = dateTime.minusMonths(1) }
-                     HistoryBy.YEAR -> { dateTime = dateTime.minusYears(1) }
+                     HistoryBy.HOUR -> { onSelectedChange(dateTime.minusHours(1)) }
+                     HistoryBy.DAY -> { onSelectedChange(dateTime.minusDays(1)) }
+                     HistoryBy.MONTH -> { onSelectedChange(dateTime.minusMonths(1)) }
+                     HistoryBy.YEAR -> { onSelectedChange(dateTime.minusYears(1)) }
                  }
-                 onSelectedChange(dateTime)
              },
              contentDescription = "DateTime back"
          )
@@ -177,14 +177,65 @@ fun SwitchDateTime(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             modifier = Modifier.clickable {
                 when (historyBy) {
-                    HistoryBy.HOUR -> { dateTime = dateTime.plusHours(1) }
-                    HistoryBy.DAY -> { dateTime = dateTime.plusDays(1) }
-                    HistoryBy.MONTH -> {dateTime = dateTime.plusMonths(1) }
-                    HistoryBy.YEAR -> {dateTime = dateTime.plusYears(1) }
+                    HistoryBy.HOUR -> { onSelectedChange(dateTime.plusHours(1)) }
+                    HistoryBy.DAY -> { onSelectedChange(dateTime.plusDays(1)) }
+                    HistoryBy.MONTH -> { onSelectedChange(dateTime.plusMonths(1)) }
+                    HistoryBy.YEAR -> { onSelectedChange(dateTime.plusYears(1)) }
                 }
-                onSelectedChange(dateTime)
             },
             contentDescription = "DateTime forward"
         )
+    }
+}
+
+@Composable
+fun SwitchSensor(
+    modifier: Modifier = Modifier,
+    onSelectedChange: (Sensor) -> Unit = {}
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(Sensor.AIR_TEMPERATURE.elementName) }
+    var textFieldSize by remember { mutableStateOf(Size.Zero)}
+
+    val icon = if (expanded)
+        Icons.Filled.KeyboardArrowUp
+    else
+        Icons.Filled.KeyboardArrowDown
+
+    Box {
+        Row(
+            Modifier.fillMaxWidth()
+                .clickable { expanded = !expanded }
+                .onGloballyPositioned { coordinates ->
+                    textFieldSize = coordinates.size.toSize()
+                }
+                .border(width=1.dp, color=Color.Black, shape = RoundedCornerShape(5.dp))
+                .padding(20.dp)
+        ) {
+            Text(
+                text = selectedText,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.weight(1f)
+            )
+            Icon(icon,"KeyboardArrow")
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .width(with(LocalDensity.current){textFieldSize.width.toDp()})
+        ) {
+            Sensor.entries.forEach {
+                DropdownMenuItem(
+                    text = { Text(text = it.elementName) },
+                    onClick = {
+                        selectedText = it.elementName
+                        expanded = false
+                        onSelectedChange(it)
+                    }
+                )
+            }
+        }
     }
 }
