@@ -3,7 +3,6 @@ package com.example.hotbedagrocontrolapp.presentation.ui
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -20,13 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hotbedagrocontrolapp.domain.entities.Control
-import com.example.hotbedagrocontrolapp.domain.entities.ControlResponse
-import com.example.hotbedagrocontrolapp.domain.entities.Sensor
-import com.example.hotbedagrocontrolapp.domain.entities.SensorResponse
-import com.example.hotbedagrocontrolapp.presentation.ui.components.ControlComponent
-import com.example.hotbedagrocontrolapp.presentation.ui.components.SensorComponent
-import com.example.hotbedagrocontrolapp.presentation.viewModel.AgroControlViewModel
+import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
+import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
+import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
+import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
+import com.example.hotbedagrocontrolapp.presentation.ui.components.elements.ControlComponent
+import com.example.hotbedagrocontrolapp.presentation.ui.components.elements.SensorComponent
+import com.example.hotbedagrocontrolapp.presentation.viewModel.elements.AgroControlViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

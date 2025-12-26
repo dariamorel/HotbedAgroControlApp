@@ -1,7 +1,6 @@
-package com.example.hotbedagrocontrolapp.domain.entities
+package com.example.hotbedagrocontrolapp.data.db
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "hotbed_agro_control_history",

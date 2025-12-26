@@ -4,27 +4,15 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
 import androidx.room.Room
-import com.example.hotbedagrocontrolapp.domain.entities.Control
-import com.example.hotbedagrocontrolapp.domain.entities.ControlResponse
-import com.example.hotbedagrocontrolapp.domain.entities.Element
-import com.example.hotbedagrocontrolapp.domain.entities.HBedEntity
-import com.example.hotbedagrocontrolapp.domain.entities.Response
-import com.example.hotbedagrocontrolapp.domain.entities.Sensor
-import com.example.hotbedagrocontrolapp.domain.entities.SensorResponse
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
+import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
+import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
+import com.example.hotbedagrocontrolapp.domain.entities.elements.Element
+import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
+import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
+import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.stateIn
 import java.time.LocalDateTime
 
 class DataBaseManager(ctx: Context) {

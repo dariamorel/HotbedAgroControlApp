@@ -1,4 +1,4 @@
-package com.example.hotbedagrocontrolapp.presentation.ui.components
+package com.example.hotbedagrocontrolapp.presentation.ui.components.elements
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchColors
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,12 +21,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.hotbedagrocontrolapp.domain.entities.Control
-import com.example.hotbedagrocontrolapp.domain.entities.ControlResponse
+import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
+import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
 import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
 import com.example.hotbedagrocontrolapp.ui.theme.DarkGreen
-import com.example.hotbedagrocontrolapp.ui.theme.LightBrown
 import com.example.hotbedagrocontrolapp.ui.theme.LightGreen
 
 @Composable

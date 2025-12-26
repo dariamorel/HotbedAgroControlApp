@@ -1,12 +1,8 @@
 package com.example.hotbedagrocontrolapp.presentation.ui
 
-import android.graphics.drawable.Icon
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -18,10 +14,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemColors
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -35,13 +29,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.hotbedagrocontrolapp.presentation.ui.components.StatisticsScreen
-import com.example.hotbedagrocontrolapp.presentation.viewModel.AgroControlViewModel
+import com.example.hotbedagrocontrolapp.presentation.viewModel.elements.AgroControlViewModel
+import com.example.hotbedagrocontrolapp.presentation.viewModel.statistics.StatisticsViewModel
 import kotlinx.coroutines.launch
 
 enum class Screens(val title: String) {
@@ -55,6 +47,7 @@ enum class Screens(val title: String) {
 @Composable
 fun MainScreen(
     agroControlViewModel: AgroControlViewModel,
+    statisticsViewModel: StatisticsViewModel,
     modifier: Modifier = Modifier
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -126,8 +119,8 @@ fun MainScreen(
                 }
 
                 composable(Screens.STATISTICS.title) {
-                    StatisticsScreen(
-                        viewModel = agroControlViewModel,
+                    StatisticsGraphScreen(
+                        viewModel = statisticsViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
