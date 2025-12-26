@@ -4,7 +4,10 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
@@ -40,20 +44,23 @@ fun StatisticsGraphScreen(
         modifier = modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        SwitchSensor { selected ->
-            sensor = selected
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            SwitchSensor(Modifier.weight(2f)) { selected ->
+                sensor = selected
+            }
+
+            SwitchAnaliseType(Modifier.weight(1f)) { selected ->
+                analiseType = selected
+                dateTime = DateTime(analiseType)
+            }
         }
 
-        SwitchAnaliseType { selected ->
-            analiseType = selected
-            dateTime = DateTime(analiseType)
-        }
-
-        SwitchDateTime(dateTime) { newDateTime ->
+        SwitchDateTime(dateTime, Modifier.align(Alignment.End)) { newDateTime ->
             dateTime = newDateTime
         }
-
-        Text(dateTime.localDateTime.toString())
 
         LineGraph(Sensor.AIR_TEMPERATURE, values)
     }

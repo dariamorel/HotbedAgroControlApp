@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
+import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -23,7 +24,7 @@ fun SwitchDateTime(
     modifier: Modifier = Modifier,
     onSelectedChange: (DateTime) -> Unit = {}
 ) {
-    Row {
+    Row(modifier) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
             modifier = Modifier.clickable { onSelectedChange(dateTime.minus(1)) },
@@ -31,6 +32,7 @@ fun SwitchDateTime(
         )
         Text(
             text = dateTime.fullString,
+            color = DarkBrown,
             style = MaterialTheme.typography.titleMedium
         )
         Icon(
