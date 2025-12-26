@@ -54,7 +54,7 @@ fun StatisticsGraphScreen(
 
             SwitchAnaliseType(Modifier.weight(1f)) { selected ->
                 analiseType = selected
-                dateTime = DateTime(analiseType)
+                dateTime = DateTime(analiseType, dateTime.localDateTime)
             }
         }
 

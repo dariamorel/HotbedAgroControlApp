@@ -79,8 +79,7 @@ class StatisticsViewModel(
                     list.filter {
                         it.first.year == dateTime.localDateTime.year
                                 && it.first.month == dateTime.localDateTime.month
-                                && (it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
-                                || (it.first.dayOfMonth == dateTime.localDateTime.plusDays(1).dayOfMonth && it.first.hour == 0))
+                                && it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
                     }
                         .distinctBy { it.first.hour }
                         .filter { it.first.hour % 3 == 0 }
@@ -91,8 +90,7 @@ class StatisticsViewModel(
                         it.first.year == dateTime.localDateTime.year
                                 && it.first.month == dateTime.localDateTime.month
                                 && it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
-                                && (it.first.hour == dateTime.localDateTime.hour
-                                || (it.first.hour == dateTime.localDateTime.plusHours(1).hour) && it.first.minute == 0)
+                                && it.first.hour == dateTime.localDateTime.hour
                     }
                         .distinctBy { it.first.minute }
                         .filter { it.first.minute % 10 == 0 }
@@ -114,9 +112,9 @@ class StatisticsViewModel(
 
             val range = when (dateTime.analiseType) {
                 AnaliseType.YEAR -> 1L..12L
-                AnaliseType.MONTH -> 0L .. 31L step 5
+                AnaliseType.MONTH -> 0L until 30L step 5
                 AnaliseType.DAY -> 0L until 24L step 3
-                AnaliseType.HOUR -> 0L..60L step 10
+                AnaliseType.HOUR -> 0L until 60L step 10
             }
 
             val iterator = dateTime.iterator
