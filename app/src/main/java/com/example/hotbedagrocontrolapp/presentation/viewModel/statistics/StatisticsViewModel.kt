@@ -53,7 +53,7 @@ class StatisticsViewModel(
         flow: Flow<List<Pair<LocalDateTime, Response>>>,
         dateTime: DateTime
     ): Flow<Map<String, Response>> {
-        val comparator = if (dateTime.analiseType == AnaliseType.YEAR) compareBy<String>{
+        val comparator = if (dateTime.analiseType == AnaliseType.YEAR) compareBy<String> {
             val formatter = DateTimeFormatter.ofPattern("LLLL", Locale("ru"))
             val month = formatter.parse(it)
             month.get(ChronoField.MONTH_OF_YEAR)
@@ -65,23 +65,25 @@ class StatisticsViewModel(
                     list.filter { it.first.year == dateTime.localDateTime.year }
                         .distinctBy { it.first.month }
                 }
+
                 AnaliseType.MONTH -> {
                     list.filter {
                         it.first.year == dateTime.localDateTime.year
                                 && it.first.month == dateTime.localDateTime.month
                     }
                         .distinctBy { it.first.dayOfMonth }
-                        .filter { it.first.dayOfMonth % 2 == 0 }
+                        .filter { (it.first.dayOfMonth - 1) % 5 == 0 }
                 }
 
                 AnaliseType.DAY -> {
                     list.filter {
                         it.first.year == dateTime.localDateTime.year
                                 && it.first.month == dateTime.localDateTime.month
-                                && it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
+                                && (it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
+                                || (it.first.dayOfMonth == dateTime.localDateTime.plusDays(1).dayOfMonth && it.first.hour == 0))
                     }
                         .distinctBy { it.first.hour }
-                        .filter { it.first.hour % 2 == 0 }
+                        .filter { it.first.hour % 3 == 0 }
                 }
 
                 AnaliseType.HOUR -> {
@@ -89,27 +91,32 @@ class StatisticsViewModel(
                         it.first.year == dateTime.localDateTime.year
                                 && it.first.month == dateTime.localDateTime.month
                                 && it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
-                                && it.first.hour == dateTime.localDateTime.hour
+                                && (it.first.hour == dateTime.localDateTime.hour
+                                || (it.first.hour == dateTime.localDateTime.plusHours(1).hour) && it.first.minute == 0)
                     }
                         .distinctBy { it.first.minute }
-                        .filter { it.first.minute % 5 == 0 }
+                        .filter { it.first.minute % 10 == 0 }
                 }
             }.associate {
                 when (dateTime.analiseType) {
-                    AnaliseType.HOUR -> it.first.format(DateTimeFormatter.ofPattern("mm"))
-                    AnaliseType.DAY -> it.first.format(DateTimeFormatter.ofPattern("HH"))
-                    AnaliseType.MONTH -> it.first.format(DateTimeFormatter.ofPattern("dd"))
-                    AnaliseType.YEAR -> it.first.format(DateTimeFormatter.ofPattern("LLLL",
-                        Locale("ru")
-                    ))
-                } to it.second }
+                    AnaliseType.HOUR -> it.first.format(DateTimeFormatter.ofPattern("HH:mm"))
+                    AnaliseType.DAY -> it.first.format(DateTimeFormatter.ofPattern("HHч"))
+                    AnaliseType.MONTH -> it.first.format(DateTimeFormatter.ofPattern("dd.MM"))
+                    AnaliseType.YEAR -> it.first.format(
+                        DateTimeFormatter.ofPattern(
+                            "LLLL",
+                            Locale("ru")
+                        )
+                    )
+                } to it.second
+            }
                 .toSortedMap(comparator)
 
             val range = when (dateTime.analiseType) {
                 AnaliseType.YEAR -> 1L..12L
-                AnaliseType.MONTH -> 1L until 31L step 2
-                AnaliseType.DAY -> 0L until 24L step 2
-                AnaliseType.HOUR -> 0L until 60L step 5
+                AnaliseType.MONTH -> 0L .. 31L step 5
+                AnaliseType.DAY -> 0L until 24L step 3
+                AnaliseType.HOUR -> 0L..60L step 10
             }
 
             val iterator = dateTime.iterator

@@ -78,15 +78,15 @@ class DateTime(
             return when (this@DateTime.analiseType) {
                 AnaliseType.HOUR -> {
                     val newLocalDateTime = localDateTime.plusMinutes(i)
-                    newLocalDateTime.format(DateTimeFormatter.ofPattern("mm"))
+                    newLocalDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
                 }
                 AnaliseType.DAY -> {
                     val newLocalDateTime = localDateTime.plusHours(i)
-                    newLocalDateTime.format(DateTimeFormatter.ofPattern("HH"))
+                    newLocalDateTime.format(DateTimeFormatter.ofPattern("HHч"))
                 }
                 AnaliseType.MONTH -> {
                     val newLocalDateTime = localDateTime.plusDays(i)
-                    newLocalDateTime.format(DateTimeFormatter.ofPattern("dd"))
+                    newLocalDateTime.format(DateTimeFormatter.ofPattern("dd.MM"))
                 }
                 AnaliseType.YEAR -> {
                     val newLocalDateTime = localDateTime.plusMonths(i)

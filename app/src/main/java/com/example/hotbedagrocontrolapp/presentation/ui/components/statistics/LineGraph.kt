@@ -1,11 +1,13 @@
 package com.example.hotbedagrocontrolapp.presentation.ui.components.statistics
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,6 +31,9 @@ import ir.ehsannarmani.compose_charts.models.HorizontalIndicatorProperties
 import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 import ir.ehsannarmani.compose_charts.models.Line
+import ir.ehsannarmani.compose_charts.models.PopupProperties
+
+const val STATISTICS_TAG = "Statistics"
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -39,13 +44,17 @@ fun LineGraph(
 ) {
     LineChart(
         modifier = modifier
+            .padding(bottom = 10.dp)
             .fillMaxSize(),
-        data = remember(values) {
+        data = remember(values, sensor) {
             listOf(
                 Line(
-                    label = sensor.topic,
-                    values = values.map { (_, response) ->
-                        response.dataToDouble
+                    label = sensor.elementName,
+                    values = values.map { (time, response) ->
+                        if (response.dataToDouble < sensor.minValue || response.dataToDouble > sensor.maxValue) {
+                            Log.d(STATISTICS_TAG, "Data: ${response.dataToDouble} Time: $time")
+                        }
+                        response.dataToDouble.coerceIn(sensor.minValue, sensor.maxValue)
                     },
                     color = SolidColor(Color(0xFF23af92)),
                     firstGradientFillColor = Color(0xFF2BC0A1).copy(alpha = .5f),
@@ -76,6 +85,9 @@ fun LineGraph(
         ),
         indicatorProperties = HorizontalIndicatorProperties(padding = 8.dp, textStyle = TextStyle(DarkBrown)),
         labelHelperProperties = LabelHelperProperties(enabled = false),
-        labelHelperPadding = 8.dp
+        labelHelperPadding = 8.dp,
+        popupProperties = PopupProperties(textStyle = TextStyle(Color.White)) { num ->
+            "%.1f".format(num) + sensor.units
+        }
     )
 }

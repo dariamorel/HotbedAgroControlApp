@@ -62,6 +62,6 @@ fun StatisticsGraphScreen(
             dateTime = newDateTime
         }
 
-        LineGraph(Sensor.AIR_TEMPERATURE, values)
+        LineGraph(sensor, values)
     }
 }
