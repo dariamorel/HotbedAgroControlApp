@@ -11,14 +11,18 @@ import androidx.annotation.RequiresApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
 import com.example.hotbedagrocontrolapp.presentation.ui.MainScreen
 import com.example.hotbedagrocontrolapp.presentation.viewModel.elements.AgroControlViewModel
 import com.example.hotbedagrocontrolapp.presentation.viewModel.statistics.StatisticsViewModel
 import com.example.hotbedagrocontrolapp.service.ClientImpl
 import com.example.hotbedagrocontrolapp.ui.theme.HotbedAgroControlAppTheme
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
 
+@HiltAndroidApp
 class HBedApp: Application() {
     override fun onCreate() {
         super.onCreate()
@@ -31,18 +35,8 @@ class HBedApp: Application() {
     }
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    val mqttClient = ClientImpl(
-        "80.237.33.119",
-        "aha/HBed",
-        "user_umki11",
-        "654321"
-    )
-    val dataBaseManager = DataBaseManager(HBedApp.appContext)
-    @RequiresApi(Build.VERSION_CODES.O)
-    val agroControlViewModel = AgroControlViewModel(dataBaseManager, mqttClient)
-    val statisticsViewModel = StatisticsViewModel(dataBaseManager)
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,25 +45,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HotbedAgroControlAppTheme(dynamicColor = false, darkTheme = false) {
-                MainScreen(
-                    agroControlViewModel = agroControlViewModel,
-                    statisticsViewModel = statisticsViewModel
-                )
+                MainScreen()
             }
         }
     }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onDestroy() {
-        super.onDestroy()
-        agroControlViewModel.disconnect()
-    }
-}
-
-@Composable
-fun Greeting(topic: String, message: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Topic: $topic, message: $message",
-        modifier = modifier
-    )
 }

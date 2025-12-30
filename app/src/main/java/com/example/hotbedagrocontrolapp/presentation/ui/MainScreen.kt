@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -38,17 +39,17 @@ import kotlinx.coroutines.launch
 
 enum class Screens(val title: String) {
     ELEMENTS("Показатели"), STATISTICS("Статистика"),
-    EVENT_LOG("Журнал событий"), DEVICES("Устройства"),
-    SETTINGS("Настройки")
+//    EVENT_LOG("Журнал событий"), DEVICES("Устройства"),
+//    SETTINGS("Настройки")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
-    agroControlViewModel: AgroControlViewModel,
-    statisticsViewModel: StatisticsViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    agroControlViewModel: AgroControlViewModel = hiltViewModel(),
+    statisticsViewModel: StatisticsViewModel = hiltViewModel()
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val navController = rememberNavController()

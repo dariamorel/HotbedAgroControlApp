@@ -11,11 +11,15 @@ import com.example.hotbedagrocontrolapp.domain.entities.elements.Element
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
+import javax.inject.Inject
 
-class DataBaseManager(ctx: Context) {
+class DataBaseManager @Inject constructor(
+    @ApplicationContext private val ctx: Context
+) {
     private val dataBase = buildDataBase(ctx)
 
     @RequiresApi(Build.VERSION_CODES.O)

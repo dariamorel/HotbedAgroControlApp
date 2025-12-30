@@ -10,6 +10,7 @@ import com.example.hotbedagrocontrolapp.domain.entities.elements.Element
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,9 +21,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoField
 import java.util.Locale
+import javax.inject.Inject
 import kotlin.comparisons.compareBy
 
-class StatisticsViewModel(
+@HiltViewModel
+class StatisticsViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager
 ) : ViewModel() {
     private val _dataHistory =

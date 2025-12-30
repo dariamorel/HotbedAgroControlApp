@@ -10,7 +10,7 @@ val GreenYellow = Color(0xffaecf7a)
 val DarkBrown = Color(0xff302301)
 val LightBrown = Color(0xffbd9e6f)
 val LightGreen = Color(0xffc4de9b)
-val DarkGreen = Color(0xff115207)
+val DarkGreen = Color(0xff8acc21)
 val MediumGrey = Color(0xffa3a3a3)
 
 val Purple40 = Color(0xFF6650a4)

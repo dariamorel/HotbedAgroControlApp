@@ -13,6 +13,7 @@ import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import com.example.hotbedagrocontrolapp.domain.interfaces.Client
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,9 +21,11 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
-class AgroControlViewModel(
+@HiltViewModel
+class AgroControlViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager,
     private val mqttClient: Client
 ) : ViewModel() {
@@ -116,6 +119,11 @@ class AgroControlViewModel(
         }
         val responseDouble = responseString.toDoubleOrNull()
         return responseDouble?.let { SensorResponse(responseDouble) }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disconnect()
     }
 
     fun disconnect() {
