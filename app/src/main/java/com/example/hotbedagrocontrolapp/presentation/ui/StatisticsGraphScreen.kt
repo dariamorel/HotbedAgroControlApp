@@ -57,14 +57,21 @@ fun StatisticsGraphScreen(
 
             SwitchAnaliseType(Modifier.weight(1f)) { selected ->
                 analiseType = selected
-                dateTime = DateTime(analiseType, dateTime.localDateTime)
+                val now = LocalDateTime.now()
+                val newDateTime = if (when (analiseType) {
+                        AnaliseType.YEAR -> false
+                        AnaliseType.MONTH -> dateTime.localDateTime.year == now.year
+                        AnaliseType.DAY -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month
+                        AnaliseType.HOUR -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.localDateTime.dayOfMonth == now.dayOfMonth
+                }) now else dateTime.localDateTime
+                dateTime = DateTime(analiseType, newDateTime)
             }
         }
 
         SwitchDateTime(dateTime, Modifier.align(Alignment.End)) { newDateTime ->
             dateTime = newDateTime
         }
-        Log.d("hehehe", values.map { it.key }.joinToString())
+
         val labels = when (analiseType) {
             AnaliseType.HOUR -> values.map { (key, _) ->
                 if (key.minute % 10 == 0) key.format(DateTimeFormatter.ofPattern("HH:mm")) else " "

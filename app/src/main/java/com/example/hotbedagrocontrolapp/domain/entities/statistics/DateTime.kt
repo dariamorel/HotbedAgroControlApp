@@ -15,42 +15,36 @@ class DateTime(
         AnaliseType.YEAR -> {
             LocalDateTime.of(
                 dateTime.year,
-                1,
-                1,
-                0,
+                LocalDateTime.now().month,
+                LocalDateTime.now().dayOfMonth,
+                LocalDateTime.now().hour,
                 0
             )
         }
         AnaliseType.MONTH -> {
-            val now = LocalDateTime.now()
-            val month = if (dateTime.year == now.year) now.month else dateTime.month
             LocalDateTime.of(
                 dateTime.year,
-                month,
+                dateTime.month,
                 1,
                 0,
                 0
             )
         }
         AnaliseType.DAY -> {
-            val now = LocalDateTime.now()
-            val dayOfMonth = if (dateTime.year == now.year && dateTime.month == now.month) now.dayOfMonth else dateTime.dayOfMonth
             LocalDateTime.of(
                 dateTime.year,
                 dateTime.month,
-                dayOfMonth,
+                dateTime.dayOfMonth,
                 0,
                 0
             )
         }
         AnaliseType.HOUR -> {
-            val now = LocalDateTime.now()
-            val hour = if (dateTime.year == now.year && dateTime.month == now.month && dateTime.dayOfMonth == now.dayOfMonth) now.hour else dateTime.hour
             LocalDateTime.of(
                 dateTime.year,
                 dateTime.month,
                 dateTime.dayOfMonth,
-                hour,
+                dateTime.hour,
                 0
             )
         }
