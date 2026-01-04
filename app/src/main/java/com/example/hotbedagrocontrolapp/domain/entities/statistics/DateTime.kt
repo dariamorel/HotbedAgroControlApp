@@ -12,32 +12,48 @@ class DateTime(
     dateTime: LocalDateTime
 ) {
     val localDateTime: LocalDateTime = when (analiseType) {
-        AnaliseType.YEAR -> LocalDateTime.of(
-            dateTime.year,
-            1,
-            1,
-            0,
-            0)
-        AnaliseType.MONTH -> LocalDateTime.of(
-            dateTime.year,
-            dateTime.month,
-            1,
-            0,
-            0)
-        AnaliseType.DAY -> LocalDateTime.of(
-            dateTime.year,
-            dateTime.month,
-            dateTime.dayOfMonth,
-            0,
-            0
-        )
-        AnaliseType.HOUR -> LocalDateTime.of(
-            dateTime.year,
-            dateTime.month,
-            dateTime.dayOfMonth,
-            dateTime.hour,
-            0
-        )
+        AnaliseType.YEAR -> {
+            LocalDateTime.of(
+                dateTime.year,
+                1,
+                1,
+                0,
+                0
+            )
+        }
+        AnaliseType.MONTH -> {
+            val now = LocalDateTime.now()
+            val month = if (dateTime.year == now.year) now.month else dateTime.month
+            LocalDateTime.of(
+                dateTime.year,
+                month,
+                1,
+                0,
+                0
+            )
+        }
+        AnaliseType.DAY -> {
+            val now = LocalDateTime.now()
+            val dayOfMonth = if (dateTime.year == now.year && dateTime.month == now.month) now.dayOfMonth else dateTime.dayOfMonth
+            LocalDateTime.of(
+                dateTime.year,
+                dateTime.month,
+                dayOfMonth,
+                0,
+                0
+            )
+        }
+        AnaliseType.HOUR -> {
+            val now = LocalDateTime.now()
+            val hour = if (dateTime.year == now.year && dateTime.month == now.month && dateTime.dayOfMonth == now.dayOfMonth) now.hour else dateTime.hour
+            LocalDateTime.of(
+                dateTime.year,
+                dateTime.month,
+                dateTime.dayOfMonth,
+                hour,
+                0
+            )
+        }
     }
 
     constructor(analiseType: AnaliseType) : this(analiseType, LocalDateTime.now())
@@ -74,23 +90,19 @@ class DateTime(
     inner class Iterator {
         var localDateTime = this@DateTime.localDateTime
 
-        fun plus(i: Long): String {
+        fun plus(i: Long): LocalDateTime {
             return when (this@DateTime.analiseType) {
                 AnaliseType.HOUR -> {
-                    val newLocalDateTime = localDateTime.plusMinutes(i)
-                    newLocalDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                    localDateTime.plusMinutes(i)
                 }
                 AnaliseType.DAY -> {
-                    val newLocalDateTime = localDateTime.plusHours(i)
-                    newLocalDateTime.format(DateTimeFormatter.ofPattern("HHч"))
+                    localDateTime.plusHours(i)
                 }
                 AnaliseType.MONTH -> {
-                    val newLocalDateTime = localDateTime.plusDays(i)
-                    newLocalDateTime.format(DateTimeFormatter.ofPattern("dd.MM"))
+                    localDateTime.plusDays(i)
                 }
                 AnaliseType.YEAR -> {
-                    val newLocalDateTime = localDateTime.plusMonths(i)
-                    newLocalDateTime.format(DateTimeFormatter.ofPattern("LLLL", Locale("ru")))
+                    localDateTime.plusMonths(i)
                 }
             }
         }

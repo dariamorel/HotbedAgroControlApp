@@ -39,7 +39,8 @@ const val STATISTICS_TAG = "Statistics"
 @Composable
 fun LineGraph(
     sensor: Sensor,
-    values: Map<String, Response>,
+    values: List<Response>,
+    labels: List<String>,
     modifier: Modifier = Modifier
 ) {
     LineChart(
@@ -50,10 +51,7 @@ fun LineGraph(
             listOf(
                 Line(
                     label = sensor.elementName,
-                    values = values.map { (time, response) ->
-                        if (response.dataToDouble < sensor.minValue || response.dataToDouble > sensor.maxValue) {
-                            Log.d(STATISTICS_TAG, "Data: ${response.dataToDouble} Time: $time")
-                        }
+                    values = values.map { response ->
                         response.dataToDouble.coerceIn(sensor.minValue, sensor.maxValue)
                     },
                     color = SolidColor(Color(0xFF23af92)),
@@ -72,7 +70,7 @@ fun LineGraph(
         maxValue = sensor.maxValue,
         labelProperties = LabelProperties(
             enabled = true,
-            labels = values.map { it.key },
+            labels = labels,
             textStyle = TextStyle(DarkBrown)
         ),
         gridProperties = GridProperties(

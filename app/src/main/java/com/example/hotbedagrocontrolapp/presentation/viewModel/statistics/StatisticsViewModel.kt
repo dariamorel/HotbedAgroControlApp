@@ -1,6 +1,7 @@
 package com.example.hotbedagrocontrolapp.presentation.viewModel.statistics
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,13 +30,13 @@ class StatisticsViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager
 ) : ViewModel() {
     private val _dataHistory =
-        mutableMapOf<HistoryItem, StateFlow<Map<String, Response>>>()
+        mutableMapOf<HistoryItem, StateFlow<Map<LocalDateTime, Response>>>()
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDataHistory(
         element: Element,
         dateTime: DateTime
-    ): StateFlow<Map<String, Response>> {
+    ): StateFlow<Map<LocalDateTime, Response>> {
         _dataHistory[HistoryItem(element, dateTime)]?.let {
             return it
         }
@@ -55,7 +56,7 @@ class StatisticsViewModel @Inject constructor(
     private fun filterByAnaliseType(
         flow: Flow<List<Pair<LocalDateTime, Response>>>,
         dateTime: DateTime
-    ): Flow<Map<String, Response>> {
+    ): Flow<Map<LocalDateTime, Response>> {
         val comparator = if (dateTime.analiseType == AnaliseType.YEAR) compareBy<String> {
             val formatter = DateTimeFormatter.ofPattern("LLLL", Locale("ru"))
             val month = formatter.parse(it)
@@ -75,7 +76,6 @@ class StatisticsViewModel @Inject constructor(
                                 && it.first.month == dateTime.localDateTime.month
                     }
                         .distinctBy { it.first.dayOfMonth }
-                        .filter { (it.first.dayOfMonth - 1) % 5 == 0 }
                 }
 
                 AnaliseType.DAY -> {
@@ -85,7 +85,6 @@ class StatisticsViewModel @Inject constructor(
                                 && it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
                     }
                         .distinctBy { it.first.hour }
-                        .filter { it.first.hour % 3 == 0 }
                 }
 
                 AnaliseType.HOUR -> {
@@ -96,28 +95,20 @@ class StatisticsViewModel @Inject constructor(
                                 && it.first.hour == dateTime.localDateTime.hour
                     }
                         .distinctBy { it.first.minute }
-                        .filter { it.first.minute % 10 == 0 }
                 }
-            }.associate {
-                when (dateTime.analiseType) {
-                    AnaliseType.HOUR -> it.first.format(DateTimeFormatter.ofPattern("HH:mm"))
-                    AnaliseType.DAY -> it.first.format(DateTimeFormatter.ofPattern("HHч"))
-                    AnaliseType.MONTH -> it.first.format(DateTimeFormatter.ofPattern("dd.MM"))
-                    AnaliseType.YEAR -> it.first.format(
-                        DateTimeFormatter.ofPattern(
-                            "LLLL",
-                            Locale("ru")
-                        )
-                    )
-                } to it.second
-            }
-                .toSortedMap(comparator)
+            }.associate { when (dateTime.analiseType) {
+                AnaliseType.YEAR -> LocalDateTime.of(it.first.year, it.first.month, 1, 0, 0)
+                AnaliseType.MONTH -> LocalDateTime.of(it.first.year, it.first.month, it.first.dayOfMonth, 0, 0)
+                AnaliseType.DAY -> LocalDateTime.of(it.first.year, it.first.month, it.first.dayOfMonth, it.first.hour, 0)
+                AnaliseType.HOUR -> LocalDateTime.of(it.first.year, it.first.month, it.first.dayOfMonth, it.first.hour, it.first.minute)
+            } to it.second }
+                .toSortedMap()
 
             val range = when (dateTime.analiseType) {
-                AnaliseType.YEAR -> 1L..12L
-                AnaliseType.MONTH -> 0L until 30L step 5
-                AnaliseType.DAY -> 0L until 24L step 3
-                AnaliseType.HOUR -> 0L until 60L step 10
+                AnaliseType.YEAR -> 1L until 12L
+                AnaliseType.MONTH -> 0L until 30L
+                AnaliseType.DAY -> 0L until 24L
+                AnaliseType.HOUR -> 0L until 60L
             }
 
             val iterator = dateTime.iterator

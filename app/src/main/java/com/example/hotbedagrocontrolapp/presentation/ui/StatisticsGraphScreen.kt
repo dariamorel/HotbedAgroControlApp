@@ -1,6 +1,7 @@
 package com.example.hotbedagrocontrolapp.presentation.ui
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,8 @@ import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.Sw
 import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.SwitchSensor
 import com.example.hotbedagrocontrolapp.presentation.viewModel.statistics.StatisticsViewModel
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -61,7 +64,21 @@ fun StatisticsGraphScreen(
         SwitchDateTime(dateTime, Modifier.align(Alignment.End)) { newDateTime ->
             dateTime = newDateTime
         }
-
-        LineGraph(sensor, values)
+        Log.d("hehehe", values.map { it.key }.joinToString())
+        val labels = when (analiseType) {
+            AnaliseType.HOUR -> values.map { (key, _) ->
+                if (key.minute % 10 == 0) key.format(DateTimeFormatter.ofPattern("HH:mm")) else " "
+            }
+            AnaliseType.DAY -> values.map { (key, _) ->
+                if (key.hour % 3 == 0) key.format(DateTimeFormatter.ofPattern("HHч")) else " "
+            }
+            AnaliseType.MONTH -> values.map { (key, _) ->
+                if ((key.dayOfMonth - 1) % 5 == 0) key.format(DateTimeFormatter.ofPattern("dd.MM")) else " "
+            }
+            AnaliseType.YEAR -> values.map { (key, _) ->
+                key.format(DateTimeFormatter.ofPattern("LLLL", Locale("ru")))
+            }
+        }
+        LineGraph(sensor, values.map { (_, response) -> response }, labels)
     }
 }
