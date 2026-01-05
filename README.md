@@ -13,10 +13,10 @@
 - Отображение графиков с историей изменения данных.
 
 #### Используемые технологии:
-- Сетевые запросы: Mqtt, Mosquitto
+- Запросы к Mosquitto по протоколу Mqtt
 - Хранение данных: Room, SharedPreferences
 - Архитектура: Clean Architecture + MVVM
 - UI: Jetpack Compose
 - Графики: Compose Charts
 - DI: Hilt
-- Асинхронность: Coroutine
+- Асинхронность: Coroutines
