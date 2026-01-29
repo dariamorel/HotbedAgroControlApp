@@ -40,7 +40,6 @@ fun ElementsScreen(
     modifier: Modifier = Modifier
 ) {
     val currentData by viewModel.currentData.collectAsState()
-    val isConnected by viewModel.isConnected.collectAsState()
 
     LazyColumn(
         modifier = modifier.fillMaxWidth()
