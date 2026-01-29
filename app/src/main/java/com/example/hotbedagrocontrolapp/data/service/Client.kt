@@ -13,7 +13,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 /**
  * Mqtt клиент.
  *
- * @param IPAddress IP адресс Mosquitto.
+ * @param IPAddress IP адрес Mosquitto.
  * @param mainTopic Главный топик Mosquitto.
  * @param clientUserName Имя пользователя в Mosquitto.
  * @param clientPassword Пароль пользователя в Mosquitto.

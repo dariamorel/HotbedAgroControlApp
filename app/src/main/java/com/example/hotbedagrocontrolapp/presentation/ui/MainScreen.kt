@@ -41,8 +41,8 @@ import kotlinx.coroutines.launch
  * Доступные странички в бургер-меню.
  */
 enum class Screens(val title: String) {
-    ELEMENTS("Показатели"), STATISTICS("Статистика"), EVENT_LOG("Журнал событий")
-//    DEVICES("Устройства"),
+    ELEMENTS("Показатели"), STATISTICS("Статистика"),
+    EVENT_LOG("Журнал событий"), DEVICES("Устройства")
 //    SETTINGS("Настройки")
 }
 
@@ -135,6 +135,13 @@ fun MainScreen(
                 composable(Screens.EVENT_LOG.title) {
                     EventLogScreen(
                         viewModel = statisticsViewModel,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+
+                composable(Screens.DEVICES.title) {
+                    DevicesScreen(
+                        viewModel = agroControlViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
