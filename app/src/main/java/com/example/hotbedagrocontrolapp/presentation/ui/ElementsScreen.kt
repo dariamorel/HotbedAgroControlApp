@@ -70,7 +70,11 @@ fun ElementsScreen(
                             response as SensorResponse,
                             Modifier.weight(1f).aspectRatio(1f)
                         )
-                    }
+                    } ?: SensorComponent(
+                        sensor,
+                        SensorResponse(0.0),
+                        Modifier.weight(1f).aspectRatio(1f)
+                    )
                     if (i + 1 < Sensor.entries.size) {
                         val sensor = Sensor.entries[i + 1]
                         currentData[sensor]?.let { response ->
@@ -79,7 +83,11 @@ fun ElementsScreen(
                                 response as SensorResponse,
                                 Modifier.weight(1f).aspectRatio(1f)
                             )
-                        }
+                        } ?: SensorComponent(
+                            sensor,
+                            SensorResponse(0.0),
+                            Modifier.weight(1f).aspectRatio(1f)
+                        )
                     } else {
                         Spacer(Modifier.weight(1f).aspectRatio(1f))
                     }
@@ -108,8 +116,13 @@ fun ElementsScreen(
                             Modifier.weight(1f).aspectRatio(1f)
                         ) { isControlOn ->
                             viewModel.onStatusChanged(control, isControlOn)
-
                         }
+                    } ?: ControlComponent(
+                        control,
+                        ControlResponse(ControlResponse.Status.OFF),
+                        Modifier.weight(1f).aspectRatio(1f)
+                    ) { isControlOn ->
+                        viewModel.onStatusChanged(control, isControlOn)
                     }
                     if (i + 1 < Control.entries.size) {
                         val control = Control.entries[i + 1]
@@ -121,6 +134,12 @@ fun ElementsScreen(
                             ) { isControlOn ->
                                 viewModel.onStatusChanged(control, isControlOn)
                             }
+                        } ?: ControlComponent(
+                            control,
+                            ControlResponse(ControlResponse.Status.OFF),
+                            Modifier.weight(1f).aspectRatio(1f)
+                        ) { isControlOn ->
+                            viewModel.onStatusChanged(control, isControlOn)
                         }
                     } else {
                         Spacer(Modifier.weight(1f).aspectRatio(1f))
