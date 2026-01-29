@@ -30,8 +30,9 @@ class ClientImpl(
      * Подключиться к Mosquitto.
      *
      * @param onMessageReceived Обработка получаемых сообщений с Mosquitto.
+     * @param onConnectionLost Обработка потери связи.
      */
-    override suspend fun connect(onMessageReceived: (String, String) -> Unit) {
+    override suspend fun connect(onMessageReceived: (String, String) -> Unit, onConnectionLost: () -> Unit) {
         val serverUri = "tcp://$IPAddress:12883"
 
         val options = MqttConnectOptions().apply {
@@ -50,7 +51,7 @@ class ClientImpl(
         mqttClient.connect(options)
 
         mqttClient.setCallback(object : MqttCallback {
-            override fun connectionLost(cause: Throwable?) {}
+            override fun connectionLost(cause: Throwable?) { onConnectionLost() }
 
             override fun messageArrived(
                 topic: String?,

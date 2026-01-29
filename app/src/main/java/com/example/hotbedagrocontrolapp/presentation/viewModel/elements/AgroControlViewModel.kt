@@ -38,11 +38,15 @@ class AgroControlViewModel @Inject constructor(
     private val _currentData = MutableStateFlow<MutableMap<Element, Response>>(mutableMapOf())
     val currentData = _currentData.asStateFlow()
 
+    private val _isConnected = MutableStateFlow(false)
+    val isConnected = _isConnected.asStateFlow()
+
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mqttClient.connect(::onMessageReceived)
+                mqttClient.connect(::onMessageReceived) { _isConnected.value = false }
+                _isConnected.value = true
                 Log.d(Client.Companion.CLIENT_TAG, "Connected!")
             } catch (e: Exception) {
                 Log.e(Client.Companion.CLIENT_TAG, "Connection error: ${e.message}")
@@ -173,6 +177,7 @@ class AgroControlViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 mqttClient.disconnect()
+                _isConnected.value = false
             } catch (e: Exception) {
                 Log.e(Client.Companion.CLIENT_TAG, "Disconnection error: ${e.message}")
             }

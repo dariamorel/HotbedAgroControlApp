@@ -9,8 +9,9 @@ interface Client {
      * Подключиться к Mosquitto.
      *
      * @param onMessageReceived Обработка получаемых сообщений с Mosquitto.
+     * @param onConnectionLost Обработка потери связи.
      */
-    suspend fun connect(onMessageReceived: (String, String) -> Unit)
+    suspend fun connect(onMessageReceived: (String, String) -> Unit, onConnectionLost: () -> Unit)
 
     /**
      * Отправить сообщение в Mosquitto.
