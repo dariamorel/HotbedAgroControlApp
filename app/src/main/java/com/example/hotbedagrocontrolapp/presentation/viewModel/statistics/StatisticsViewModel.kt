@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
-import com.example.hotbedagrocontrolapp.domain.entities.elements.Element
+import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
@@ -25,6 +25,11 @@ import java.util.Locale
 import javax.inject.Inject
 import kotlin.comparisons.compareBy
 
+/**
+ * Бизнес-логика для работы с историей изменений и графиками.
+ *
+ * @param dataBaseManager Менеджер базы данных.
+ */
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager
@@ -32,6 +37,14 @@ class StatisticsViewModel @Inject constructor(
     private val _dataHistory =
         mutableMapOf<HistoryItem, StateFlow<Map<LocalDateTime, Response>>>()
 
+    /**
+     * Получить историю изменения данных.
+     *
+     * @param element Элемент.
+     * @param dateTime Дата-время.
+     *
+     * @return Мапа времени и значения элемента.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDataHistory(
         element: Element,
@@ -52,6 +65,14 @@ class StatisticsViewModel @Inject constructor(
         return stateFlow
     }
 
+    /**
+     * Отфильтровать историю изменений по типу анализа и дате.
+     *
+     * @param flow Поток с историей изменений.
+     * @param dateTime Дата-время.
+     *
+     * @return Отфильтрованный поток истории изменений.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun filterByAnaliseType(
         flow: Flow<List<Pair<LocalDateTime, Response>>>,

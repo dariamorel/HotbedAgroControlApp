@@ -27,6 +27,11 @@ import com.example.hotbedagrocontrolapp.presentation.ui.components.elements.Cont
 import com.example.hotbedagrocontrolapp.presentation.ui.components.elements.SensorComponent
 import com.example.hotbedagrocontrolapp.presentation.viewModel.elements.AgroControlViewModel
 
+/**
+ * Экран сотображением элементов(датчиков и элементов управления) и их значений.
+ *
+ * @param viewModel Бизнес-логика для работы с элементами.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ElementsScreen(

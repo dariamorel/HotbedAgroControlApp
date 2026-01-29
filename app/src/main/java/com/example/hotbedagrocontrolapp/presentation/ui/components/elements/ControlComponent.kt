@@ -27,6 +27,13 @@ import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
 import com.example.hotbedagrocontrolapp.ui.theme.DarkGreen
 import com.example.hotbedagrocontrolapp.ui.theme.LightGreen
 
+/**
+ * Отображение элемента управления.
+ *
+ * @param control Элемент управления.
+ * @param response Статус элемента управления, полученное с устройства.
+ * @param onStatusChanged Обработка изменения статуса элемента управления.
+ */
 @Composable
 fun ControlComponent(
     control: Control,

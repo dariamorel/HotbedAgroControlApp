@@ -36,6 +36,11 @@ import androidx.compose.ui.unit.toSize
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
 
+/**
+ * Выпадающий список для изменения типа анализа.
+ *
+ * @param onSelectedChange Обработка выбранного значения.
+ */
 @Composable
 fun SwitchAnaliseType(
     modifier: Modifier = Modifier,

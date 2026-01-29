@@ -6,6 +6,12 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+/**
+ * Корректное дата-время, в зависимости от типа анализа данных.
+ *
+ * @param analiseType Тип анализа данных.
+ * @param dateTime Дата-время.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 class DateTime(
     val analiseType: AnaliseType,
@@ -52,6 +58,11 @@ class DateTime(
 
     constructor(analiseType: AnaliseType) : this(analiseType, LocalDateTime.now())
 
+    /**
+     * Увеличить значение в зависимости от типа анализа.
+     *
+     * @param amount Насколько увеличить.
+     */
     fun plus(amount: Long): DateTime {
         return when (analiseType) {
             AnaliseType.HOUR -> DateTime(analiseType, localDateTime.plusHours(amount))
@@ -61,6 +72,11 @@ class DateTime(
         }
     }
 
+    /**
+     * Уменьшить значение в зависимости от типа анализа.
+     *
+     * @param amount Насколько уменьшить.
+     */
     fun minus(amount: Long): DateTime {
         return when (analiseType) {
             AnaliseType.HOUR -> DateTime(analiseType, localDateTime.minusHours(amount))
@@ -81,9 +97,15 @@ class DateTime(
             AnaliseType.YEAR -> localDateTime.format(DateTimeFormatter.ofPattern("yyyyг"))
         }
 
+    /**
+     * Итератор в заивисомти от типа анализа.
+     */
     inner class Iterator {
         var localDateTime = this@DateTime.localDateTime
 
+        /**
+         * Прибавить значение.
+         */
         fun plus(i: Long): LocalDateTime {
             return when (this@DateTime.analiseType) {
                 AnaliseType.HOUR -> {

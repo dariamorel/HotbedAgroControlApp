@@ -2,10 +2,17 @@ package com.example.hotbedagrocontrolapp.domain.entities.elements
 
 import androidx.compose.ui.graphics.Color
 import com.example.hotbedagrocontrolapp.R
-import com.example.hotbedagrocontrolapp.domain.entities.elements.Element
+import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
 import com.example.hotbedagrocontrolapp.ui.theme.BottlePurple
 import com.example.hotbedagrocontrolapp.ui.theme.SunYellow
 
+/**
+ * Доступные элементы управения устройства.
+ *
+ * @param topic Топик элемента в Mosquitto.
+ * @param elementName Название элемента.
+ * @param iconInfo Информация об иконке.
+ */
 enum class Control(
     override val topic: String,
     override val elementName: String,
@@ -40,6 +47,9 @@ enum class Control(
     );
 }
 
+/**
+ * Информация об иконке элемента управления.
+ */
 data class IconInfo(
     val resourceId: Int,
     val tint: Color

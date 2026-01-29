@@ -1,6 +1,15 @@
 package com.example.hotbedagrocontrolapp.domain.entities.elements
 
+/**
+ * Сообщение со статусом элемента управления, получаемое с устройства.
+ *
+ * @param data Статус элемента.
+ */
 data class ControlResponse(override val data: Status): Response() {
+
+    /**
+     * Статус элемента.
+     */
     enum class Status(val message: String) {
         ON("ON"), OFF("OFF")
     }

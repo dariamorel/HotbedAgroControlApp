@@ -5,6 +5,9 @@ import androidx.room.RoomDatabase
 import com.example.hotbedagrocontrolapp.data.db.DataBaseDao
 import com.example.hotbedagrocontrolapp.data.db.HBedEntity
 
+/**
+ * База данных с историей изменения показателей устройства.
+ */
 @Database(
     entities = [HBedEntity::class],
     version = 2,

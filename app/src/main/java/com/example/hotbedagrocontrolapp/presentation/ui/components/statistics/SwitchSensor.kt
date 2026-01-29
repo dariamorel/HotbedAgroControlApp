@@ -36,6 +36,11 @@ import androidx.compose.ui.unit.toSize
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
 
+/**
+ * Выпадающий список для изменения датчика.
+ *
+ * @param onSelectedChange обработка выбранного значения.
+ */
 @Composable
 fun SwitchSensor(
     modifier: Modifier = Modifier,

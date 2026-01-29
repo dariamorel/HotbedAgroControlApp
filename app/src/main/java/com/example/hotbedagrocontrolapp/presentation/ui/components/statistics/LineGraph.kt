@@ -35,6 +35,13 @@ import ir.ehsannarmani.compose_charts.models.PopupProperties
 
 const val STATISTICS_TAG = "Statistics"
 
+/**
+ * Отображение графика с историей изменений по конкретному датчику.
+ *
+ * @param sensor Датчик.
+ * @param values Значения датчика.
+ * @param labels Отметки на оси Ox.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LineGraph(

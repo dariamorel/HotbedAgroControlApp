@@ -23,6 +23,12 @@ import androidx.compose.ui.unit.sp
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 
+/**
+ * Отображение датчика.
+ *
+ * @param sensor Датчик.
+ * @param response Значение датчика, полученное с устройства.
+ */
 @Composable
 fun SensorComponent(
     sensor: Sensor,

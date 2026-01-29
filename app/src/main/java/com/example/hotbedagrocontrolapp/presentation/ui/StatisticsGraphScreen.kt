@@ -32,6 +32,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+/**
+ * Экран с графиками.
+ *
+ * @param viewModel Бизнес-логика для работы с историей изменений и графиками.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun StatisticsGraphScreen(

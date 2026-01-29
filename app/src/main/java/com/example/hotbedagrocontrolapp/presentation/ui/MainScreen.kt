@@ -37,12 +37,18 @@ import com.example.hotbedagrocontrolapp.presentation.viewModel.elements.AgroCont
 import com.example.hotbedagrocontrolapp.presentation.viewModel.statistics.StatisticsViewModel
 import kotlinx.coroutines.launch
 
+/**
+ * Доступные странички в бургер-меню.
+ */
 enum class Screens(val title: String) {
     ELEMENTS("Показатели"), STATISTICS("Статистика"),
 //    EVENT_LOG("Журнал событий"), DEVICES("Устройства"),
 //    SETTINGS("Настройки")
 }
 
+/**
+ * Основной экран приложения.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

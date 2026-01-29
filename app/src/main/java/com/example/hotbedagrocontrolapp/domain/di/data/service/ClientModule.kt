@@ -11,6 +11,9 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object ClientModule {
 
+    /**
+     * Провайдер Mqtt клиента.
+     */
     @Provides
     fun provideClient(): Client {
         return ClientImpl(

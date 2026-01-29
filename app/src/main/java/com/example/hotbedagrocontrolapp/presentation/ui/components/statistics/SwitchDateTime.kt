@@ -17,6 +17,12 @@ import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
 import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
 import java.time.LocalDateTime
 
+/**
+ * Выпадающий список для изменения даты.
+ *
+ * @param dateTime Текущая дата.
+ * @param onSelectedChange Обработка выбранного значения.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SwitchDateTime(

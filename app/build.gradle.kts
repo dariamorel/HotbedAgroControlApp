@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.room.ktx)
     implementation (libs.compose.charts)
     implementation(libs.androidx.navigation.compose)
+    testImplementation(libs.junit.jupiter)
     ksp(libs.room.compiler)
     implementation(libs.google.hilt)
     ksp(libs.google.hilt.compiler)

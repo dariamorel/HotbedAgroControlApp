@@ -2,6 +2,9 @@ package com.example.hotbedagrocontrolapp.data.db
 
 import androidx.room.Entity
 
+/**
+ * Строка таблицы с историей изменений элементов.
+ */
 @Entity(
     tableName = "hotbed_agro_control_history",
     primaryKeys = ["time", "element"]

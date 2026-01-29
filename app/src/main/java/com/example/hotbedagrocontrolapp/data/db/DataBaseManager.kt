@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.room.Room
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
 import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
-import com.example.hotbedagrocontrolapp.domain.entities.elements.Element
+import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
@@ -17,17 +17,30 @@ import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
 import javax.inject.Inject
 
+/**
+ * Менеджер базы данных.
+ *
+ * @param ctx Контекст приложения.
+ */
 class DataBaseManager @Inject constructor(
-    @ApplicationContext private val ctx: Context
+    private val dataBase: DataBase
 ) {
-    private val dataBase = buildDataBase(ctx)
-
+    /**
+     * Мапа с элементами и историями их изменений.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     val dataHistory: Map<Element, Flow<List<Pair<LocalDateTime, Response>>>> =
         (Sensor.entries + Control.entries).associateWith { element ->
             getData(element)
         }
 
+    /**
+     * Вставить данные в таблицу.
+     *
+     * @param element Элемент.
+     * @param response Значение элемента, полученное с устройства.
+     * @param time Время, когда было получено значение.
+     */
     suspend fun insertData(element: Element, response: Response, time: LocalDateTime) {
         dataBase.dataBaseDao.insertData(
             HBedEntity(
@@ -38,6 +51,12 @@ class DataBaseManager @Inject constructor(
         )
     }
 
+    /**
+     * Получить данные из бд по элементу.
+     *
+     * @param element Элемент.
+     * @return Список пар время - значение элемента.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getData(
         element: Element
@@ -93,19 +112,11 @@ class DataBaseManager @Inject constructor(
             }
     }
 
+    /**
+     * Очистить бд.
+     */
     suspend fun clearDataBase() {
         dataBase.dataBaseDao.cleanDataBase()
-    }
-
-    private fun buildDataBase(ctx: Context): DataBase {
-        return Room
-            .databaseBuilder(
-                ctx,
-                DataBase::class.java,
-                "h_bed.db"
-            )
-            .fallbackToDestructiveMigration()
-            .build()
     }
 
     companion object {

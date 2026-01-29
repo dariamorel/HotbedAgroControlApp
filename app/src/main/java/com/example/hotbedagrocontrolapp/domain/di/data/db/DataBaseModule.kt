@@ -14,8 +14,10 @@ import jakarta.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DataBaseModule {
 
+    /**
+     * Провайдер базы данных.
+     */
     @Provides
-    @Singleton
     fun provideDataBase(@ApplicationContext context: Context): DataBase {
         return Room.databaseBuilder(
             context,

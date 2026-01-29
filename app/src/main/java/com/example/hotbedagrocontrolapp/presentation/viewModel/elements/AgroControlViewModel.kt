@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
 import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
-import com.example.hotbedagrocontrolapp.domain.entities.elements.Element
+import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
@@ -23,6 +23,12 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import javax.inject.Inject
 
+/**
+ * Бизнес-логика для работы с элементами (датчиками и элементами управления).
+ *
+ * @param dataBaseManager Менеджер базы данных.
+ * @param mqttClient Mqtt клиент.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class AgroControlViewModel @Inject constructor(
@@ -44,6 +50,12 @@ class AgroControlViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Вставить в таблицу текущее значение элемента.
+     *
+     * @param element Элемент.
+     * @param response Значение элемента, полученное с устройства.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun insertCurrentData(element: Element, response: Response) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -62,6 +74,12 @@ class AgroControlViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Опубликовать новый статус элемента управления в Mosquitto.
+     *
+     * @param control Элемент управления.
+     * @param status Новый статус.
+     */
     fun publish(control: Control, status: ControlResponse.Status) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -72,6 +90,12 @@ class AgroControlViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Обработка получаемого значения с устройства.
+     *
+     * @param topicString Название топика в Mosquitto.
+     * @param responseString Полученное новое значение.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun onMessageReceived(topicString: String, responseString: String) {
         val element = defineElement(topicString)
@@ -90,6 +114,12 @@ class AgroControlViewModel @Inject constructor(
         insertCurrentData(element, response)
     }
 
+    /**
+     * Обработка изменения статуса элемента управления.
+     *
+     * @param control Элемент управления.
+     * @param isControlOn Включен ли элемент управления.
+     */
     fun onStatusChanged(control: Control, isControlOn: Boolean) {
         when (isControlOn) {
             true -> publish(control, ControlResponse.Status.ON)
@@ -97,6 +127,11 @@ class AgroControlViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Определить элемент по топику.
+     *
+     * @param topicString Топик.
+     */
     private fun defineElement(topicString: String): Element? {
         Sensor.entries.map { sensor ->
             if (topicString.contains("/${sensor.topic}/")) {
@@ -111,6 +146,11 @@ class AgroControlViewModel @Inject constructor(
         return null
     }
 
+    /**
+     * Определить полученное значение.
+     *
+     * @param responseString Полученное значение.
+     */
     private fun defineResponse(responseString: String): Response? {
         ControlResponse.Status.entries.map { status ->
             if (status.message == responseString) {
@@ -126,6 +166,9 @@ class AgroControlViewModel @Inject constructor(
         disconnect()
     }
 
+    /**
+     * Отсоединиться от Mosquitto.
+     */
     fun disconnect() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

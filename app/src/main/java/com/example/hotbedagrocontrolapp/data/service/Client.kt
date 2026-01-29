@@ -10,6 +10,14 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 
+/**
+ * Mqtt клиент.
+ *
+ * @param IPAddress IP адресс Mosquitto.
+ * @param mainTopic Главный топик Mosquitto.
+ * @param clientUserName Имя пользователя в Mosquitto.
+ * @param clientPassword Пароль пользователя в Mosquitto.
+ */
 class ClientImpl(
     private val IPAddress: String,
     private val mainTopic: String,
@@ -18,6 +26,11 @@ class ClientImpl(
 ): Client {
     private lateinit var mqttClient: MqttClient
 
+    /**
+     * Подключиться к Mosquitto.
+     *
+     * @param onMessageReceived Обработка получаемых сообщений с Mosquitto.
+     */
     override suspend fun connect(onMessageReceived: (String, String) -> Unit) {
         val serverUri = "tcp://$IPAddress:12883"
 
@@ -63,10 +76,19 @@ class ClientImpl(
         mqttClient.subscribe("$mainTopic/#", 1)
     }
 
+    /**
+     * Отправить сообщение в Mosquitto.
+     *
+     * @param topic Топик Mosquitto.
+     * @param message Передаваемое сообщение.
+     */
     override suspend fun publish(topic: String, message: String) {
         mqttClient.publish("$mainTopic/$topic/cmd_t", MqttMessage(message.toByteArray()))
         mqttClient.publish("$mainTopic/$topic/stat_t", MqttMessage(message.toByteArray()))
     }
 
+    /**
+     * Отсоединиться.
+     */
     override suspend fun disconnect() = mqttClient.disconnect()
 }

@@ -1,11 +1,21 @@
 package com.example.hotbedagrocontrolapp.domain.entities.elements
 
 import com.example.hotbedagrocontrolapp.R
-import com.example.hotbedagrocontrolapp.domain.entities.elements.Element
+import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
 import com.example.hotbedagrocontrolapp.ui.theme.BottlePurple
 import com.example.hotbedagrocontrolapp.ui.theme.SunYellow
 import com.example.hotbedagrocontrolapp.ui.theme.WaterBlue
 
+/**
+ * Доступные датчики устройства.
+ *
+ * @param topic Топик датчика в Mosquitto.
+ * @param elementName название элемента.
+ * @param iconInfo Информация об иконке.
+ * @param minValue Минимальное возможное значение.
+ * @param maxValue Максимальное возможное значение.
+ * @param units Единицы измерения.
+ */
 enum class Sensor(
     override val topic: String,
     override val elementName: String,
