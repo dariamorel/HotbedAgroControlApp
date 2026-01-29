@@ -8,15 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
 import com.example.hotbedagrocontrolapp.presentation.ui.MainScreen
-import com.example.hotbedagrocontrolapp.presentation.viewModel.elements.AgroControlViewModel
-import com.example.hotbedagrocontrolapp.presentation.viewModel.statistics.StatisticsViewModel
-import com.example.hotbedagrocontrolapp.service.ClientImpl
 import com.example.hotbedagrocontrolapp.ui.theme.HotbedAgroControlAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp

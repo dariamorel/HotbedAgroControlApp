@@ -1,4 +1,4 @@
-package com.example.hotbedagrocontrolapp.domain.interfaces
+package com.example.hotbedagrocontrolapp.domain.interfaces.data.service
 
 interface Client {
     suspend fun connect(onMessageReceived: (String, String) -> Unit)

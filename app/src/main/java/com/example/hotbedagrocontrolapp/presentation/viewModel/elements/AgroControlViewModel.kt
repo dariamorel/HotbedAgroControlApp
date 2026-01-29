@@ -12,7 +12,7 @@ import com.example.hotbedagrocontrolapp.domain.entities.elements.Element
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
-import com.example.hotbedagrocontrolapp.domain.interfaces.Client
+import com.example.hotbedagrocontrolapp.domain.interfaces.data.service.Client
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,8 +1,8 @@
-package com.example.hotbedagrocontrolapp.service
+package com.example.hotbedagrocontrolapp.data.service
 
 import android.util.Log
-import com.example.hotbedagrocontrolapp.domain.interfaces.Client
-import com.example.hotbedagrocontrolapp.domain.interfaces.Client.Companion.CLIENT_TAG
+import com.example.hotbedagrocontrolapp.domain.interfaces.data.service.Client
+import com.example.hotbedagrocontrolapp.domain.interfaces.data.service.Client.Companion.CLIENT_TAG
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttClient

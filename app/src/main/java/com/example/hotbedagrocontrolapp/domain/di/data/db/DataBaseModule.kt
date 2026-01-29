@@ -1,4 +1,4 @@
-package com.example.hotbedagrocontrolapp.domain.di
+package com.example.hotbedagrocontrolapp.domain.di.data.db
 
 import android.content.Context
 import androidx.room.Room

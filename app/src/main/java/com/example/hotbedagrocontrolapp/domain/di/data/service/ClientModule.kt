@@ -1,12 +1,11 @@
-package com.example.hotbedagrocontrolapp.domain.di
+package com.example.hotbedagrocontrolapp.domain.di.data.service
 
-import com.example.hotbedagrocontrolapp.domain.interfaces.Client
-import com.example.hotbedagrocontrolapp.service.ClientImpl
+import com.example.hotbedagrocontrolapp.data.service.ClientImpl
+import com.example.hotbedagrocontrolapp.domain.interfaces.data.service.Client
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
