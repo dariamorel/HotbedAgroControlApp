@@ -6,14 +6,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,7 +35,10 @@ fun DeleteDeviceScreen(
 ) {
     val mqttSettings = viewModel.mqttSettings
 
-    Column(modifier.fillMaxSize(),
+    Column(modifier.padding(20.dp)
+        .clip(RoundedCornerShape(15.dp))
+        .background(MaterialTheme.colorScheme.surface)
+        .padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Text(
@@ -39,7 +47,6 @@ fun DeleteDeviceScreen(
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         )
         Text(
             text = "Топик: ${mqttSettings.mainTopic}",
@@ -47,7 +54,6 @@ fun DeleteDeviceScreen(
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         )
 
         Text(
@@ -56,7 +62,6 @@ fun DeleteDeviceScreen(
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         )
 
         Text(
@@ -65,15 +70,15 @@ fun DeleteDeviceScreen(
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.background(MaterialTheme.colorScheme.surface)
         )
 
 
         Button(
             onClick = { viewModel.deleteDevice() },
             modifier = Modifier
-                .clip(RoundedCornerShape(30.dp))
-                .background(MaterialTheme.colorScheme.surface)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(30.dp)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray)
         ) {
             Text(
                 text = "Удалить устройство",

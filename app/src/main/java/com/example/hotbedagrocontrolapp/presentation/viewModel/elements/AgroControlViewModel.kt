@@ -60,7 +60,6 @@ class AgroControlViewModel @Inject constructor(
         )
 
     init {
-        addDevice("80.237.33.119", "aha/HBed", "user_umki11", "654321")
         if (_isDeviceAdded.value) {
             connect()
         }
