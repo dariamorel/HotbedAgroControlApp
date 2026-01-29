@@ -2,7 +2,9 @@ package com.example.hotbedagrocontrolapp.presentation.ui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +20,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,42 +45,43 @@ fun ElementsScreen(
     modifier: Modifier = Modifier
 ) {
     val currentData by viewModel.currentData.collectAsState()
+    val isConnected by viewModel.isConnected.collectAsState()
 
-    LazyColumn(
-        modifier = modifier.fillMaxWidth()
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Column(modifier = modifier.fillMaxWidth()
+        .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        item {
+        if (!isConnected) {
             Text(
-                text = "Датчики",
+                text = "Ошибка соединения!",
                 style = MaterialTheme.typography.titleMedium,
-                fontSize = 25.sp,
+                fontSize = 20.sp,
                 textAlign = TextAlign.Left,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = Color.Red,
             )
         }
-        for (i in 0 until Sensor.entries.size step 2) {
+
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    val sensor = Sensor.entries[i]
-                    currentData[sensor]?.let { response ->
-                        SensorComponent(
-                            sensor,
-                            response as SensorResponse,
-                            Modifier.weight(1f).aspectRatio(1f)
-                        )
-                    } ?: SensorComponent(
-                        sensor,
-                        SensorResponse(0.0),
-                        Modifier.weight(1f).aspectRatio(1f)
-                    )
-                    if (i + 1 < Sensor.entries.size) {
-                        val sensor = Sensor.entries[i + 1]
+                Text(
+                    text = "Датчики",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 25.sp,
+                    textAlign = TextAlign.Left,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+            for (i in 0 until Sensor.entries.size step 2) {
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        val sensor = Sensor.entries[i]
                         currentData[sensor]?.let { response ->
                             SensorComponent(
                                 sensor,
@@ -87,44 +93,40 @@ fun ElementsScreen(
                             SensorResponse(0.0),
                             Modifier.weight(1f).aspectRatio(1f)
                         )
-                    } else {
-                        Spacer(Modifier.weight(1f).aspectRatio(1f))
+                        if (i + 1 < Sensor.entries.size) {
+                            val sensor = Sensor.entries[i + 1]
+                            currentData[sensor]?.let { response ->
+                                SensorComponent(
+                                    sensor,
+                                    response as SensorResponse,
+                                    Modifier.weight(1f).aspectRatio(1f)
+                                )
+                            } ?: SensorComponent(
+                                sensor,
+                                SensorResponse(0.0),
+                                Modifier.weight(1f).aspectRatio(1f)
+                            )
+                        } else {
+                            Spacer(Modifier.weight(1f).aspectRatio(1f))
+                        }
                     }
                 }
             }
-        }
-        item {
-            Text(
-                text = "Элементы управления",
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 25.sp,
-                textAlign = TextAlign.Left,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-        for (i in 0 until Control.entries.size step 2) {
             item {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    val control = Control.entries[i]
-                    currentData[control]?.let { response ->
-                        ControlComponent(
-                            control,
-                            response as ControlResponse,
-                            Modifier.weight(1f).aspectRatio(1f)
-                        ) { isControlOn ->
-                            viewModel.onStatusChanged(control, isControlOn)
-                        }
-                    } ?: ControlComponent(
-                        control,
-                        ControlResponse(ControlResponse.Status.OFF),
-                        Modifier.weight(1f).aspectRatio(1f)
-                    ) { isControlOn ->
-                        viewModel.onStatusChanged(control, isControlOn)
-                    }
-                    if (i + 1 < Control.entries.size) {
-                        val control = Control.entries[i + 1]
+                Text(
+                    text = "Элементы управления",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 25.sp,
+                    textAlign = TextAlign.Left,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+            for (i in 0 until Control.entries.size step 2) {
+                item {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        val control = Control.entries[i]
                         currentData[control]?.let { response ->
                             ControlComponent(
                                 control,
@@ -140,8 +142,26 @@ fun ElementsScreen(
                         ) { isControlOn ->
                             viewModel.onStatusChanged(control, isControlOn)
                         }
-                    } else {
-                        Spacer(Modifier.weight(1f).aspectRatio(1f))
+                        if (i + 1 < Control.entries.size) {
+                            val control = Control.entries[i + 1]
+                            currentData[control]?.let { response ->
+                                ControlComponent(
+                                    control,
+                                    response as ControlResponse,
+                                    Modifier.weight(1f).aspectRatio(1f)
+                                ) { isControlOn ->
+                                    viewModel.onStatusChanged(control, isControlOn)
+                                }
+                            } ?: ControlComponent(
+                                control,
+                                ControlResponse(ControlResponse.Status.OFF),
+                                Modifier.weight(1f).aspectRatio(1f)
+                            ) { isControlOn ->
+                                viewModel.onStatusChanged(control, isControlOn)
+                            }
+                        } else {
+                            Spacer(Modifier.weight(1f).aspectRatio(1f))
+                        }
                     }
                 }
             }
