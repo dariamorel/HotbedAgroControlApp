@@ -56,7 +56,7 @@ class DateTime(
         }
     }
 
-    constructor(analiseType: AnaliseType) : this(analiseType, LocalDateTime.now())
+    constructor(analiseType: AnaliseType = AnaliseType.DAY) : this(analiseType, LocalDateTime.now())
 
     /**
      * Увеличить значение в зависимости от типа анализа.

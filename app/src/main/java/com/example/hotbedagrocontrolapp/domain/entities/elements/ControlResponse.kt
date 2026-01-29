@@ -11,7 +11,7 @@ data class ControlResponse(override val data: Status): Response() {
      * Статус элемента.
      */
     enum class Status(val message: String) {
-        ON("ON"), OFF("OFF")
+        ON("ON"), OFF("OFF"), NaN("NaN")
     }
 
     override val dataToString = data.message

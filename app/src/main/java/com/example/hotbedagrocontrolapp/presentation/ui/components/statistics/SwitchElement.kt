@@ -1,12 +1,9 @@
 package com.example.hotbedagrocontrolapp.presentation.ui.components.statistics
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -27,13 +24,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
+import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
 import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
 
 /**
@@ -42,12 +39,14 @@ import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
  * @param onSelectedChange обработка выбранного значения.
  */
 @Composable
-fun SwitchSensor(
+fun SwitchElement(
+    element: Element,
+    options: List<Element>,
     modifier: Modifier = Modifier,
-    onSelectedChange: (Sensor) -> Unit = {}
+    onSelectedChange: (Element) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(Sensor.AIR_TEMPERATURE.elementName) }
+    var selectedText by remember { mutableStateOf(element.elementName) }
     var textFieldSize by remember { mutableStateOf(Size.Zero)}
 
     val icon = if (expanded)
@@ -83,7 +82,7 @@ fun SwitchSensor(
                 .width(with(LocalDensity.current){textFieldSize.width.toDp()})
                 .background(MaterialTheme.colorScheme.surface)
         ) {
-            Sensor.entries.forEach {
+            options.forEach {
                 DropdownMenuItem(
                     text = { Text(text = it.elementName) },
                     onClick = {

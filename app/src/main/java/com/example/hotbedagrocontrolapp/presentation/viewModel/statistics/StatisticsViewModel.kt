@@ -6,15 +6,20 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
+import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
+import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
+import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.STATISTICS_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -50,19 +55,24 @@ class StatisticsViewModel @Inject constructor(
         element: Element,
         dateTime: DateTime
     ): StateFlow<Map<LocalDateTime, Response>> {
-        _dataHistory[HistoryItem(element, dateTime)]?.let {
-            return it
-        }
-        val flow =
-            filterByAnaliseType(dataBaseManager.dataHistory[element] ?: emptyFlow(), dateTime)
+        try {
+            _dataHistory[HistoryItem(element, dateTime)]?.let {
+                return it
+            }
+            val flow =
+                filterByAnaliseType(element, dataBaseManager.dataHistory[element] ?: emptyFlow(), dateTime)
 
-        val stateFlow = flow.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = emptyMap()
-        )
-        _dataHistory[HistoryItem(element, dateTime)] = stateFlow
-        return stateFlow
+            val stateFlow = flow.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Lazily,
+                initialValue = emptyMap()
+            )
+            _dataHistory[HistoryItem(element, dateTime)] = stateFlow
+            return stateFlow
+        } catch (e: Exception) {
+            Log.e(STATISTICS_TAG, "Error getting data history: ${e.message}.")
+            return MutableStateFlow<Map<LocalDateTime, Response>>(emptyMap()).asStateFlow()
+        }
     }
 
     /**
@@ -75,15 +85,10 @@ class StatisticsViewModel @Inject constructor(
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun filterByAnaliseType(
+        element: Element,
         flow: Flow<List<Pair<LocalDateTime, Response>>>,
         dateTime: DateTime
     ): Flow<Map<LocalDateTime, Response>> {
-        val comparator = if (dateTime.analiseType == AnaliseType.YEAR) compareBy<String> {
-            val formatter = DateTimeFormatter.ofPattern("LLLL", Locale("ru"))
-            val month = formatter.parse(it)
-            month.get(ChronoField.MONTH_OF_YEAR)
-        } else compareBy { it }
-
         return flow.map { list ->
             val map = when (dateTime.analiseType) {
                 AnaliseType.YEAR -> {
@@ -134,7 +139,10 @@ class StatisticsViewModel @Inject constructor(
 
             val iterator = dateTime.iterator
             for (i in range) {
-                map.putIfAbsent(iterator.plus(i), SensorResponse(0.0))
+                map.putIfAbsent(iterator.plus(i),
+                    if (element is Sensor) SensorResponse(0.0)
+                    else ControlResponse(ControlResponse.Status.NaN)
+                )
             }
 
             map

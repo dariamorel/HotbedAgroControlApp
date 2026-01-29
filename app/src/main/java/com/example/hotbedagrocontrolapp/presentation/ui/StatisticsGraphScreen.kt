@@ -26,7 +26,7 @@ import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
 import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.LineGraph
 import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.SwitchAnaliseType
 import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.SwitchDateTime
-import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.SwitchSensor
+import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.SwitchElement
 import com.example.hotbedagrocontrolapp.presentation.viewModel.statistics.StatisticsViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -56,8 +56,12 @@ fun StatisticsGraphScreen(
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            SwitchSensor(Modifier.weight(2f)) { selected ->
-                sensor = selected
+            SwitchElement(
+                element = sensor,
+                options = Sensor.entries,
+                modifier = Modifier.weight(2f)
+            ) { selected ->
+                sensor = selected as Sensor
             }
 
             SwitchAnaliseType(Modifier.weight(1f)) { selected ->
