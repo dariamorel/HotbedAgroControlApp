@@ -59,8 +59,9 @@ class StatisticsViewModel @Inject constructor(
             _dataHistory[HistoryItem(element, dateTime)]?.let {
                 return it
             }
-            val flow =
-                filterByAnaliseType(element, dataBaseManager.dataHistory[element] ?: emptyFlow(), dateTime)
+            val flow = if (element is Sensor)
+                filterForSensor(dataBaseManager.dataHistory[element] ?: emptyFlow(), dateTime)
+            else filterForControl(dataBaseManager.dataHistory[element] ?: emptyFlow(), dateTime)
 
             val stateFlow = flow.stateIn(
                 scope = viewModelScope,
@@ -84,8 +85,7 @@ class StatisticsViewModel @Inject constructor(
      * @return Отфильтрованный поток истории изменений.
      */
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun filterByAnaliseType(
-        element: Element,
+    private fun filterForSensor(
         flow: Flow<List<Pair<LocalDateTime, Response>>>,
         dateTime: DateTime
     ): Flow<Map<LocalDateTime, Response>> {
@@ -140,12 +140,34 @@ class StatisticsViewModel @Inject constructor(
             val iterator = dateTime.iterator
             for (i in range) {
                 map.putIfAbsent(iterator.plus(i),
-                    if (element is Sensor) SensorResponse(0.0)
-                    else ControlResponse(ControlResponse.Status.NaN)
+                    SensorResponse(0.0)
                 )
             }
 
             map
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun filterForControl(
+        flow: Flow<List<Pair<LocalDateTime, Response>>>,
+        dateTime: DateTime
+    ): Flow<Map<LocalDateTime, Response>> {
+        return flow.map { list ->
+            list.filter {
+                it.first.year == dateTime.localDateTime.year
+                        && it.first.month == dateTime.localDateTime.month
+                        && it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
+            }
+                .associate {
+                    LocalDateTime.of(
+                        it.first.year,
+                        it.first.month,
+                        it.first.dayOfMonth,
+                        it.first.hour,
+                        it.first.minute
+                    ) to it.second
+                }.toSortedMap()
         }
     }
 }
