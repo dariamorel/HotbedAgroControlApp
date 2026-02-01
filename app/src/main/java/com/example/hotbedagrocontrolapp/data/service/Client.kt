@@ -33,7 +33,7 @@ class ClientImpl(
      * @param onConnectionLost Обработка потери связи.
      */
     override suspend fun connect(onMessageReceived: (String, String) -> Unit, onConnectionLost: () -> Unit) {
-        val serverUri = "tcp://$IPAddress:12883"
+        val serverUri = "tcp://$IPAddress:1883"
 
         val options = MqttConnectOptions().apply {
             isAutomaticReconnect = true
