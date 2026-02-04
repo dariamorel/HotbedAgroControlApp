@@ -2,8 +2,11 @@ package com.example.hotbedagrocontrolapp.presentation.ui.components.statistics
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -11,7 +14,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.dp
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
 import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
@@ -28,9 +35,10 @@ import java.time.LocalDateTime
 fun SwitchDateTime(
     dateTime: DateTime,
     modifier: Modifier = Modifier,
+    clickableModifier: Modifier = Modifier,
     onSelectedChange: (DateTime) -> Unit = {}
 ) {
-    Row(modifier) {
+    Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
             modifier = Modifier.clickable { onSelectedChange(dateTime.minus(1)) },
@@ -39,7 +47,10 @@ fun SwitchDateTime(
         Text(
             text = dateTime.fullString,
             color = DarkBrown,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium.copy(
+                textDecoration = TextDecoration.Underline
+            ),
+            modifier = clickableModifier
         )
         Icon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,

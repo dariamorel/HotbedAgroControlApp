@@ -3,6 +3,7 @@ package com.example.hotbedagrocontrolapp.presentation.ui
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,11 +52,12 @@ fun StatisticsGraphScreen(
     var dateTime by remember { mutableStateOf(DateTime(analiseType)) }
     val values by viewModel.getDataHistory(sensor, dateTime).collectAsState()
 
+    var isOpen by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-
         SwitchElement(
             element = sensor,
             options = Sensor.entries,
@@ -64,18 +66,15 @@ fun StatisticsGraphScreen(
             sensor = selected as Sensor
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(
-                text = dateTime.fullString,
-                color = DarkBrown,
-                style = MaterialTheme.typography.titleMedium
-            )
-
-            ChooseDateTimeWheel() { newLocalDateTime, newAnaliseType ->
-                {
-                    analiseType = newAnaliseType
-                    dateTime = DateTime(analiseType, newLocalDateTime)
-                }
+        SwitchDateTime(dateTime, Modifier.align(Alignment.End), Modifier.clickable { isOpen = true }) { newDateTime ->
+            dateTime = newDateTime
+        }
+        if (isOpen) {
+            ChooseDateTimeWheel(
+                dateTime = dateTime,
+                onDismissRequest = { isOpen = false }) { newLocalDateTime, newAnaliseType ->
+                analiseType = newAnaliseType
+                dateTime = DateTime(analiseType, newLocalDateTime)
             }
         }
 

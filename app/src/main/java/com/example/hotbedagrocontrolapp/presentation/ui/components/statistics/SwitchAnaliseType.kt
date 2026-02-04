@@ -76,6 +76,8 @@ fun SwitchAnaliseType(
             Icon(icon,"KeyboardArrow")
         }
 
+
+
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
