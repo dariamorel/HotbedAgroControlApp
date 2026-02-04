@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -23,11 +24,13 @@ import androidx.compose.ui.unit.dp
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
+import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.ChooseDateTimeWheel
 import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.LineGraph
 import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.SwitchAnaliseType
 import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.SwitchDateTime
 import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.SwitchElement
 import com.example.hotbedagrocontrolapp.presentation.viewModel.statistics.StatisticsViewModel
+import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -53,32 +56,27 @@ fun StatisticsGraphScreen(
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            SwitchElement(
-                element = sensor,
-                options = Sensor.entries,
-                modifier = Modifier.weight(2f)
-            ) { selected ->
-                sensor = selected as Sensor
-            }
-
-            SwitchAnaliseType(Modifier.weight(1f)) { selected ->
-                analiseType = selected
-                val now = LocalDateTime.now()
-                val newDateTime = if (when (analiseType) {
-                        AnaliseType.YEAR -> false
-                        AnaliseType.MONTH -> dateTime.localDateTime.year == now.year
-                        AnaliseType.DAY -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month
-                        AnaliseType.HOUR -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.localDateTime.dayOfMonth == now.dayOfMonth
-                }) now else dateTime.localDateTime
-                dateTime = DateTime(analiseType, newDateTime)
-            }
+        SwitchElement(
+            element = sensor,
+            options = Sensor.entries,
+            modifier = Modifier
+        ) { selected ->
+            sensor = selected as Sensor
         }
 
-        SwitchDateTime(dateTime, Modifier.align(Alignment.End)) { newDateTime ->
-            dateTime = newDateTime
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(
+                text = dateTime.fullString,
+                color = DarkBrown,
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            ChooseDateTimeWheel() { newLocalDateTime, newAnaliseType ->
+                {
+                    analiseType = newAnaliseType
+                    dateTime = DateTime(analiseType, newLocalDateTime)
+                }
+            }
         }
 
         val labels = when (analiseType) {

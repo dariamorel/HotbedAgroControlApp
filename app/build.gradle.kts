@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.google.hilt)
     ksp(libs.google.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.wheelpickercompose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
