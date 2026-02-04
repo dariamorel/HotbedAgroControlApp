@@ -48,6 +48,7 @@ import java.time.LocalDateTime
 @Composable
 fun ChooseDateTimeWheel(
     dateTime: DateTime,
+    analiseType: AnaliseType,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     updateDateTime: (LocalDateTime, AnaliseType) -> Unit
@@ -140,76 +141,82 @@ fun ChooseDateTimeWheel(
                     null
                 }
             }
-            Column(
-                Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Месяц",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.surface
-                )
-                WheelTextPicker(
-                    texts = monthItems,
-                    rowCount = 3,
-                    startIndex = monthIdx,
-                    modifier = Modifier,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.surface,
-                    selectorProperties = WheelPickerDefaults.selectorProperties(
-                        border = BorderStroke(1.dp, Color.DarkGray)
+            if (analiseType in listOf(AnaliseType.MONTH, AnaliseType.DAY, AnaliseType.HOUR)) {
+                Column(
+                    Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Месяц",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.surface
                     )
-                ) { newIdx ->
-                    monthIdx = newIdx
-                    null
+                    WheelTextPicker(
+                        texts = monthItems,
+                        rowCount = 3,
+                        startIndex = monthIdx,
+                        modifier = Modifier,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.surface,
+                        selectorProperties = WheelPickerDefaults.selectorProperties(
+                            border = BorderStroke(1.dp, Color.DarkGray)
+                        )
+                    ) { newIdx ->
+                        monthIdx = newIdx
+                        null
+                    }
                 }
             }
-            Column(
-                Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "День",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.surface
-                )
-                WheelTextPicker(
-                    texts = dayItems,
-                    rowCount = 3,
-                    startIndex = dayIdx,
-                    modifier = Modifier,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.surface,
-                    selectorProperties = WheelPickerDefaults.selectorProperties(
-                        border = BorderStroke(1.dp, Color.DarkGray)
+            if (analiseType in listOf(AnaliseType.DAY, AnaliseType.HOUR)) {
+                Column(
+                    Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "День",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.surface
                     )
-                ) { newIdx ->
-                    dayIdx = newIdx
-                    null
+                    WheelTextPicker(
+                        texts = dayItems,
+                        rowCount = 3,
+                        startIndex = dayIdx,
+                        modifier = Modifier,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.surface,
+                        selectorProperties = WheelPickerDefaults.selectorProperties(
+                            border = BorderStroke(1.dp, Color.DarkGray)
+                        )
+                    ) { newIdx ->
+                        dayIdx = newIdx
+                        null
+                    }
                 }
             }
-            Column(
-                Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Час",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.surface
-                )
-                WheelTextPicker(
-                    texts = hourItems,
-                    rowCount = 3,
-                    startIndex = hourIdx,
-                    modifier = Modifier,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.surface,
-                    selectorProperties = WheelPickerDefaults.selectorProperties(
-                        border = BorderStroke(1.dp, Color.DarkGray)
+            if (analiseType == AnaliseType.HOUR) {
+                Column(
+                    Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Час",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.surface
                     )
-                ) { newIdx ->
-                    hourIdx = newIdx
-                    null
+                    WheelTextPicker(
+                        texts = hourItems,
+                        rowCount = 3,
+                        startIndex = hourIdx,
+                        modifier = Modifier,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.surface,
+                        selectorProperties = WheelPickerDefaults.selectorProperties(
+                            border = BorderStroke(1.dp, Color.DarkGray)
+                        )
+                    ) { newIdx ->
+                        hourIdx = newIdx
+                        null
+                    }
                 }
             }
         }

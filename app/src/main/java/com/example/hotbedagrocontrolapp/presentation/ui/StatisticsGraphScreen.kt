@@ -58,12 +58,25 @@ fun StatisticsGraphScreen(
         modifier = modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        SwitchElement(
-            element = sensor,
-            options = Sensor.entries,
-            modifier = Modifier
-        ) { selected ->
-            sensor = selected as Sensor
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            SwitchElement(
+                element = sensor,
+                options = Sensor.entries,
+                modifier = Modifier.weight(1f)
+            ) { selected ->
+                sensor = selected as Sensor
+            }
+            SwitchAnaliseType(analiseType, Modifier.weight(1f)) { newAnaliseType ->
+                analiseType = newAnaliseType
+                val now = LocalDateTime.now()
+                val newDateTime = if (when (analiseType) {
+                        AnaliseType.YEAR -> false
+                        AnaliseType.MONTH -> dateTime.localDateTime.year == now.year
+                        AnaliseType.DAY -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month
+                        AnaliseType.HOUR -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.localDateTime.dayOfMonth == now.dayOfMonth
+                    }) now else dateTime.localDateTime
+                dateTime = DateTime(analiseType, newDateTime)
+            }
         }
 
         SwitchDateTime(dateTime, Modifier.align(Alignment.End), Modifier.clickable { isOpen = true }) { newDateTime ->
@@ -72,6 +85,7 @@ fun StatisticsGraphScreen(
         if (isOpen) {
             ChooseDateTimeWheel(
                 dateTime = dateTime,
+                analiseType = analiseType,
                 onDismissRequest = { isOpen = false }) { newLocalDateTime, newAnaliseType ->
                 analiseType = newAnaliseType
                 dateTime = DateTime(analiseType, newLocalDateTime)

@@ -43,11 +43,12 @@ import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
  */
 @Composable
 fun SwitchAnaliseType(
+    analiseType: AnaliseType,
     modifier: Modifier = Modifier,
     onSelectedChange: (AnaliseType) -> Unit = {}
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(AnaliseType.DAY.type) }
+    var selectedText by remember { mutableStateOf(analiseType.type) }
     var textFieldSize by remember { mutableStateOf(Size.Zero)}
 
     val icon = if (expanded)
