@@ -72,6 +72,13 @@ fun DeleteDeviceScreen(
             color = MaterialTheme.colorScheme.onPrimary,
         )
 
+        Text(
+            text = "Порт: ${mqttSettings.port}",
+            style = MaterialTheme.typography.titleMedium,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onPrimary,
+        )
 
         Button(
             onClick = { viewModel.deleteDevice() },

@@ -13,4 +13,5 @@ data class MqttSettings(
     val mainTopic: String,
     val userName: String,
     val password: String,
+    val port: String
 )

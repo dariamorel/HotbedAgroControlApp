@@ -38,10 +38,11 @@ fun AddDeviceScreen(
     viewModel: AgroControlViewModel,
     modifier: Modifier = Modifier
 ) {
-    var ipAddress by remember { mutableStateOf("") }
-    var mainTopic by remember { mutableStateOf("") }
-    var userName by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var ipAddress by remember { mutableStateOf("62.60.233.95") }
+    var mainTopic by remember { mutableStateOf("aha/HBed") }
+    var userName by remember { mutableStateOf("umki") }
+    var password by remember { mutableStateOf("12345") }
+    var port by remember { mutableStateOf("1883") }
 
     Column(modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -82,8 +83,17 @@ fun AddDeviceScreen(
                 .clip(RoundedCornerShape(15.dp)),
             colors = TextFieldDefaults.colors(focusedContainerColor = Color.LightGray, unfocusedContainerColor = MaterialTheme.colorScheme.surface)
         )
+        TextField(
+            value = port,
+            onValueChange = { newPort -> port = newPort },
+            label = { Text("Порт", color = MaterialTheme.colorScheme.onPrimary) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(15.dp)),
+            colors = TextFieldDefaults.colors(focusedContainerColor = Color.LightGray, unfocusedContainerColor = MaterialTheme.colorScheme.surface)
+        )
         Button(
-            onClick = { viewModel.addDevice(ipAddress, mainTopic, userName, password) },
+            onClick = { viewModel.addDevice(ipAddress, mainTopic, userName, password, port) },
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(30.dp)),

@@ -58,7 +58,8 @@ class AgroControlViewModel @Inject constructor(
             ipAddress = prefs.getString("ip_address", "") ?: "",
             mainTopic = prefs.getString("main_topic", "") ?: "",
             userName = prefs.getString("user_name", "") ?: "",
-            password = prefs.getString("password", "") ?: ""
+            password = prefs.getString("password", "") ?: "",
+            port = prefs.getString("port", "") ?: ""
         )
 
     init {
@@ -90,13 +91,14 @@ class AgroControlViewModel @Inject constructor(
      * @param userName Имя пользователя в Mosquitto.
      * @param password Пароль пользователя в Mosquitto.
      */
-    fun addDevice(ipAddress: String, mainTopic: String, userName: String, password: String) {
+    fun addDevice(ipAddress: String, mainTopic: String, userName: String, password: String, port: String) {
         viewModelScope.launch(Dispatchers.IO) {
             prefs.edit {
                 putString("ip_address", ipAddress)
                 putString("main_topic", mainTopic)
                 putString("user_name", userName)
                 putString("password", password)
+                putString("port", port)
             }
             _isDeviceAdded.value = true
             Log.d(Client.Companion.CLIENT_TAG, "Device was added!")

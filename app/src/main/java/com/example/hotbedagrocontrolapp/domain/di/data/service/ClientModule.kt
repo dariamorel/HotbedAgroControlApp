@@ -28,7 +28,8 @@ object ClientModule {
             prefs.getString("ip_address", "") ?: "",
             prefs.getString("main_topic", "") ?: "",
             prefs.getString("user_name", "") ?: "",
-            prefs.getString("password", "") ?: ""
+            prefs.getString("password", "") ?: "",
+            prefs.getString("port", "") ?: ""
         )
     }
 

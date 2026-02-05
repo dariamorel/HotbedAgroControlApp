@@ -23,6 +23,7 @@ class ClientImpl(
     private val mainTopic: String,
     private val clientUserName: String,
     private val clientPassword: String,
+    private val port: String
 ): Client {
     private lateinit var mqttClient: MqttClient
 
@@ -33,7 +34,7 @@ class ClientImpl(
      * @param onConnectionLost Обработка потери связи.
      */
     override suspend fun connect(onMessageReceived: (String, String) -> Unit, onConnectionLost: () -> Unit) {
-        val serverUri = "tcp://$IPAddress:1883"
+        val serverUri = "tcp://$IPAddress:$port"
 
         val options = MqttConnectOptions().apply {
             isAutomaticReconnect = true
