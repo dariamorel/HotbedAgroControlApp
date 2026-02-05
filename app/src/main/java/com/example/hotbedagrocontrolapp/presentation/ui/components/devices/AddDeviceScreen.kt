@@ -51,6 +51,7 @@ fun AddDeviceScreen(
             onValueChange = { newIpAddress -> ipAddress = newIpAddress },
             label = { Text("IP адрес", color = MaterialTheme.colorScheme.onPrimary) },
             modifier = Modifier
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(15.dp)),
             colors = TextFieldDefaults.colors(focusedContainerColor = Color.LightGray, unfocusedContainerColor = MaterialTheme.colorScheme.surface)
         )
@@ -59,6 +60,7 @@ fun AddDeviceScreen(
             onValueChange = { newMainTopic -> mainTopic = newMainTopic },
             label = { Text("Топик", color = MaterialTheme.colorScheme.onPrimary) },
             modifier = Modifier
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(15.dp)),
             colors = TextFieldDefaults.colors(focusedContainerColor = Color.LightGray, unfocusedContainerColor = MaterialTheme.colorScheme.surface)
         )
@@ -67,6 +69,7 @@ fun AddDeviceScreen(
             onValueChange = { newUserName -> userName = newUserName },
             label = { Text("Имя пользователя", color = MaterialTheme.colorScheme.onPrimary) },
             modifier = Modifier
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(15.dp)),
             colors = TextFieldDefaults.colors(focusedContainerColor = Color.LightGray, unfocusedContainerColor = MaterialTheme.colorScheme.surface)
         )
@@ -75,6 +78,7 @@ fun AddDeviceScreen(
             onValueChange = { newPassword -> password = newPassword },
             label = { Text("Пароль", color = MaterialTheme.colorScheme.onPrimary) },
             modifier = Modifier
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(15.dp)),
             colors = TextFieldDefaults.colors(focusedContainerColor = Color.LightGray, unfocusedContainerColor = MaterialTheme.colorScheme.surface)
         )

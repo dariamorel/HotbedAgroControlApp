@@ -48,65 +48,64 @@ import java.time.LocalDateTime
 @Composable
 fun ChooseDateTimeWheel(
     dateTime: DateTime,
-    analiseType: AnaliseType,
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
-    updateDateTime: (LocalDateTime, AnaliseType) -> Unit
+    onSelectedChange: (DateTime) -> Unit
 ) {
     val yearItems = ((1990..2100)).map { it.toString() }
     var yearIdx by remember { mutableIntStateOf(yearItems.indexOf(dateTime.localDateTime.year.toString())) }
 
-    val monthItems = listOf("-") + (1..12).map { it.toString() }
+    val monthItems = (1..12).map { it.toString() }
     var monthIdx by remember { mutableIntStateOf(monthItems.indexOf(dateTime.localDateTime.month.value.toString())) }
 
-    val dayItems = listOf("-") + (1..31).map { it.toString() }
+    val dayItems = (1..31).map { it.toString() }
     var dayIdx by remember { mutableIntStateOf(dayItems.indexOf(dateTime.localDateTime.dayOfMonth.toString())) }
 
-    val hourItems = listOf("-") + (0..23).map { it.toString() }
-    var hourIdx by remember { mutableIntStateOf(0) }
+    val hourItems = (0..23).map { it.toString() }
+    var hourIdx by remember { mutableIntStateOf(hourItems.indexOf(dateTime.localDateTime.hour.toString())) }
 
     Dialog(onDismissRequest = {
         onDismissRequest()
         try {
-            when {
-                monthItems[monthIdx] == "-" -> updateDateTime(
-                    LocalDateTime.of(
+            when (dateTime.analiseType) {
+                 AnaliseType.YEAR -> onSelectedChange(
+                    DateTime(AnaliseType.YEAR, LocalDateTime.of(
                         yearItems[yearIdx].toInt(),
                         1,
                         1,
                         0,
                         0
-                    ), AnaliseType.YEAR
+                    )),
                 )
 
-                dayItems[dayIdx] == "-" -> updateDateTime(
-                    LocalDateTime.of(
+                AnaliseType.MONTH ->  onSelectedChange(
+                    DateTime(AnaliseType.MONTH, LocalDateTime.of(
                         yearItems[yearIdx].toInt(),
                         monthItems[monthIdx].toInt(),
                         1,
                         0,
                         0
-                    ), AnaliseType.MONTH
+                    )),
                 )
 
-                hourItems[hourIdx] == "-" -> updateDateTime(
-                    LocalDateTime.of(
+                AnaliseType.DAY ->  onSelectedChange(
+                    DateTime(AnaliseType.DAY, LocalDateTime.of(
                         yearItems[yearIdx].toInt(),
                         monthItems[monthIdx].toInt(),
                         dayItems[dayIdx].toInt(),
                         0,
                         0
-                    ), AnaliseType.DAY
+                    )),
                 )
 
-                else -> updateDateTime(
-                    LocalDateTime.of(
+                else -> onSelectedChange(
+                    DateTime(AnaliseType.HOUR, LocalDateTime.of(
                         yearItems[yearIdx].toInt(),
                         monthItems[monthIdx].toInt(),
                         dayItems[dayIdx].toInt(),
                         hourItems[hourIdx].toInt(),
                         0
-                    ), AnaliseType.HOUR
+                    )),
                 )
             }
         } catch (_: Exception) {
@@ -141,7 +140,7 @@ fun ChooseDateTimeWheel(
                     null
                 }
             }
-            if (analiseType in listOf(AnaliseType.MONTH, AnaliseType.DAY, AnaliseType.HOUR)) {
+            if (dateTime.analiseType in listOf(AnaliseType.MONTH, AnaliseType.DAY, AnaliseType.HOUR)) {
                 Column(
                     Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -167,7 +166,7 @@ fun ChooseDateTimeWheel(
                     }
                 }
             }
-            if (analiseType in listOf(AnaliseType.DAY, AnaliseType.HOUR)) {
+            if (dateTime.analiseType in listOf(AnaliseType.DAY, AnaliseType.HOUR)) {
                 Column(
                     Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -193,7 +192,7 @@ fun ChooseDateTimeWheel(
                     }
                 }
             }
-            if (analiseType == AnaliseType.HOUR) {
+            if (dateTime.analiseType == AnaliseType.HOUR) {
                 Column(
                     Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally

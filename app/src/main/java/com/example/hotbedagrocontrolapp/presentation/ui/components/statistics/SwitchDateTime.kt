@@ -14,6 +14,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,9 +39,10 @@ import java.time.LocalDateTime
 fun SwitchDateTime(
     dateTime: DateTime,
     modifier: Modifier = Modifier,
-    clickableModifier: Modifier = Modifier,
-    onSelectedChange: (DateTime) -> Unit = {}
+    onSelectedChange: (DateTime) -> Unit
 ) {
+    var isOpen by remember { mutableStateOf(false) }
+
     Row(modifier, verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
@@ -50,12 +55,19 @@ fun SwitchDateTime(
             style = MaterialTheme.typography.titleMedium.copy(
                 textDecoration = TextDecoration.Underline
             ),
-            modifier = clickableModifier
+            modifier = Modifier.clickable { isOpen = true }
         )
         Icon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             modifier = Modifier.clickable { onSelectedChange(dateTime.plus(1)) },
             contentDescription = "DateTime forward"
+        )
+    }
+    if (isOpen) {
+        ChooseDateTimeWheel(
+            dateTime = dateTime,
+            onDismissRequest = { isOpen = false },
+            onSelectedChange = onSelectedChange
         )
     }
 }

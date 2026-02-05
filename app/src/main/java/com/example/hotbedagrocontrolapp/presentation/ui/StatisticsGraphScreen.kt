@@ -52,8 +52,6 @@ fun StatisticsGraphScreen(
     var dateTime by remember { mutableStateOf(DateTime(analiseType)) }
     val values by viewModel.getDataHistory(sensor, dateTime).collectAsState()
 
-    var isOpen by remember { mutableStateOf(false) }
-
     Column(
         modifier = modifier.fillMaxSize().padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -62,7 +60,7 @@ fun StatisticsGraphScreen(
             SwitchElement(
                 element = sensor,
                 options = Sensor.entries,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(2f)
             ) { selected ->
                 sensor = selected as Sensor
             }
@@ -79,17 +77,8 @@ fun StatisticsGraphScreen(
             }
         }
 
-        SwitchDateTime(dateTime, Modifier.align(Alignment.End), Modifier.clickable { isOpen = true }) { newDateTime ->
+        SwitchDateTime(dateTime, Modifier.align(Alignment.End)) { newDateTime ->
             dateTime = newDateTime
-        }
-        if (isOpen) {
-            ChooseDateTimeWheel(
-                dateTime = dateTime,
-                analiseType = analiseType,
-                onDismissRequest = { isOpen = false }) { newLocalDateTime, newAnaliseType ->
-                analiseType = newAnaliseType
-                dateTime = DateTime(analiseType, newLocalDateTime)
-            }
         }
 
         val labels = when (analiseType) {
