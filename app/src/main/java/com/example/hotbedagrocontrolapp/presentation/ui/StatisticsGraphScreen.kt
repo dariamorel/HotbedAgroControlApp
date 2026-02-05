@@ -48,8 +48,7 @@ fun StatisticsGraphScreen(
     modifier: Modifier = Modifier
 ) {
     var sensor by remember { mutableStateOf(Sensor.AIR_TEMPERATURE) }
-    var analiseType by remember { mutableStateOf(AnaliseType.DAY) }
-    var dateTime by remember { mutableStateOf(DateTime(analiseType)) }
+    var dateTime by remember { mutableStateOf(DateTime(AnaliseType.DAY)) }
     val values by viewModel.getDataHistory(sensor, dateTime).collectAsState()
 
     Column(
@@ -64,16 +63,15 @@ fun StatisticsGraphScreen(
             ) { selected ->
                 sensor = selected as Sensor
             }
-            SwitchAnaliseType(analiseType, Modifier.weight(1f)) { newAnaliseType ->
-                analiseType = newAnaliseType
+            SwitchAnaliseType(dateTime.analiseType, Modifier.weight(1f)) { newAnaliseType ->
                 val now = LocalDateTime.now()
-                val newDateTime = if (when (analiseType) {
+                val newDateTime = if (when (newAnaliseType) {
                         AnaliseType.YEAR -> false
                         AnaliseType.MONTH -> dateTime.localDateTime.year == now.year
                         AnaliseType.DAY -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month
                         AnaliseType.HOUR -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.localDateTime.dayOfMonth == now.dayOfMonth
                     }) now else dateTime.localDateTime
-                dateTime = DateTime(analiseType, newDateTime)
+                dateTime = DateTime(newAnaliseType, newDateTime)
             }
         }
 
@@ -81,7 +79,7 @@ fun StatisticsGraphScreen(
             dateTime = newDateTime
         }
 
-        val labels = when (analiseType) {
+        val labels = when (dateTime.analiseType) {
             AnaliseType.HOUR -> values.map { (key, _) ->
                 if (key.minute % 10 == 0) key.format(DateTimeFormatter.ofPattern("HH:mm")) else " "
             }
