@@ -51,15 +51,15 @@ fun ElementsScreen(
         .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        if (!isConnected) {
-            Text(
-                text = "Ошибка соединения!",
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 20.sp,
-                textAlign = TextAlign.Left,
-                color = Color.Red,
-            )
-        }
+//        if (!isConnected) {
+//            Text(
+//                text = "Ошибка соединения!",
+//                style = MaterialTheme.typography.titleMedium,
+//                fontSize = 20.sp,
+//                textAlign = TextAlign.Left,
+//                color = Color.Red,
+//            )
+//        }
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),

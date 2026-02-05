@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.style.TextAlign
@@ -115,7 +116,9 @@ fun ChooseDateTimeWheel(
     }) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
-            modifier = Modifier
+            modifier = Modifier.clip(RoundedCornerShape(20.dp))
+                .background(MaterialTheme.colorScheme.background.copy(alpha = 1.5f))
+                .padding(20.dp)
         ) {
             Column(
                 Modifier.weight(1f),
@@ -124,7 +127,7 @@ fun ChooseDateTimeWheel(
                 Text(
                     text = "Год",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.surface
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
                 WheelTextPicker(
                     texts = yearItems,
@@ -132,10 +135,10 @@ fun ChooseDateTimeWheel(
                     startIndex = yearIdx,
                     modifier = Modifier,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.surface,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     selectorProperties = WheelPickerDefaults.selectorProperties(
-                        border = BorderStroke(1.dp, Color.DarkGray),
-                        color = Color.DarkGray.copy(alpha = 0.5f),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.surface),
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
                     )
                 ) { newIdx ->
                     yearIdx = newIdx
@@ -150,7 +153,7 @@ fun ChooseDateTimeWheel(
                     Text(
                         text = "Месяц",
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.surface
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     WheelTextPicker(
                         texts = monthItems,
@@ -158,10 +161,10 @@ fun ChooseDateTimeWheel(
                         startIndex = monthIdx,
                         modifier = Modifier,
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.surface,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         selectorProperties = WheelPickerDefaults.selectorProperties(
-                            border = BorderStroke(1.dp, Color.DarkGray),
-                            color = Color.DarkGray.copy(alpha = 0.5f),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.surface),
+                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
                         )
                     ) { newIdx ->
                         monthIdx = newIdx
@@ -177,7 +180,7 @@ fun ChooseDateTimeWheel(
                     Text(
                         text = "День",
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.surface
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     WheelTextPicker(
                         texts = dayItems,
@@ -185,10 +188,10 @@ fun ChooseDateTimeWheel(
                         startIndex = dayIdx,
                         modifier = Modifier,
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.surface,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         selectorProperties = WheelPickerDefaults.selectorProperties(
-                            border = BorderStroke(1.dp, Color.DarkGray),
-                            color = Color.DarkGray.copy(alpha = 0.5f),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.surface),
+                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
                         )
                     ) { newIdx ->
                         dayIdx = newIdx
@@ -204,7 +207,7 @@ fun ChooseDateTimeWheel(
                     Text(
                         text = "Час",
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.surface
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     WheelTextPicker(
                         texts = hourItems,
@@ -212,10 +215,10 @@ fun ChooseDateTimeWheel(
                         startIndex = hourIdx,
                         modifier = Modifier,
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.surface,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         selectorProperties = WheelPickerDefaults.selectorProperties(
-                            border = BorderStroke(1.dp, Color.DarkGray),
-                            color = Color.DarkGray.copy(alpha = 0.5f),
+                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.surface),
+                            color = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
                         )
                     ) { newIdx ->
                         hourIdx = newIdx
