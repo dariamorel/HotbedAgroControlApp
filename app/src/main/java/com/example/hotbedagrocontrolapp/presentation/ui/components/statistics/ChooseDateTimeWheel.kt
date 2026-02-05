@@ -36,12 +36,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.commandiron.wheel_picker_compose.WheelDateTimePicker
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import com.commandiron.wheel_picker_compose.core.WheelTextPicker
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
 import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
+import com.example.hotbedagrocontrolapp.ui.theme.DarkGreen
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -133,7 +135,7 @@ fun ChooseDateTimeWheel(
                     color = MaterialTheme.colorScheme.surface,
                     selectorProperties = WheelPickerDefaults.selectorProperties(
                         border = BorderStroke(1.dp, Color.DarkGray),
-
+                        color = Color.DarkGray.copy(alpha = 0.5f),
                     )
                 ) { newIdx ->
                     yearIdx = newIdx
@@ -158,7 +160,8 @@ fun ChooseDateTimeWheel(
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.surface,
                         selectorProperties = WheelPickerDefaults.selectorProperties(
-                            border = BorderStroke(1.dp, Color.DarkGray)
+                            border = BorderStroke(1.dp, Color.DarkGray),
+                            color = Color.DarkGray.copy(alpha = 0.5f),
                         )
                     ) { newIdx ->
                         monthIdx = newIdx
@@ -184,7 +187,8 @@ fun ChooseDateTimeWheel(
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.surface,
                         selectorProperties = WheelPickerDefaults.selectorProperties(
-                            border = BorderStroke(1.dp, Color.DarkGray)
+                            border = BorderStroke(1.dp, Color.DarkGray),
+                            color = Color.DarkGray.copy(alpha = 0.5f),
                         )
                     ) { newIdx ->
                         dayIdx = newIdx
@@ -210,7 +214,8 @@ fun ChooseDateTimeWheel(
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.surface,
                         selectorProperties = WheelPickerDefaults.selectorProperties(
-                            border = BorderStroke(1.dp, Color.DarkGray)
+                            border = BorderStroke(1.dp, Color.DarkGray),
+                            color = Color.DarkGray.copy(alpha = 0.5f),
                         )
                     ) { newIdx ->
                         hourIdx = newIdx
