@@ -2,8 +2,7 @@ package com.example.hotbedagrocontrolapp.domain.di.data.service
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.hotbedagrocontrolapp.data.service.ClientImpl
-import com.example.hotbedagrocontrolapp.domain.interfaces.data.service.Client
+import com.example.hotbedagrocontrolapp.data.service.MqttClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,8 +22,8 @@ object ClientModule {
      * Провайдер Mqtt клиента.
      */
     @Provides
-    fun provideClient(prefs: SharedPreferences): Client {
-        return ClientImpl(
+    fun provideClient(prefs: SharedPreferences): MqttClient {
+        return MqttClient(
             prefs.getString("ip_address", "") ?: "",
             prefs.getString("main_topic", "") ?: "",
             prefs.getString("user_name", "") ?: "",

@@ -1,8 +1,6 @@
 package com.example.hotbedagrocontrolapp.data.service
 
 import android.util.Log
-import com.example.hotbedagrocontrolapp.domain.interfaces.data.service.Client
-import com.example.hotbedagrocontrolapp.domain.interfaces.data.service.Client.Companion.CLIENT_TAG
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttClient
@@ -18,13 +16,13 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
  * @param clientUserName Имя пользователя в Mosquitto.
  * @param clientPassword Пароль пользователя в Mosquitto.
  */
-class ClientImpl(
+class MqttClient(
     private val IPAddress: String,
     private val mainTopic: String,
     private val clientUserName: String,
     private val clientPassword: String,
     private val port: String
-): Client {
+) {
     private lateinit var mqttClient: MqttClient
 
     /**
@@ -33,7 +31,7 @@ class ClientImpl(
      * @param onMessageReceived Обработка получаемых сообщений с Mosquitto.
      * @param onConnectionLost Обработка потери связи.
      */
-    override suspend fun connect(onMessageReceived: (String, String) -> Unit, onConnectionLost: () -> Unit) {
+    suspend fun connect(onMessageReceived: (String, String) -> Unit, onConnectionLost: () -> Unit) {
         val serverUri = "tcp://$IPAddress:$port"
 
         val options = MqttConnectOptions().apply {
@@ -84,7 +82,7 @@ class ClientImpl(
      * @param topic Топик Mosquitto.
      * @param message Передаваемое сообщение.
      */
-    override suspend fun publish(topic: String, message: String) {
+    suspend fun publish(topic: String, message: String) {
         mqttClient.publish("$mainTopic/$topic/cmd_t", MqttMessage(message.toByteArray()))
         mqttClient.publish("$mainTopic/$topic/stat_t", MqttMessage(message.toByteArray()))
     }
@@ -92,5 +90,9 @@ class ClientImpl(
     /**
      * Отсоединиться.
      */
-    override suspend fun disconnect() = mqttClient.disconnect()
+    suspend fun disconnect() = mqttClient.disconnect()
+
+    companion object {
+        const val CLIENT_TAG = "Mqtt client"
+    }
 }

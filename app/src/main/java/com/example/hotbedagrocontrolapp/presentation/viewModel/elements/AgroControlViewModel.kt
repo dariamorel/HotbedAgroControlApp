@@ -9,6 +9,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
+import com.example.hotbedagrocontrolapp.data.service.MqttClient
 import com.example.hotbedagrocontrolapp.domain.entities.devices.MqttSettings
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
 import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
@@ -16,7 +17,6 @@ import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Elem
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
-import com.example.hotbedagrocontrolapp.domain.interfaces.data.service.Client
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +39,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AgroControlViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager,
-    private val mqttClient: Client,
+    private val mqttClient: MqttClient,
     @ApplicationContext private val ctx: Context
 ) : ViewModel() {
     private val _currentData = MutableStateFlow<MutableMap<Element, Response>>(mutableMapOf())
@@ -76,9 +76,9 @@ class AgroControlViewModel @Inject constructor(
             try {
                 mqttClient.connect(::onMessageReceived) { _isConnected.value = false }
                 _isConnected.value = true
-                Log.d(Client.Companion.CLIENT_TAG, "Connected!")
+                Log.d(MqttClient.Companion.CLIENT_TAG, "Connected!")
             } catch (e: Exception) {
-                Log.e(Client.Companion.CLIENT_TAG, "Connection error: ${e.message}")
+                Log.e(MqttClient.Companion.CLIENT_TAG, "Connection error: ${e.message}")
             }
         }
     }
@@ -101,7 +101,7 @@ class AgroControlViewModel @Inject constructor(
                 putString("port", port)
             }
             _isDeviceAdded.value = true
-            Log.d(Client.Companion.CLIENT_TAG, "Device was added!")
+            Log.d(MqttClient.Companion.CLIENT_TAG, "Device was added!")
             connect()
         }
     }
@@ -115,7 +115,7 @@ class AgroControlViewModel @Inject constructor(
                 clear()
             }
             _isDeviceAdded.value = false
-            Log.d(Client.Companion.CLIENT_TAG, "Device was deleted!")
+            Log.d(MqttClient.Companion.CLIENT_TAG, "Device was deleted!")
             disconnect()
         }
     }
@@ -155,7 +155,7 @@ class AgroControlViewModel @Inject constructor(
             try {
                 mqttClient.publish(control.topic, status.message)
             } catch (e: Exception) {
-                Log.e(Client.Companion.CLIENT_TAG, "Error while publishing data: ${e.message}.")
+                Log.e(MqttClient.Companion.CLIENT_TAG, "Error while publishing data: ${e.message}.")
             }
         }
     }
@@ -170,12 +170,12 @@ class AgroControlViewModel @Inject constructor(
     private fun onMessageReceived(topicString: String, responseString: String) {
         val element = defineElement(topicString)
         if (element == null) {
-            Log.e(Client.Companion.CLIENT_TAG, "Unknown topic: $topicString.")
+            Log.e(MqttClient.Companion.CLIENT_TAG, "Unknown topic: $topicString.")
             return
         }
         val response = defineResponse(responseString)
         if (response == null) {
-            Log.e(Client.Companion.CLIENT_TAG, "Unknown response: $responseString.")
+            Log.e(MqttClient.Companion.CLIENT_TAG, "Unknown response: $responseString.")
             return
         }
         val newMap = _currentData.value.toMutableMap()
@@ -244,9 +244,9 @@ class AgroControlViewModel @Inject constructor(
             try {
                 mqttClient.disconnect()
                 _isConnected.value = false
-                Log.d(Client.Companion.CLIENT_TAG, "Disconnected!")
+                Log.d(MqttClient.Companion.CLIENT_TAG, "Disconnected!")
             } catch (e: Exception) {
-                Log.e(Client.Companion.CLIENT_TAG, "Disconnection error: ${e.message}")
+                Log.e(MqttClient.Companion.CLIENT_TAG, "Disconnection error: ${e.message}")
             }
         }
     }
