@@ -1,57 +1,26 @@
 package com.example.hotbedagrocontrolapp.data.repository
 
-import android.content.Context
-import android.os.Build
-import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.core.content.edit
-import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceClient
-import com.example.hotbedagrocontrolapp.data.service.dataService.UserApi
+import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
+import com.example.hotbedagrocontrolapp.data.db.HBedEntity
+import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceManager
 import com.example.hotbedagrocontrolapp.data.service.dataService.entities.ElementResponse
-import com.example.hotbedagrocontrolapp.data.service.dataService.entities.UserCreate
-import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
-import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
-import dagger.hilt.android.qualifiers.ApplicationContext
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-@RequiresApi(Build.VERSION_CODES.O)
 class DataRepository @Inject constructor(
-    private val userApi: UserApi,
-    @ApplicationContext ctx: Context
+    private val dataBaseManager: DataBaseManager,
+    private val dataServiceManager: DataServiceManager
 ) {
-    private val prefs = ctx.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-    private val formatter = DateTimeFormatter.ISO_INSTANT
+    suspend fun getDataHistory()
 
-    suspend fun createUser(ipAddress: String, mainTopic: String, userName: String, password: String, port: Int) {
-        val userResponse = userApi.createUser(UserCreate(
-            ipAddress = ipAddress,
-            topic = mainTopic,
-            userName = userName,
-            password = password,
-            port = port
-        ))
-        prefs.edit {
-            putLong("user_id", userResponse.id)
+    private suspend fun addNewDataToDb(elements: List<ElementResponse>) {
+        for (response in elements) {
+            dataBaseManager.insertData(
+                HBedEntity(
+                    time = response.time,
+                    element = response.element,
+                    response = response.response
+                )
+            )
         }
-    }
-
-    suspend fun deleteUser() {
-        val userId = prefs.getLong("user_id", 0)
-        userApi.deleteUser(userId)
-        prefs.edit {
-            remove("user_id")
-        }
-    }
-
-    suspend fun getDataHistory(element: Element, time: LocalDateTime, period: AnaliseType): List<ElementResponse> {
-        val userId = prefs.getLong("user_id", 0)
-        val timeStr = time.atZone(ZoneOffset.UTC).format(formatter)
-        val elementListResponse =  userApi.getDataHistory(userId, element.name, timeStr, period.name)
-        val elements = elementListResponse.content
-        Log.d(DataServiceClient.DATA_SERVICE_TAG, "Total elements got: ${elementListResponse.totalElements}")
-        return elements
     }
 }

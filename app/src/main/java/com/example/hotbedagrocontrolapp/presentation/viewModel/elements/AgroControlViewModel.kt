@@ -3,13 +3,12 @@ package com.example.hotbedagrocontrolapp.presentation.viewModel.elements
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
-import com.example.hotbedagrocontrolapp.data.repository.DataRepository
+import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceManager
 import com.example.hotbedagrocontrolapp.data.service.MqttClient
 import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceClient
 import com.example.hotbedagrocontrolapp.domain.entities.devices.MqttSettings
@@ -22,7 +21,6 @@ import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -42,7 +40,7 @@ import javax.inject.Inject
 class AgroControlViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager,
     private val mqttClient: MqttClient,
-    private val dataRepository: DataRepository,
+    private val dataRepository: DataServiceManager,
     @ApplicationContext private val ctx: Context
 ) : ViewModel() {
     private val _currentData = MutableStateFlow<MutableMap<Element, Response>>(mutableMapOf())

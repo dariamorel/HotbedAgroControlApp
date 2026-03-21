@@ -51,6 +51,10 @@ class DataBaseManager @Inject constructor(
         )
     }
 
+    suspend fun insertData(entity: HBedEntity) {
+        dataBase.dataBaseDao.insertData(entity)
+    }
+
     /**
      * Получить данные из бд по элементу.
      *

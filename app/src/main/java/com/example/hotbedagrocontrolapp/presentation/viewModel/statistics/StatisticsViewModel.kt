@@ -6,9 +6,8 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
-import com.example.hotbedagrocontrolapp.data.repository.DataRepository
+import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceManager
 import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceClient
-import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
@@ -28,11 +27,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoField
-import java.util.Locale
 import javax.inject.Inject
-import kotlin.comparisons.compareBy
 
 /**
  * Бизнес-логика для работы с историей изменений и графиками.
@@ -42,7 +37,7 @@ import kotlin.comparisons.compareBy
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager,
-    private val dataRepository: DataRepository
+    private val dataRepository: DataServiceManager
 ) : ViewModel() {
     private val _dataHistory =
         mutableMapOf<HistoryItem, StateFlow<Map<LocalDateTime, Response>>>()
