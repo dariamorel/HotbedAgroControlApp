@@ -6,6 +6,8 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
+import com.example.hotbedagrocontrolapp.data.repository.DataRepository
+import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceClient
 import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
@@ -15,6 +17,7 @@ import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
 import com.example.hotbedagrocontrolapp.presentation.ui.components.statistics.STATISTICS_TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,6 +26,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoField
@@ -37,7 +41,8 @@ import kotlin.comparisons.compareBy
  */
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val dataBaseManager: DataBaseManager
+    private val dataBaseManager: DataBaseManager,
+    private val dataRepository: DataRepository
 ) : ViewModel() {
     private val _dataHistory =
         mutableMapOf<HistoryItem, StateFlow<Map<LocalDateTime, Response>>>()
@@ -56,6 +61,17 @@ class StatisticsViewModel @Inject constructor(
         dateTime: DateTime
     ): StateFlow<Map<LocalDateTime, Response>> {
         try {
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    val elements = dataRepository.getDataHistory(
+                        element,
+                        dateTime.localDateTime,
+                        dateTime.analiseType
+                    )
+                } catch (e: Exception) {
+                    Log.d(DataServiceClient.DATA_SERVICE_TAG, "Error while getting data: ${e.message}.")
+                }
+            }
             _dataHistory[HistoryItem(element, dateTime)]?.let {
                 return it
             }

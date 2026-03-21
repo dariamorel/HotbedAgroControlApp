@@ -21,4 +21,6 @@ interface Element {
      * Информация об иконке.
      */
     val iconInfo: IconInfo
+
+    val name: String
 }
