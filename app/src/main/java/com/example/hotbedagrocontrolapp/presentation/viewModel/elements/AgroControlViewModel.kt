@@ -9,7 +9,9 @@ import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
+import com.example.hotbedagrocontrolapp.data.repository.DataRepository
 import com.example.hotbedagrocontrolapp.data.service.MqttClient
+import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceClient
 import com.example.hotbedagrocontrolapp.domain.entities.devices.MqttSettings
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
 import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
@@ -40,6 +42,7 @@ import javax.inject.Inject
 class AgroControlViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager,
     private val mqttClient: MqttClient,
+    private val dataRepository: DataRepository,
     @ApplicationContext private val ctx: Context
 ) : ViewModel() {
     private val _currentData = MutableStateFlow<MutableMap<Element, Response>>(mutableMapOf())
@@ -103,6 +106,11 @@ class AgroControlViewModel @Inject constructor(
             _isDeviceAdded.value = true
             Log.d(MqttClient.Companion.CLIENT_TAG, "Device was added!")
             connect()
+            try {
+                dataRepository.createUser(ipAddress, mainTopic, userName, password, port.toInt())
+            } catch (e: Exception) {
+                Log.e(DataServiceClient.DATA_SERVICE_TAG, "Error while creating user: ${e.message}.")
+            }
         }
     }
 
@@ -111,6 +119,11 @@ class AgroControlViewModel @Inject constructor(
      */
     fun deleteDevice() {
         viewModelScope.launch(Dispatchers.IO) {
+            try {
+                dataRepository.deleteUser()
+            } catch (e: Exception) {
+                Log.e(DataServiceClient.DATA_SERVICE_TAG, "Error while deleting user: ${e.message}.")
+            }
             prefs.edit {
                 clear()
             }
