@@ -3,12 +3,12 @@ package com.example.hotbedagrocontrolapp.domain.di.data.db
 import android.content.Context
 import androidx.room.Room
 import com.example.hotbedagrocontrolapp.data.db.DataBase
+import com.example.hotbedagrocontrolapp.data.db.DataBaseMigrations
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import jakarta.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -24,7 +24,7 @@ object DataBaseModule {
             DataBase::class.java,
             "h_bed.db"
         )
-            .fallbackToDestructiveMigration()
+            .addMigrations(DataBaseMigrations.MIGRATION_2_3)
             .build()
     }
 }

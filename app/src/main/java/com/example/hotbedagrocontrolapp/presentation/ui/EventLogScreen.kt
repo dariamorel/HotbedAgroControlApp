@@ -56,9 +56,11 @@ fun EventLogScreen(
                 modifier = Modifier.weight(1f)
             ) { selected ->
                 control = selected as Control
+                viewModel.updateDataBase(control, dateTime)
             }
             SwitchDateTime(dateTime) { newDateTime ->
                 dateTime = newDateTime
+                viewModel.updateDataBase(control, dateTime)
             }
         }
 

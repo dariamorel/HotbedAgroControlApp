@@ -24,7 +24,7 @@ interface DataBaseDao {
      * Получить данные по элементу за интервал времени.
      *
      * @param element Топик элемента.
-     * @param startTime Начало интервала
+     * @param startTime Начало интервала.
      * @param endTime Конец интервала включительно.
      */
     @Query(

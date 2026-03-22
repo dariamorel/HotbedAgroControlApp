@@ -30,15 +30,29 @@ import javax.inject.Inject
 
 /**
  * Бизнес-логика для работы с историей изменений и графиками.
- *
- * @param dataBaseManager Менеджер базы данных.
  */
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val dataBaseManager: DataBaseManager
+    private val dataBaseManager: DataBaseManager,
+    private val dataServiceManager: DataServiceManager
 ) : ViewModel() {
     private val _dataHistory =
         mutableMapOf<HistoryItem, StateFlow<Map<LocalDateTime, Response>>>()
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updateDataBase(element: Element, dateTime: DateTime) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                dataServiceManager.getDataHistory(
+                    element,
+                    dateTime.localDateTime,
+                    dateTime.analiseType
+                )
+            } catch (e: Exception) {
+                Log.d(DataServiceClient.DATA_SERVICE_TAG, "Error while getting data: ${e.message}.")
+            }
+        }
+    }
 
     /**
      * Получить историю изменения данных.

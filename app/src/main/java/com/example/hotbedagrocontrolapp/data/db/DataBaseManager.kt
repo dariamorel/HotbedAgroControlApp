@@ -35,7 +35,7 @@ class DataBaseManager @Inject constructor(
         dataBase.dataBaseDao.insertData(
             HBedEntity(
                 time = time.toString(),
-                element = element.topic,
+                element = element.name,
                 response = response.dataToString
             )
         )
@@ -78,7 +78,7 @@ class DataBaseManager @Inject constructor(
             }
         }
         return dataBase.dataBaseDao.getData(
-            element = element.topic,
+            element = element.name,
             startTime = startTime.toString(),
             endTime = endTime.toString()
         )
