@@ -1,38 +1,28 @@
 package com.example.hotbedagrocontrolapp.data.db
 
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.room.Room
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
 import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
+import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Element
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 /**
  * Менеджер базы данных.
- *
- * @param ctx Контекст приложения.
  */
 class DataBaseManager @Inject constructor(
     private val dataBase: DataBase
 ) {
-    /**
-     * Мапа с элементами и историями их изменений.
-     */
-    @RequiresApi(Build.VERSION_CODES.O)
-    val dataHistory: Map<Element, Flow<List<Pair<LocalDateTime, Response>>>> =
-        (Sensor.entries + Control.entries).associateWith { element ->
-            getData(element)
-        }
 
     /**
      * Вставить данные в таблицу.
@@ -55,18 +45,44 @@ class DataBaseManager @Inject constructor(
         dataBase.dataBaseDao.insertData(entity)
     }
 
+
     /**
-     * Получить данные из бд по элементу.
+     * Поток истории по элементу за интервал, заданный типом анализа и опорной датой/временем.
      *
      * @param element Элемент.
-     * @return Список пар время - значение элемента.
      */
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getData(
-        element: Element
+    fun getData(
+        element: Element,
+        dateTime: DateTime
     ): Flow<List<Pair<LocalDateTime, Response>>> {
-        return dataBase.dataBaseDao.getData(element.topic)
-            .map{ list ->
+        val (startTime, endTime) = when (dateTime.analiseType) {
+            AnaliseType.HOUR -> {
+                val start = dateTime.localDateTime.truncatedTo(ChronoUnit.HOURS)
+                start to start.plusHours(1)
+            }
+
+            AnaliseType.DAY -> {
+                val start = dateTime.localDateTime.truncatedTo(ChronoUnit.DAYS)
+                start to start.plusDays(1)
+            }
+
+            AnaliseType.MONTH -> {
+                val start = dateTime.localDateTime.withDayOfMonth(1).truncatedTo(ChronoUnit.DAYS)
+                start to start.plusMonths(1)
+            }
+
+            AnaliseType.YEAR -> {
+                val start = dateTime.localDateTime.withDayOfYear(1).truncatedTo(ChronoUnit.DAYS)
+                start to start.plusYears(1)
+            }
+        }
+        return dataBase.dataBaseDao.getData(
+            element = element.topic,
+            startTime = startTime.toString(),
+            endTime = endTime.toString()
+        )
+            .map { list ->
                 val result = list.mapNotNull { history ->
                     val time = history.time
                     val response = history.response

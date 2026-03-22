@@ -21,18 +21,27 @@ interface DataBaseDao {
     suspend fun insertData(hBedEntity: HBedEntity)
 
     /**
-     * Получить данные по элементу.
+     * Получить данные по элементу за интервал времени.
      *
-     * @param element Элемент (датчик или сенсор).
-     * @return Список с изменениями по данному элементу.
+     * @param element Топик элемента.
+     * @param startTime Начало интервала
+     * @param endTime Конец интервала включительно.
      */
-    @Query("""
+    @Query(
+        """
         SELECT time, response
         FROM hotbed_agro_control_history
         WHERE element = :element
-        ORDER BY time ASC 
-    """)
-    fun getData(element: String): Flow<List<HistoryItem>>
+            AND time >= :startTime
+            AND time <= :endTime
+        ORDER BY time ASC
+        """
+    )
+    fun getData(
+        element: String,
+        startTime: String,
+        endTime: String
+    ): Flow<List<HistoryItem>>
 
     /**
      * Очистить базу данных.

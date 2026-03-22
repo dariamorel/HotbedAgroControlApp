@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -36,8 +35,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val dataBaseManager: DataBaseManager,
-    private val dataRepository: DataServiceManager
+    private val dataBaseManager: DataBaseManager
 ) : ViewModel() {
     private val _dataHistory =
         mutableMapOf<HistoryItem, StateFlow<Map<LocalDateTime, Response>>>()
@@ -56,23 +54,12 @@ class StatisticsViewModel @Inject constructor(
         dateTime: DateTime
     ): StateFlow<Map<LocalDateTime, Response>> {
         try {
-            viewModelScope.launch(Dispatchers.IO) {
-                try {
-                    val elements = dataRepository.getDataHistory(
-                        element,
-                        dateTime.localDateTime,
-                        dateTime.analiseType
-                    )
-                } catch (e: Exception) {
-                    Log.d(DataServiceClient.DATA_SERVICE_TAG, "Error while getting data: ${e.message}.")
-                }
-            }
             _dataHistory[HistoryItem(element, dateTime)]?.let {
                 return it
             }
             val flow = if (element is Sensor)
-                filterForSensor(dataBaseManager.dataHistory[element] ?: emptyFlow(), dateTime)
-            else filterForControl(dataBaseManager.dataHistory[element] ?: emptyFlow(), dateTime)
+                filterForSensor(dataBaseManager.getData(element, dateTime), dateTime)
+            else filterForControl(dataBaseManager.getData(element, dateTime), dateTime)
 
             val stateFlow = flow.stateIn(
                 scope = viewModelScope,
@@ -101,39 +88,7 @@ class StatisticsViewModel @Inject constructor(
         dateTime: DateTime
     ): Flow<Map<LocalDateTime, Response>> {
         return flow.map { list ->
-            val map = when (dateTime.analiseType) {
-                AnaliseType.YEAR -> {
-                    list.filter { it.first.year == dateTime.localDateTime.year }
-                        .distinctBy { it.first.month }
-                }
-
-                AnaliseType.MONTH -> {
-                    list.filter {
-                        it.first.year == dateTime.localDateTime.year
-                                && it.first.month == dateTime.localDateTime.month
-                    }
-                        .distinctBy { it.first.dayOfMonth }
-                }
-
-                AnaliseType.DAY -> {
-                    list.filter {
-                        it.first.year == dateTime.localDateTime.year
-                                && it.first.month == dateTime.localDateTime.month
-                                && it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
-                    }
-                        .distinctBy { it.first.hour }
-                }
-
-                AnaliseType.HOUR -> {
-                    list.filter {
-                        it.first.year == dateTime.localDateTime.year
-                                && it.first.month == dateTime.localDateTime.month
-                                && it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
-                                && it.first.hour == dateTime.localDateTime.hour
-                    }
-                        .distinctBy { it.first.minute }
-                }
-            }.associate { when (dateTime.analiseType) {
+            val map = list.associate { when (dateTime.analiseType) {
                 AnaliseType.YEAR -> LocalDateTime.of(it.first.year, it.first.month, 1, 0, 0)
                 AnaliseType.MONTH -> LocalDateTime.of(it.first.year, it.first.month, it.first.dayOfMonth, 0, 0)
                 AnaliseType.DAY -> LocalDateTime.of(it.first.year, it.first.month, it.first.dayOfMonth, it.first.hour, 0)
@@ -165,12 +120,7 @@ class StatisticsViewModel @Inject constructor(
         dateTime: DateTime
     ): Flow<Map<LocalDateTime, Response>> {
         return flow.map { list ->
-            list.filter {
-                it.first.year == dateTime.localDateTime.year
-                        && it.first.month == dateTime.localDateTime.month
-                        && it.first.dayOfMonth == dateTime.localDateTime.dayOfMonth
-            }
-                .associate {
+            list.associate {
                     LocalDateTime.of(
                         it.first.year,
                         it.first.month,

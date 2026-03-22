@@ -10,7 +10,6 @@ class DataRepository @Inject constructor(
     private val dataBaseManager: DataBaseManager,
     private val dataServiceManager: DataServiceManager
 ) {
-    suspend fun getDataHistory()
 
     private suspend fun addNewDataToDb(elements: List<ElementResponse>) {
         for (response in elements) {
