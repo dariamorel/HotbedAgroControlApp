@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,13 @@ fun EventLogScreen(
     var control by remember { mutableStateOf(Control.CLEAR_CLOUDY) }
     var dateTime by remember { mutableStateOf(DateTime()) }
     val values by viewModel.getDataHistory(control, dateTime).collectAsState()
+    var historyReady by remember { mutableStateOf(false) }
+
+    LaunchedEffect(control, dateTime) {
+        historyReady = false
+        viewModel.updateDataBase(control, dateTime)
+        historyReady = true
+    }
 
     Column(
         modifier = modifier.fillMaxSize().padding(20.dp),

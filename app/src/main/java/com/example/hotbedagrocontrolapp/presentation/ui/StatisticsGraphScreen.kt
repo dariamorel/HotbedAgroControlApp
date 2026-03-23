@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +51,13 @@ fun StatisticsGraphScreen(
     var sensor by remember { mutableStateOf(Sensor.AIR_TEMPERATURE) }
     var dateTime by remember { mutableStateOf(DateTime(AnaliseType.DAY)) }
     val values by viewModel.getDataHistory(sensor, dateTime).collectAsState()
+    var historyReady by remember { mutableStateOf(false) }
+
+    LaunchedEffect(sensor, dateTime) {
+        historyReady = false
+        viewModel.updateDataBase(sensor, dateTime)
+        historyReady = true
+    }
 
     Column(
         modifier = modifier.fillMaxSize().padding(20.dp),
@@ -62,7 +70,6 @@ fun StatisticsGraphScreen(
                 modifier = Modifier.weight(2f)
             ) { selected ->
                 sensor = selected as Sensor
-                viewModel.updateDataBase(sensor, dateTime)
             }
             SwitchAnaliseType(dateTime.analiseType, Modifier.weight(1f)) { newAnaliseType ->
                 val now = LocalDateTime.now()
@@ -73,13 +80,11 @@ fun StatisticsGraphScreen(
                         AnaliseType.HOUR -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.localDateTime.dayOfMonth == now.dayOfMonth
                     }) now else dateTime.localDateTime
                 dateTime = DateTime(newAnaliseType, newDateTime)
-                viewModel.updateDataBase(sensor, dateTime)
             }
         }
 
         SwitchDateTime(dateTime, Modifier.align(Alignment.End)) { newDateTime ->
             dateTime = newDateTime
-            viewModel.updateDataBase(sensor, dateTime)
         }
 
         val labels = when (dateTime.analiseType) {
@@ -96,6 +101,7 @@ fun StatisticsGraphScreen(
                 key.format(DateTimeFormatter.ofPattern("LLLL", Locale("ru")))
             }
         }
-        LineGraph(sensor, values.map { (_, response) -> response }, labels)
+        val listValues = if (historyReady) values.map { (_, response) -> response } else emptyList()
+        LineGraph(sensor, listValues, labels)
     }
 }
