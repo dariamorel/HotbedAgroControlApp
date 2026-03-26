@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
     testImplementation(libs.junit.jupiter)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
     ksp(libs.room.compiler)
     implementation(libs.google.hilt)
     ksp(libs.google.hilt.compiler)

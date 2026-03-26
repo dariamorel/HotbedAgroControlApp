@@ -24,23 +24,6 @@ class DataBaseManager @Inject constructor(
     private val dataBase: DataBase
 ) {
 
-    /**
-     * Вставить данные в таблицу.
-     *
-     * @param element Элемент.
-     * @param response Значение элемента, полученное с устройства.
-     * @param time Время, когда было получено значение.
-     */
-    suspend fun insertData(element: Element, response: Response, time: LocalDateTime) {
-        dataBase.dataBaseDao.insertData(
-            HBedEntity(
-                time = time.toString(),
-                element = element.name,
-                response = response.dataToString
-            )
-        )
-    }
-
     suspend fun insertData(entity: HBedEntity) {
         dataBase.dataBaseDao.insertData(entity)
     }

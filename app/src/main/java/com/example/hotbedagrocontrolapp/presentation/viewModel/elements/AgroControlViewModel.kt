@@ -132,30 +132,6 @@ class AgroControlViewModel @Inject constructor(
     }
 
     /**
-     * Вставить в таблицу текущее значение элемента.
-     *
-     * @param element Элемент.
-     * @param response Значение элемента, полученное с устройства.
-     */
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun insertCurrentData(element: Element, response: Response) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val currentTime = LocalDateTime.of(
-                    LocalDate.now(),
-                    LocalTime.of(
-                        LocalDateTime.now().hour,
-                        LocalDateTime.now().minute
-                    )
-                )
-                dataBaseManager.insertData(element, response, currentTime)
-            } catch (e: Exception) {
-                Log.e(DataBaseManager.Companion.DATA_BASE_TAG, "Error while inserting new data in db: ${e.message}.")
-            }
-        }
-    }
-
-    /**
      * Опубликовать новый статус элемента управления в Mosquitto.
      *
      * @param control Элемент управления.
@@ -192,7 +168,6 @@ class AgroControlViewModel @Inject constructor(
         val newMap = _currentData.value.toMutableMap()
         newMap[element] = response
         _currentData.value = newMap
-        insertCurrentData(element, response)
     }
 
     /**
