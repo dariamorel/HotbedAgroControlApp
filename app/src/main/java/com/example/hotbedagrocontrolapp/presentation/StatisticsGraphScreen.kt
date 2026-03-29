@@ -38,6 +38,7 @@ import java.util.Locale
 @Composable
 fun StatisticsGraphScreen(
     viewModel: StatisticsViewModel,
+    optimalValues: Map<Sensor, Double?>,
     modifier: Modifier = Modifier
 ) {
     var sensor by remember { mutableStateOf(Sensor.AIR_TEMPERATURE) }
@@ -94,6 +95,11 @@ fun StatisticsGraphScreen(
             }
         }
         val listValues = if (historyReady) values.map { (_, response) -> response } else emptyList()
-        LineGraph(sensor, listValues, labels)
+        LineGraph(
+            sensor = sensor,
+            values = listValues,
+            labels = labels,
+            optimalValue = optimalValues[sensor]
+        )
     }
 }

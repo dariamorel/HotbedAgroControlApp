@@ -123,6 +123,7 @@ fun MainScreen(
         ) { innerPadding ->
 
             val isDeviceAdded by agroControlViewModel.isDeviceAdded.collectAsState()
+            val optimalValues by agroControlViewModel.optimalValues.collectAsState()
 
             NavHost(navController = navController, startDestination = Screens.ELEMENTS.title) {
                 composable(Screens.ELEMENTS.title) {
@@ -147,6 +148,7 @@ fun MainScreen(
                     if (isDeviceAdded) {
                         StatisticsGraphScreen(
                             viewModel = statisticsViewModel,
+                            optimalValues = optimalValues,
                             modifier = Modifier.padding(innerPadding)
                         )
                     } else {
