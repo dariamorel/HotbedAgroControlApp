@@ -25,6 +25,8 @@ import com.example.hotbedagrocontrolapp.presentation.components.statistics.Switc
 import com.example.hotbedagrocontrolapp.presentation.components.statistics.SwitchDateTime
 import com.example.hotbedagrocontrolapp.presentation.components.statistics.SwitchElement
 import com.example.hotbedagrocontrolapp.domain.viewModel.statistics.StatisticsViewModel
+import com.example.hotbedagrocontrolapp.presentation.components.statistics.AnaliseTypeDown
+import com.example.hotbedagrocontrolapp.presentation.components.statistics.AnaliseTypeUp
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -46,6 +48,17 @@ fun StatisticsGraphScreen(
     val values by viewModel.getDataHistory(sensor, dateTime).collectAsState()
     var historyReady by remember { mutableStateOf(false) }
 
+    fun onAnaliseTypeChange(newAnaliseType: AnaliseType) {
+        val now = LocalDateTime.now()
+        val newDateTime = if (when (newAnaliseType) {
+                AnaliseType.YEAR -> false
+                AnaliseType.MONTH -> dateTime.localDateTime.year == now.year
+                AnaliseType.DAY -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month
+                AnaliseType.HOUR -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.localDateTime.dayOfMonth == now.dayOfMonth
+            }) now else dateTime.localDateTime
+        dateTime = DateTime(newAnaliseType, newDateTime)
+    }
+
     LaunchedEffect(sensor, dateTime) {
         historyReady = false
         viewModel.updateDataBase(sensor, dateTime)
@@ -60,20 +73,12 @@ fun StatisticsGraphScreen(
             SwitchElement(
                 element = sensor,
                 options = Sensor.entries,
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(1f)
             ) { selected ->
                 sensor = selected as Sensor
             }
-            SwitchAnaliseType(dateTime.analiseType, Modifier.weight(1f)) { newAnaliseType ->
-                val now = LocalDateTime.now()
-                val newDateTime = if (when (newAnaliseType) {
-                        AnaliseType.YEAR -> false
-                        AnaliseType.MONTH -> dateTime.localDateTime.year == now.year
-                        AnaliseType.DAY -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month
-                        AnaliseType.HOUR -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.localDateTime.dayOfMonth == now.dayOfMonth
-                    }) now else dateTime.localDateTime
-                dateTime = DateTime(newAnaliseType, newDateTime)
-            }
+            AnaliseTypeDown(analiseType = dateTime.analiseType) { onAnaliseTypeChange(it) }
+            AnaliseTypeUp(dateTime.analiseType) { onAnaliseTypeChange(it) }
         }
 
         SwitchDateTime(dateTime, Modifier.align(Alignment.End)) { newDateTime ->
