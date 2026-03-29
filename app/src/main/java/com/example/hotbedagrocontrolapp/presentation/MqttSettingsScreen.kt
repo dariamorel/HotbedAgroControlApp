@@ -1,6 +1,7 @@
 package com.example.hotbedagrocontrolapp.presentation
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.hotbedagrocontrolapp.R
@@ -43,6 +45,9 @@ fun MqttSettingsScreen(
     var password by remember { mutableStateOf(default_password) }
     var port by remember { mutableStateOf(default_port) }
 
+    val context = LocalContext.current
+    val parametersUpdatedMessage = stringResource(R.string.parameters_successfully_updated)
+
     LazyColumn(
         modifier = modifier.fillMaxWidth().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -50,7 +55,7 @@ fun MqttSettingsScreen(
     ) {
         item {
             BasicTitle(
-                text = "Параметры конфигурации",
+                text = stringResource(R.string.configuration_parameters),
             )
         }
         item {
@@ -110,6 +115,7 @@ fun MqttSettingsScreen(
                 text = stringResource(R.string.update_parameters),
             ) {
                 viewModel.addDevice(ipAddress, topic, userName, password, port)
+                Toast.makeText(context, parametersUpdatedMessage, Toast.LENGTH_SHORT).show()
             }
         }
     }

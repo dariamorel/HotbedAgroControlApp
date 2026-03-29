@@ -1,6 +1,7 @@
 package com.example.hotbedagrocontrolapp.presentation
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -33,6 +35,11 @@ fun DevicesScreen(
     viewModel: AgroControlViewModel,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val deviceDeletedMessage = stringResource(R.string.device_successfully_deleted)
+
+    val isDeviceAdded by viewModel.isDeviceAdded.collectAsState()
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -40,21 +47,24 @@ fun DevicesScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        BasicTitle("Управление устройством")
+        BasicTitle(stringResource(R.string.device_management))
         Spacer(Modifier.size(8.dp))
         BasicOpenButton(
-            text = "Параметры конфигурации",
+            text = stringResource(R.string.configuration_parameters),
         ) {
             navController.navigate(Screens.MQTT_SETTINGS.title)
         }
         BasicOpenButton(
-            text = "Оптимальные значения датчиков",
+            text = stringResource(R.string.optimal_values),
         )
-        BasicConfirmButton(
-            text = stringResource(R.string.delete_device),
-            color = Color.Red
-        ) {
-            viewModel.deleteDevice()
+        if (isDeviceAdded) {
+            BasicConfirmButton(
+                text = stringResource(R.string.delete_device),
+                color = Color.Red
+            ) {
+                viewModel.deleteDevice()
+                Toast.makeText(context, deviceDeletedMessage, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

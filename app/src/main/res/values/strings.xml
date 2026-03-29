@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">HotbedAgroControlApp</string>
+    
+    <!-- Управление устройством -->
+    <string name="device_management">Управление устройством</string>
+    <string name="configuration_parameters">Параметры конфигурации</string>
+    <string name="optimal_values">Оптимальные значения датчиков</string>
+    <string name="device_successfully_deleted">Устройство успешно удалено</string>
 
     <!--> Параметры конфигурации -->
     <string name="what_is_mqtt">Для получения данных с устройства HotbedAgroControl необходимо подключить устройство к MQTT-броккеру Mosquitto.</string>
@@ -15,5 +21,6 @@
     <string name="port">Порт</string>
     <string name="default_port">1883</string>
     <string name="update_parameters">Обновить параметры</string>
+    <string name="parameters_successfully_updated">Параметры успешно обновлены</string>
     <string name="delete_device">Удалить устройство</string>
 </resources>
