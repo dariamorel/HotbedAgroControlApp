@@ -50,6 +50,8 @@ class AgroControlViewModel @Inject constructor(
 
     private val _isDeviceAdded = MutableStateFlow(prefs.getString("ip_address", null) != null)
     val isDeviceAdded = _isDeviceAdded.asStateFlow()
+    private val _optimalValues = MutableStateFlow(loadOptimalValues())
+    val optimalValues = _optimalValues.asStateFlow()
 
     val mqttSettings: MqttSettings
         get() = MqttSettings(
@@ -99,6 +101,7 @@ class AgroControlViewModel @Inject constructor(
             prefs.edit {
                 clear()
             }
+            _optimalValues.value = loadOptimalValues()
             disconnect()
             prefs.edit {
                 putString("ip_address", ipAddress)
@@ -131,10 +134,25 @@ class AgroControlViewModel @Inject constructor(
             prefs.edit {
                 clear()
             }
+            _optimalValues.value = loadOptimalValues()
             _isDeviceAdded.value = false
             Log.d(MqttClient.Companion.CLIENT_TAG, "Device was deleted!")
             disconnect()
         }
+    }
+
+    fun saveOptimalValues(values: Map<Sensor, String>) {
+        prefs.edit {
+            values.forEach { (sensor, value) ->
+                val normalizedValue = value.replace(',', '.').trim()
+                if (normalizedValue.toDoubleOrNull() != null) {
+                    putString(optimalValueKey(sensor), normalizedValue)
+                } else {
+                    remove(optimalValueKey(sensor))
+                }
+            }
+        }
+        _optimalValues.value = loadOptimalValues()
     }
 
     /**
@@ -242,4 +260,11 @@ class AgroControlViewModel @Inject constructor(
             }
         }
     }
+
+    private fun loadOptimalValues(): Map<Sensor, Double?> =
+        Sensor.entries.associateWith { sensor ->
+            prefs.getString(optimalValueKey(sensor), null)?.toDoubleOrNull()
+        }
+
+    private fun optimalValueKey(sensor: Sensor): String = "optimal_value_${sensor.name.lowercase()}"
 }

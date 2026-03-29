@@ -11,6 +11,8 @@ val DarkBrown = Color(0xff302301)
 val LightBrown = Color(0xffbd9e6f)
 val LightGreen = Color(0xffc4de9b)
 val DarkGreen = Color(0xff8acc21)
+val LightRed = Color(0xFFFFE3E3)
+val DarkRed = Color(0xFFC62828)
 val MediumGrey = Color(0xffa3a3a3)
 
 val Purple40 = Color(0xFF6650a4)
@@ -23,3 +25,4 @@ val BottlePurple = Color(0xff6f00ff)
 
 val SkyBlue = Color(0xFF23af92)
 val BasicButtonColor = Color.Black
+val DarkYellow = Color(0xfff7a500)

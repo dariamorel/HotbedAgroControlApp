@@ -24,6 +24,7 @@ import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlVie
 import com.example.hotbedagrocontrolapp.presentation.components.BasicConfirmButton
 import com.example.hotbedagrocontrolapp.presentation.components.BasicOpenButton
 import com.example.hotbedagrocontrolapp.presentation.components.BasicTitle
+import com.example.hotbedagrocontrolapp.ui.theme.DarkRed
 
 /**
  * Экран с устройствами.
@@ -56,11 +57,13 @@ fun DevicesScreen(
         }
         BasicOpenButton(
             text = stringResource(R.string.optimal_values),
-        )
+        ) {
+            navController.navigate(Screens.OPTIMAL_VALUES.title)
+        }
         if (isDeviceAdded) {
             BasicConfirmButton(
                 text = stringResource(R.string.delete_device),
-                color = Color.Red
+                color = DarkRed
             ) {
                 viewModel.deleteDevice()
                 Toast.makeText(context, deviceDeletedMessage, Toast.LENGTH_SHORT).show()

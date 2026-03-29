@@ -22,5 +22,18 @@
     <string name="default_port">1883</string>
     <string name="update_parameters">Обновить параметры</string>
     <string name="parameters_successfully_updated">Параметры успешно обновлены</string>
+    <string name="optimal_values_successfully_updated">Оптимальные значения обновлены</string>
     <string name="delete_device">Удалить устройство</string>
+
+    <!-- Оптимальные значения датчиков -->
+    <string name="what_is_optimal_values">Приложение позволяет задать целевые параметры для датчиков, чтобы при отклонении реальных значений от них приложение могло уведомить пользователя об этом и предложить способ, как вернуться обратно к оптимальным значениям.</string>
+
+    <!-- Датчики и элементы управления -->
+    <string name="air_humidity_opt">Влажность воздуха (%)</string>
+    <string name="air_temperature_opt">Температура воздуха (°C)</string>
+    <string name="fluid_temperature_opt">Температура раствора (°C)</string>
+    <string name="fluid_level_opt">Уровень жидкости (см)</string>
+    <string name="ec_opt">EC (мСм/см)</string>
+    <string name="lux_opt">Lux (люкс)</string>
+    <string name="ph_opt">PH (ед.)</string>
 </resources>

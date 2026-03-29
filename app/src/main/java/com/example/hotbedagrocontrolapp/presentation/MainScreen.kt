@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 enum class Screens(val title: String) {
     ELEMENTS("Показатели"), STATISTICS("Статистика"),
     EVENT_LOG("Журнал событий"), DEVICES("Управление устройством"),
-    MQTT_SETTINGS("Параметры конфигурации")
+    MQTT_SETTINGS("Параметры конфигурации"), OPTIMAL_VALUES("Оптимальные значения датчиков")
 }
 
 /**
@@ -189,6 +189,13 @@ fun MainScreen(
 
                 composable(Screens.MQTT_SETTINGS.title) {
                     MqttSettingsScreen(
+                        viewModel = agroControlViewModel,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+
+                composable(Screens.OPTIMAL_VALUES.title) {
+                    OptimalValuesScreen(
                         viewModel = agroControlViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )

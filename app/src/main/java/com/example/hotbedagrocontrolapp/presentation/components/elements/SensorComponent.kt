@@ -16,12 +16,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
+import com.example.hotbedagrocontrolapp.ui.theme.DarkBrown
+import com.example.hotbedagrocontrolapp.ui.theme.DarkGreen
+import com.example.hotbedagrocontrolapp.ui.theme.DarkRed
+import com.example.hotbedagrocontrolapp.ui.theme.DarkYellow
+import com.example.hotbedagrocontrolapp.ui.theme.LightGreen
+import com.example.hotbedagrocontrolapp.ui.theme.LightRed
+import com.example.hotbedagrocontrolapp.ui.theme.LightYellow
+import kotlin.math.abs
 
 /**
  * Отображение датчика.
@@ -33,12 +42,23 @@ import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 fun SensorComponent(
     sensor: Sensor,
     response: SensorResponse,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    optimalValue: Double? = null,
+    hasActualData: Boolean = true
 ) {
+    val (backgroundColor, valueColor) = sensorStatusColors(
+        sensor = sensor,
+        actualValue = response.data,
+        optimalValue = optimalValue,
+        hasActualData = hasActualData,
+        defaultBackground = MaterialTheme.colorScheme.surface,
+        defaultValueColor = MaterialTheme.colorScheme.onSurface
+    )
+
     Box(
         modifier = modifier.fillMaxSize()
             .clip(RoundedCornerShape(30.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .background(backgroundColor)
     ) {
         Column(
             modifier = Modifier.padding(10.dp)
@@ -71,9 +91,31 @@ fun SensorComponent(
                     text = "${response.data}",
                     fontSize = 30.sp,
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = valueColor
                 )
             }
         }
+    }
+}
+
+private fun sensorStatusColors(
+    sensor: Sensor,
+    actualValue: Double,
+    optimalValue: Double?,
+    hasActualData: Boolean,
+    defaultBackground: Color,
+    defaultValueColor: Color
+): Pair<Color, Color> {
+    if (!hasActualData || optimalValue == null) {
+        return defaultBackground to defaultValueColor
+    }
+
+    val sensorRange = (sensor.maxValue - sensor.minValue).coerceAtLeast(1.0)
+    val distanceRatio = abs(actualValue - optimalValue) / sensorRange
+
+    return when {
+        distanceRatio <= 0.05 -> defaultBackground to DarkGreen
+        distanceRatio <= 0.15 -> defaultBackground to DarkYellow
+        else -> LightRed to DarkRed
     }
 }

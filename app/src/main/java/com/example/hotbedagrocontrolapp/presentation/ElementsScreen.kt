@@ -42,20 +42,12 @@ fun ElementsScreen(
 ) {
     val currentData by viewModel.currentData.collectAsState()
     val isConnected by viewModel.isConnected.collectAsState()
+    val optimalValues by viewModel.optimalValues.collectAsState()
 
     Column(modifier = modifier.fillMaxWidth()
         .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-//        if (!isConnected) {
-//            Text(
-//                text = "Ошибка соединения!",
-//                style = MaterialTheme.typography.titleMedium,
-//                fontSize = 20.sp,
-//                textAlign = TextAlign.Left,
-//                color = Color.Red,
-//            )
-//        }
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
@@ -76,12 +68,16 @@ fun ElementsScreen(
                             SensorComponent(
                                 sensor,
                                 response as SensorResponse,
-                                Modifier.weight(1f).aspectRatio(1f)
+                                Modifier.weight(1f).aspectRatio(1f),
+                                optimalValue = optimalValues[sensor],
+                                hasActualData = true
                             )
                         } ?: SensorComponent(
                             sensor,
                             SensorResponse(0.0),
-                            Modifier.weight(1f).aspectRatio(1f)
+                            Modifier.weight(1f).aspectRatio(1f),
+                            optimalValue = optimalValues[sensor],
+                            hasActualData = false
                         )
                         if (i + 1 < Sensor.entries.size) {
                             val sensor = Sensor.entries[i + 1]
@@ -89,12 +85,16 @@ fun ElementsScreen(
                                 SensorComponent(
                                     sensor,
                                     response as SensorResponse,
-                                    Modifier.weight(1f).aspectRatio(1f)
+                                    Modifier.weight(1f).aspectRatio(1f),
+                                    optimalValue = optimalValues[sensor],
+                                    hasActualData = true
                                 )
                             } ?: SensorComponent(
                                 sensor,
                                 SensorResponse(0.0),
-                                Modifier.weight(1f).aspectRatio(1f)
+                                Modifier.weight(1f).aspectRatio(1f),
+                                optimalValue = optimalValues[sensor],
+                                hasActualData = false
                             )
                         } else {
                             Spacer(Modifier.weight(1f).aspectRatio(1f))

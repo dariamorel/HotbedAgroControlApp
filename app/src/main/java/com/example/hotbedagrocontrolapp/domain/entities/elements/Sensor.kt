@@ -69,7 +69,7 @@ enum class Sensor(
         "Lux",
         IconInfo(R.drawable.sun, SunYellow),
         minValue = 0.0,
-        maxValue = 100000.0,
+        maxValue = 10000.0,
         units = "люкс"
     ),
     PH(
