@@ -4,12 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import com.example.hotbedagrocontrolapp.presentation.ui.MainScreen
+import com.example.hotbedagrocontrolapp.presentation.MainScreen
 import com.example.hotbedagrocontrolapp.ui.theme.HotbedAgroControlAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp

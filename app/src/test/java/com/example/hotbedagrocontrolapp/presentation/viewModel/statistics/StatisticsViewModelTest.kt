@@ -1,7 +1,7 @@
 package com.example.hotbedagrocontrolapp.presentation.viewModel.statistics
 
 import com.example.hotbedagrocontrolapp.MainDispatcherRule
-import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
+import com.example.hotbedagrocontrolapp.di.db.DataBaseManager
 import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceManager
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
 import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
@@ -9,12 +9,12 @@ import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
+import com.example.hotbedagrocontrolapp.domain.viewModel.statistics.StatisticsViewModel
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame

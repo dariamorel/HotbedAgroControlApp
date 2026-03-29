@@ -1,15 +1,14 @@
 package com.example.hotbedagrocontrolapp.data.db
 
+import com.example.hotbedagrocontrolapp.di.db.DataBase
+import com.example.hotbedagrocontrolapp.di.db.DataBaseDao
+import com.example.hotbedagrocontrolapp.di.db.DataBaseManager
+import com.example.hotbedagrocontrolapp.di.db.HistoryItem
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
-import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking

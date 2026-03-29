@@ -22,3 +22,4 @@ val WaterBlue = Color(0xff00a2ff)
 val BottlePurple = Color(0xff6f00ff)
 
 val SkyBlue = Color(0xFF23af92)
+val BasicButtonColor = Color.Black

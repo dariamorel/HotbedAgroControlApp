@@ -3,8 +3,8 @@ package com.example.hotbedagrocontrolapp.data.service.dataService
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.example.hotbedagrocontrolapp.data.db.DataBaseManager
-import com.example.hotbedagrocontrolapp.data.db.HBedEntity
+import com.example.hotbedagrocontrolapp.di.db.DataBaseManager
+import com.example.hotbedagrocontrolapp.di.db.HBedEntity
 import com.example.hotbedagrocontrolapp.data.service.dataService.entities.ElementListResponse
 import com.example.hotbedagrocontrolapp.data.service.dataService.entities.ElementResponse
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
