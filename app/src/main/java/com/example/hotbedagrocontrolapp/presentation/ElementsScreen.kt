@@ -27,6 +27,7 @@ import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
 import com.example.hotbedagrocontrolapp.presentation.components.elements.ControlComponent
 import com.example.hotbedagrocontrolapp.presentation.components.elements.SensorComponent
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
+import com.example.hotbedagrocontrolapp.presentation.components.BasicTitle
 
 /**
  * Экран сотображением элементов(датчиков и элементов управления) и их значений.
@@ -62,13 +63,7 @@ fun ElementsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                Text(
-                    text = "Датчики",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 25.sp,
-                    textAlign = TextAlign.Left,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+                BasicTitle("Датчики")
             }
             for (i in 0 until Sensor.entries.size step 2) {
                 item {
@@ -108,13 +103,7 @@ fun ElementsScreen(
                 }
             }
             item {
-                Text(
-                    text = "Элементы управления",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 25.sp,
-                    textAlign = TextAlign.Left,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+                BasicTitle("Элементы управления")
             }
             for (i in 0 until Control.entries.size step 2) {
                 item {

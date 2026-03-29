@@ -91,6 +91,15 @@ class AgroControlViewModel @Inject constructor(
      */
     fun addDevice(ipAddress: String, mainTopic: String, userName: String, password: String, port: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            try {
+                dataRepository.deleteUser()
+            } catch (e: Exception) {
+                Log.e(DataServiceClient.DATA_SERVICE_TAG, "Error while deleting user: ${e.message}.")
+            }
+            prefs.edit {
+                clear()
+            }
+            disconnect()
             prefs.edit {
                 putString("ip_address", ipAddress)
                 putString("main_topic", mainTopic)

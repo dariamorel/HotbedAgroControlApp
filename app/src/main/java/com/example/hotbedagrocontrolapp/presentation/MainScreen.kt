@@ -46,8 +46,8 @@ import kotlinx.coroutines.launch
  */
 enum class Screens(val title: String) {
     ELEMENTS("Показатели"), STATISTICS("Статистика"),
-    EVENT_LOG("Журнал событий"), DEVICES("Устройства")
-//    SETTINGS("Настройки")
+    EVENT_LOG("Журнал событий"), DEVICES("Управление устройством"),
+    MQTT_SETTINGS("Параметры конфигурации")
 }
 
 /**
@@ -73,7 +73,7 @@ fun MainScreen(
                 drawerContainerColor = MaterialTheme.colorScheme.surface,
                 modifier = Modifier.width(320.dp)
             ) {
-                Screens.entries.forEach { screen ->
+                listOf(Screens.ELEMENTS, Screens.STATISTICS, Screens.EVENT_LOG, Screens.DEVICES).forEach { screen ->
                     NavigationDrawerItem(
                         label = {
                             Text(
@@ -181,6 +181,14 @@ fun MainScreen(
 
                 composable(Screens.DEVICES.title) {
                     DevicesScreen(
+                        viewModel = agroControlViewModel,
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+
+                composable(Screens.MQTT_SETTINGS.title) {
+                    MqttSettingsScreen(
                         viewModel = agroControlViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )

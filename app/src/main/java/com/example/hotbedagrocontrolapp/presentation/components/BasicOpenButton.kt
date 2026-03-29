@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -34,8 +35,8 @@ fun BasicOpenButton(
             .clip(RoundedCornerShape(8.dp))
 //            .border(2.dp, BasicButtonColor, RoundedCornerShape(6.dp))
             .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp)
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -50,7 +51,8 @@ fun BasicOpenButton(
         Icon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = "Open",
-            tint = MaterialTheme.colorScheme.onBackground
+            tint = MaterialTheme.colorScheme.onBackground,
+            modifier = modifier.size(30.dp)
         )
     }
 }
