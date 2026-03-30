@@ -14,16 +14,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
-import com.example.hotbedagrocontrolapp.presentation.components.BasicConfirmButton
-import com.example.hotbedagrocontrolapp.presentation.components.BasicOpenButton
-import com.example.hotbedagrocontrolapp.presentation.components.BasicTitle
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicConfirmButton
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicOpenButton
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTitle
 import com.example.hotbedagrocontrolapp.ui.theme.DarkRed
 
 /**

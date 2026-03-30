@@ -1,4 +1,4 @@
-package com.example.hotbedagrocontrolapp.presentation.components
+package com.example.hotbedagrocontrolapp.presentation.components.basicComponents
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -8,16 +8,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun BasicTitle(
+fun BasicBodyText(
     text: String,
-    modifier: Modifier = Modifier,
-    fontSize: Int = 25
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = text,
-        style = MaterialTheme.typography.titleMedium,
-        fontSize = fontSize.sp,
-        textAlign = TextAlign.Center,
+        style = MaterialTheme.typography.bodyMedium,
+        textAlign = TextAlign.Left,
+        fontSize = 16.sp,
         color = MaterialTheme.colorScheme.onPrimary
     )
 }

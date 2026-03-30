@@ -180,7 +180,7 @@ private fun chartFillColor(
     }
 }
 
-private fun pointStatus(
+fun pointStatus(
     sensor: Sensor,
     value: Double,
     optimalValue: Double?
@@ -199,7 +199,7 @@ private fun pointStatus(
     }
 }
 
-private enum class PointStatus {
+enum class PointStatus {
     CLOSE,
     MEDIUM,
     FAR,

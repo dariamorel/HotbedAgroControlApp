@@ -20,10 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
-import com.example.hotbedagrocontrolapp.presentation.components.BasicConfirmButton
-import com.example.hotbedagrocontrolapp.presentation.components.BasicDropDownButton
-import com.example.hotbedagrocontrolapp.presentation.components.BasicTextField
-import com.example.hotbedagrocontrolapp.presentation.components.BasicTitle
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicConfirmButton
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicDropDownButton
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTextField
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTitle
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
