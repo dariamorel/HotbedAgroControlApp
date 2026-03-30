@@ -33,7 +33,7 @@ class AiChatViewModel @Inject constructor(
     private val _chatStarted = MutableStateFlow(false)
     val charStarted = _chatStarted.asStateFlow()
 
-    fun startChat(introMessage: String?, currentData: Map<Element, Response>, optimalValues: Map<Sensor, Double?>) {
+    fun startChat(introMessage: String? = null, currentData: Map<Element, Response>, optimalValues: Map<Sensor, Double?>) {
         val contextMessage = getContextMessage(currentData, optimalValues)
         _chatStarted.value = true
 

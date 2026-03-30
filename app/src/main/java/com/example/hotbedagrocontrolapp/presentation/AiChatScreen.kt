@@ -76,12 +76,11 @@ fun AiChatScreen(
     val listState = rememberLazyListState()
     val visibleMessages = if (chatHistory.size > 2) chatHistory.drop(2) else emptyList()
 
-    var message by remember { mutableStateOf("") }
+    var message by remember { mutableStateOf(introMessage ?: "") }
 
     LaunchedEffect(chatStarted) {
         if (!chatStarted) {
             aiChatViewModel.startChat(
-                introMessage = introMessage,
                 currentData = currentData,
                 optimalValues = optimalValues
             )
