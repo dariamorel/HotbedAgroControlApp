@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -38,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -69,6 +73,8 @@ fun AiChatScreen(
     val chatHistory by aiChatViewModel.chatHistory.collectAsState()
     val isLoading by aiChatViewModel.isLoading.collectAsState()
     val chatStarted by aiChatViewModel.charStarted.collectAsState()
+    val listState = rememberLazyListState()
+    val visibleMessages = if (chatHistory.size > 2) chatHistory.drop(2) else emptyList()
 
     var message by remember { mutableStateOf("") }
 
@@ -82,50 +88,63 @@ fun AiChatScreen(
         }
     }
 
+    LaunchedEffect(visibleMessages.size, isLoading) {
+        if (visibleMessages.isNotEmpty()) {
+            listState.animateScrollToItem(visibleMessages.lastIndex)
+        }
+    }
+
     Column(
-        modifier = modifier.fillMaxWidth().padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.fillMaxWidth()
     ) {
-        CloseButton(Modifier.align(Alignment.End)) {
+        CloseButton(
+        ) {
             aiChatViewModel.clearChat()
             message = ""
         }
 
-        LazyColumn(
-            modifier = modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            for (i in 2 until chatHistory.size) {
-                val item = chatHistory[i]
-                val isUser = item.role == "user"
-                item {
+
+            LazyColumn(
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
+                    .weight(1f),
+                state = listState,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(visibleMessages) { item ->
+                    val isUser = item.role == "user"
                     ChatFrame(item.content, isUser)
                 }
             }
-        }
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BasicTextField(message, Modifier.weight(1f)) { newMessage ->
-                message = newMessage
-            }
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .clickable {
-                        if (message.isNotBlank()) {
-                            aiChatViewModel.addMessage(message)
-                            message = ""
-                        }},
-                contentAlignment = Alignment.Center
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = "Send message",
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.size(35.dp)
-                )
+                BasicTextField(message, Modifier.weight(1f)) { newMessage ->
+                    message = newMessage
+                }
+                Box(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clickable {
+                            if (message.isNotBlank()) {
+                                aiChatViewModel.addMessage(message)
+                                message = ""
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Send,
+                        contentDescription = "Send message",
+                        tint = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.size(35.dp)
+                    )
+                }
             }
         }
     }
@@ -138,27 +157,33 @@ fun CloseButton(
 ) {
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .clickable { onClick() }
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .fillMaxWidth()
+            .height(40.dp)
+            .background(MaterialTheme.colorScheme.surface),
     ) {
-        Text(
-            text = stringResource(R.string.ai_chat_clear),
-            style = MaterialTheme.typography.titleMedium.copy(
-                textDecoration = TextDecoration.Underline
-            ),
-            fontSize = 16.sp,
-            textAlign = TextAlign.End,
-            color = DarkBlue
-        )
-        Icon(
-            imageVector = Icons.Default.Clear,
-            contentDescription = "Clear chat",
-            tint = DarkRed,
-            modifier = Modifier.size(20.dp)
-        )
+        Spacer(Modifier.weight(1f))
+        Row(
+            modifier = Modifier
+                .clickable { onClick() }
+                .padding(vertical = 4.dp, horizontal = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.ai_chat_clear),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    textDecoration = TextDecoration.Underline
+                ),
+                fontSize = 16.sp,
+                textAlign = TextAlign.End,
+                color = DarkBlue
+            )
+            Icon(
+                imageVector = Icons.Default.Clear,
+                contentDescription = "Clear chat",
+                tint = DarkRed,
+                modifier = Modifier.size(20.dp)
+            )
+        }
     }
 }
