@@ -20,7 +20,7 @@ enum class Control(
 ) : Element {
     CLEAR_CLOUDY(
         "ClearCloudy",
-        "Ясно/Пасмурно",
+        "Освещение",
         IconInfo(R.drawable.sun, SunYellow)
     ),
     RELAY_1(
@@ -38,11 +38,11 @@ enum class Control(
         IconInfo(R.drawable.relay, Color.DarkGray)
     ),
     IF_EC("IFEC",
-        "Вкл/Выкл\nEC",
+        "EC",
         IconInfo(R.drawable.ec, SunYellow)
     ),
     IF_PH("IFPH",
-        "Вкл/Выкл\nPH",
+        "PH",
         IconInfo(R.drawable.ph, BottlePurple)
     );
 }

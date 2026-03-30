@@ -28,7 +28,6 @@ class AiManager @Inject constructor(
     suspend fun sendUserMessage(
         history: List<AiChatMessage>,
         userMessage: String,
-        model: String = DEFAULT_MODEL
     ): List<AiChatMessage> {
         val updatedHistory = history + AiChatMessage(
             role = ROLE_USER,
@@ -36,7 +35,7 @@ class AiManager @Inject constructor(
         )
         val response = aiUserApi.chat(
             AiChatRequest(
-                model = model,
+                model = DEFAULT_MODEL,
                 messages = updatedHistory,
                 stream = false
             )
