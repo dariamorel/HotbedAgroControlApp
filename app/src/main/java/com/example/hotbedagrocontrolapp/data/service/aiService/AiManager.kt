@@ -1,5 +1,8 @@
 package com.example.hotbedagrocontrolapp.data.service.aiService
 
+import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatMessage
+import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatRequest
+import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatResponse
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiGenerateRequest
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiGenerateResponse
 import javax.inject.Inject
@@ -21,14 +24,30 @@ class AiManager @Inject constructor(
         )
     }
 
-    suspend fun generateText(
-        prompt: String,
+
+    suspend fun sendUserMessage(
+        history: List<AiChatMessage>,
+        userMessage: String,
         model: String = DEFAULT_MODEL
-    ): String {
-        return generate(prompt = prompt, model = model, stream = false).response.trim()
+    ): List<AiChatMessage> {
+        val updatedHistory = history + AiChatMessage(
+            role = ROLE_USER,
+            content = userMessage
+        )
+        val response = aiUserApi.chat(
+            AiChatRequest(
+                model = model,
+                messages = updatedHistory,
+                stream = false
+            )
+        )
+
+        return updatedHistory + response.message
     }
 
     companion object {
         const val DEFAULT_MODEL = "qwen3:1.7b"
+        const val ROLE_USER = "user"
+        const val ROLE_ASSISTANT = "assistant"
     }
 }
