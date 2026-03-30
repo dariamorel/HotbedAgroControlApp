@@ -30,7 +30,7 @@ fun BasicOpenButton(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(20.dp))
 //            .border(2.dp, BasicButtonColor, RoundedCornerShape(6.dp))
             .background(MaterialTheme.colorScheme.surface)
             .clickable { onClick() }

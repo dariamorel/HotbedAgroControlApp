@@ -6,6 +6,9 @@
     <string name="configuration_parameters">Параметры конфигурации</string>
     <string name="optimal_values">Оптимальные значения датчиков</string>
     <string name="device_successfully_deleted">Устройство успешно удалено</string>
+    <string name="if_delete_device">Удалить устройство?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 
     <!--> Параметры конфигурации -->
     <string name="what_is_mqtt">Для получения данных с устройства HotbedAgroControl необходимо подключить устройство к MQTT-броккеру Mosquitto.</string>
