@@ -3,6 +3,8 @@ package com.example.hotbedagrocontrolapp.data.service
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.hotbedagrocontrolapp.data.service.MqttClient
+import com.example.hotbedagrocontrolapp.data.service.aiService.AiClient
+import com.example.hotbedagrocontrolapp.data.service.aiService.AiUserApi
 import com.example.hotbedagrocontrolapp.data.service.dataService.DataServiceClient
 import com.example.hotbedagrocontrolapp.data.service.dataService.UserApi
 import dagger.Module
@@ -21,6 +23,10 @@ object ClientModule {
     @Provides
     @Singleton
     fun provideUserApi(): UserApi = DataServiceClient.userApi
+
+    @Provides
+    @Singleton
+    fun provideAiUserApi(): AiUserApi = AiClient.aiUserApi
 
     @Provides
     fun provideSharedPreferences(@ApplicationContext ctx: Context): SharedPreferences {
