@@ -42,6 +42,7 @@ fun ElementsScreen(
     val currentData by viewModel.currentData.collectAsState()
     val isConnected by viewModel.isConnected.collectAsState()
     val optimalValues by viewModel.optimalValues.collectAsState()
+    val backScreen = Screens.ELEMENTS.title
 
     Column(modifier = modifier.fillMaxWidth()
         .padding(20.dp),

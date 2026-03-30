@@ -26,6 +26,7 @@ import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
 import com.example.hotbedagrocontrolapp.presentation.components.ai.FixInChat
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicBackArrow
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicConfirmButton
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicDropDownButton
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTextField
@@ -39,7 +40,8 @@ import com.example.hotbedagrocontrolapp.ui.theme.SkyBlue
 fun OptimalValuesScreen(
     viewModel: AgroControlViewModel,
     navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -65,12 +67,14 @@ fun OptimalValuesScreen(
     }
 
     val messageForAi = stringResource(R.string.choose_optimal_values_ai_message)
+    val backScreen = Screens.OPTIMAL_VALUES.title
 
     Column(
         modifier = modifier.fillMaxWidth().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
+        BasicBackArrow(Modifier.align(Alignment.Start)) { onBack() }
         LazyColumn(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -93,7 +97,7 @@ fun OptimalValuesScreen(
                     modifier = Modifier.align(Alignment.Start),
                     fontSize = 20.sp
                 ) {
-                    navController.navigate("${Screens.AI_CHAT.title}/$messageForAi")
+                    navController.navigate("${Screens.AI_CHAT.title}/$messageForAi/$backScreen")
                 }
             }
 

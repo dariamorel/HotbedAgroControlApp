@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicBackArrow
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicConfirmButton
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicDropDownButton
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTextField
@@ -29,7 +30,8 @@ import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.
 @Composable
 fun MqttSettingsScreen(
     viewModel: AgroControlViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit
 ) {
     val mqttSettings = viewModel.mqttSettings
 
@@ -53,6 +55,7 @@ fun MqttSettingsScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
+        BasicBackArrow(Modifier.align(Alignment.Start)) { onBack() }
         LazyColumn(
             modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -53,6 +53,7 @@ import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatMe
 import com.example.hotbedagrocontrolapp.domain.viewModel.ai.AiChatViewModel
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
 import com.example.hotbedagrocontrolapp.presentation.components.ai.ChatFrame
+import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicBackArrow
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicOpenButton
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTextField
 import com.example.hotbedagrocontrolapp.ui.theme.DarkBlue
@@ -65,7 +66,8 @@ fun AiChatScreen(
     agroControlViewModel: AgroControlViewModel,
     aiChatViewModel: AiChatViewModel,
     modifier: Modifier = Modifier,
-    introMessage: String? = null
+    introMessage: String? = null,
+    onBack: () -> Unit = {}
 ) {
     val currentData by agroControlViewModel.currentData.collectAsState()
     val optimalValues by agroControlViewModel.optimalValues.collectAsState()
@@ -96,8 +98,7 @@ fun AiChatScreen(
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        CloseButton(
-        ) {
+        CloseButton(onBack = { onBack() }) {
             aiChatViewModel.clearChat()
             message = ""
         }
@@ -152,6 +153,7 @@ fun AiChatScreen(
 @Composable
 fun CloseButton(
     modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -160,6 +162,7 @@ fun CloseButton(
             .height(40.dp)
             .background(MaterialTheme.colorScheme.surface),
     ) {
+        BasicBackArrow(Modifier.padding(horizontal = 4.dp)) { onBack() }
         Spacer(Modifier.weight(1f))
         Row(
             modifier = Modifier

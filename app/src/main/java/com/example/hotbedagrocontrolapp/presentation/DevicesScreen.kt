@@ -56,6 +56,7 @@ fun DevicesScreen(
 
     val isDeviceAdded by viewModel.isDeviceAdded.collectAsState()
     var isCheckBoxOpened by remember { mutableStateOf(false) }
+    val backScreen = Screens.DEVICES.title
 
     Column(
         modifier = modifier
@@ -69,12 +70,12 @@ fun DevicesScreen(
         BasicOpenButton(
             text = stringResource(R.string.configuration_parameters),
         ) {
-            navController.navigate(Screens.MQTT_SETTINGS.title)
+            navController.navigate("${Screens.MQTT_SETTINGS.title}/$backScreen")
         }
         BasicOpenButton(
             text = stringResource(R.string.optimal_values),
         ) {
-            navController.navigate(Screens.OPTIMAL_VALUES.title)
+            navController.navigate("${Screens.OPTIMAL_VALUES.title}/$backScreen")
         }
         if (isDeviceAdded) {
             Spacer(Modifier.weight(1f))

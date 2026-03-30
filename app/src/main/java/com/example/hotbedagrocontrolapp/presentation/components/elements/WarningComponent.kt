@@ -78,6 +78,7 @@ fun WarningComponent(
         R.string.values_in_red_zone_ai_message,
         sensorsWithRedValuesList.joinToString(", ") { it.first.elementName }
     )
+    val backScreen = Screens.ELEMENTS.title
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -108,7 +109,7 @@ fun WarningComponent(
                 text = stringResource(R.string.fix_in_chat),
                 modifier = Modifier.align(Alignment.End)
             ) {
-                navController.navigate("${Screens.AI_CHAT.title}/$messageForAi")
+                navController.navigate("${Screens.AI_CHAT.title}/$messageForAi/$backScreen")
             }
         }
     }

@@ -76,7 +76,7 @@ fun MainScreen(
                 drawerContainerColor = MaterialTheme.colorScheme.surface,
                 modifier = Modifier.width(320.dp)
             ) {
-                listOf(Screens.ELEMENTS, Screens.STATISTICS, Screens.EVENT_LOG, Screens.DEVICES, Screens.AI_CHAT).forEach { screen ->
+                listOf(Screens.AI_CHAT, Screens.ELEMENTS, Screens.STATISTICS, Screens.EVENT_LOG, Screens.DEVICES).forEach { screen ->
                     NavigationDrawerItem(
                         label = {
                             Text(
@@ -193,37 +193,60 @@ fun MainScreen(
                     )
                 }
 
-                composable(Screens.MQTT_SETTINGS.title) {
+                composable("${Screens.MQTT_SETTINGS.title}/{back_screen}") { backStackEntry ->
+                    val backScreen = backStackEntry.arguments?.getString("back_screen")
                     MqttSettingsScreen(
                         viewModel = agroControlViewModel,
                         modifier = Modifier.padding(innerPadding)
-                    )
+                    ) {
+                        backScreen?.let { navController.navigate(backScreen) }
+                    }
                 }
 
-                composable(Screens.OPTIMAL_VALUES.title) {
+                composable("${Screens.OPTIMAL_VALUES.title}/{back_screen}") { backStackEntry ->
+                    val backScreen = backStackEntry.arguments?.getString("back_screen")
                     OptimalValuesScreen(
                         viewModel = agroControlViewModel,
                         navController = navController,
                         modifier = Modifier.padding(innerPadding)
-                    )
+                    ) {
+                        backScreen?.let { navController.navigate(backScreen) }
+                    }
                 }
 
                 composable(Screens.AI_CHAT.title) {
+                    val backScreen = Screens.ELEMENTS.title
                     AiChatScreen(
                         agroControlViewModel = agroControlViewModel,
                         aiChatViewModel = aiChatViewModel,
                         modifier = Modifier.padding(innerPadding),
-                    )
+                    ) {
+                        navController.navigate(backScreen)
+                    }
                 }
 
-                composable("${Screens.AI_CHAT.title}/{intro_message}") { backStackEntry ->
+                composable("${Screens.AI_CHAT.title}/{back_screen}") { backStackEntry ->
+                    val backScreen = backStackEntry.arguments?.getString("back_screen")
+                    AiChatScreen(
+                        agroControlViewModel = agroControlViewModel,
+                        aiChatViewModel = aiChatViewModel,
+                        modifier = Modifier.padding(innerPadding),
+                    ) {
+                        backScreen?.let { navController.navigate(backScreen) }
+                    }
+                }
+
+                composable("${Screens.AI_CHAT.title}/{intro_message}/{back_screen}") { backStackEntry ->
                     val introMessage = backStackEntry.arguments?.getString("intro_message")
+                    val backScreen = backStackEntry.arguments?.getString("back_screen")
                     AiChatScreen(
                         agroControlViewModel = agroControlViewModel,
                         aiChatViewModel = aiChatViewModel,
                         modifier = Modifier.padding(innerPadding),
                         introMessage = introMessage
-                    )
+                    ) {
+                        backScreen?.let { navController.navigate(backScreen) }
+                    }
                 }
             }
         }
