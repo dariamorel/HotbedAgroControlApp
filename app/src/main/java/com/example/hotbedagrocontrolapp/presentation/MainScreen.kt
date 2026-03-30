@@ -133,6 +133,7 @@ fun MainScreen(
                     if (isDeviceAdded) {
                         ElementsScreen(
                             viewModel = agroControlViewModel,
+                            navController = navController,
                             modifier = Modifier.padding(innerPadding)
                         )
                     } else {
@@ -210,7 +211,17 @@ fun MainScreen(
                     AiChatScreen(
                         agroControlViewModel = agroControlViewModel,
                         aiChatViewModel = aiChatViewModel,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                    )
+                }
+
+                composable("${Screens.AI_CHAT.title}/{intro_message}") { backStackEntry ->
+                    val introMessage = backStackEntry.arguments?.getString("intro_message")
+                    AiChatScreen(
+                        agroControlViewModel = agroControlViewModel,
+                        aiChatViewModel = aiChatViewModel,
+                        modifier = Modifier.padding(innerPadding),
+                        introMessage = introMessage
                     )
                 }
             }

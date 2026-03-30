@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
 import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
@@ -35,6 +36,7 @@ import com.example.hotbedagrocontrolapp.presentation.components.elements.Warning
 @Composable
 fun ElementsScreen(
     viewModel: AgroControlViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val currentData by viewModel.currentData.collectAsState()
@@ -52,7 +54,7 @@ fun ElementsScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
-                WarningComponent(viewModel)
+                WarningComponent(viewModel, navController)
             }
             item {
                 BasicTitle("Датчики")

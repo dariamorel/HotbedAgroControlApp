@@ -37,8 +37,10 @@ class AiChatViewModel @Inject constructor(
         val contextMessage = getContextMessage(currentData, optimalValues)
         _chatStarted.value = true
 
-        addMessage(contextMessage)
-        introMessage?.let { addMessage(introMessage) }
+        viewModelScope.launch(Dispatchers.IO) {
+            sendUserMessage(contextMessage)
+            introMessage?.let { sendUserMessage(introMessage) }
+        }
     }
 
     fun clearChat() {
@@ -49,27 +51,31 @@ class AiChatViewModel @Inject constructor(
     fun addMessage(
         message: String,
     ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            sendUserMessage(message)
+        }
+    }
+
+    private suspend fun sendUserMessage(message: String) {
         if (message.isBlank()) {
             return
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.value = true
+        _isLoading.value = true
 
-            try {
+        try {
 
-                val updatedHistory = aiManager.sendUserMessage(
-                    history = _chatHistory.value,
-                    userMessage = message,
-                )
+            val updatedHistory = aiManager.sendUserMessage(
+                history = _chatHistory.value,
+                userMessage = message,
+            )
 
-                _chatHistory.value = updatedHistory
-                Log.d(AI_TAG, "History: ${_chatHistory.value.joinToString("\n")}")
-            } catch (e: Exception) {
-                Log.d(AI_TAG, "Error while getting answer: ${e.message}.")
-            } finally {
-                _isLoading.value = false
-            }
+            _chatHistory.value = updatedHistory
+            Log.d(AI_TAG, "History: ${_chatHistory.value.joinToString("\n")}")
+        } catch (e: Exception) {
+            Log.d(AI_TAG, "Error while getting answer: ${e.message}.")
+        } finally {
+            _isLoading.value = false
         }
     }
 

@@ -34,9 +34,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
+import com.example.hotbedagrocontrolapp.presentation.Screens
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicBodyText
 import com.example.hotbedagrocontrolapp.presentation.components.statistics.PointStatus
 import com.example.hotbedagrocontrolapp.presentation.components.statistics.pointStatus
@@ -51,6 +53,7 @@ import com.example.hotbedagrocontrolapp.ui.theme.SunYellow
 @Composable
 fun WarningComponent(
     viewModel: AgroControlViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
     val currentData by viewModel.currentData.collectAsState()
@@ -64,7 +67,15 @@ fun WarningComponent(
 
     if (sensorsWithRedValues.isEmpty()) return
 
-    val message = "Сильное отклонение от оптимальных значений у датчиков:\n- ${sensorsWithRedValues.toList().joinToString("\n- ") { it.first.elementName } }"
+    val sensorsWithRedValuesList = sensorsWithRedValues.toList()
+    val message = stringResource(
+        R.string.values_in_red_zone,
+        sensorsWithRedValuesList.joinToString("\n- ") { it.first.elementName }
+    )
+    val messageForAi = stringResource(
+        R.string.values_in_red_zone_ai_message,
+        sensorsWithRedValuesList.joinToString(", ") { it.first.elementName }
+    )
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -94,7 +105,7 @@ fun WarningComponent(
             Row(
                 modifier = Modifier
                     .align(Alignment.End)
-                    .clickable {  }
+                    .clickable { navController.navigate("${Screens.AI_CHAT.title}/$messageForAi") }
                     .padding(10.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
