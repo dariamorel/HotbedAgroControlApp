@@ -48,75 +48,79 @@ fun MqttSettingsScreen(
     val context = LocalContext.current
     val parametersUpdatedMessage = stringResource(R.string.parameters_successfully_updated)
 
-    LazyColumn(
+    Column(
         modifier = modifier.fillMaxWidth().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        item {
-            BasicTitle(
-                text = stringResource(R.string.configuration_parameters),
-            )
-        }
-        item {
-            BasicDropDownButton(
-                title = stringResource(R.string.what_is_it),
-                body = stringResource(R.string.what_is_mqtt)
-            )
-        }
-        item {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
+        LazyColumn(
+            modifier = Modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            item {
                 BasicTitle(
-                    text = stringResource(R.string.ip_address),
-                    fontSize = 20,
+                    text = stringResource(R.string.configuration_parameters),
                 )
-                BasicTextField(ipAddress) { newIpAddress ->
-                    ipAddress = newIpAddress
-                }
+            }
+            item {
+                BasicDropDownButton(
+                    title = stringResource(R.string.what_is_it),
+                    body = stringResource(R.string.what_is_mqtt)
+                )
+            }
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    BasicTitle(
+                        text = stringResource(R.string.ip_address),
+                        fontSize = 20,
+                    )
+                    BasicTextField(ipAddress) { newIpAddress ->
+                        ipAddress = newIpAddress
+                    }
 
-                BasicTitle(
-                    text = stringResource(R.string.topic),
-                    fontSize = 20,
-                )
-                BasicTextField(topic) { newTopic ->
-                    topic = newTopic
-                }
+                    BasicTitle(
+                        text = stringResource(R.string.topic),
+                        fontSize = 20,
+                    )
+                    BasicTextField(topic) { newTopic ->
+                        topic = newTopic
+                    }
 
-                BasicTitle(
-                    text = stringResource(R.string.user_name),
-                    fontSize = 20,
-                )
-                BasicTextField(userName) { newUserName ->
-                    userName = newUserName
-                }
+                    BasicTitle(
+                        text = stringResource(R.string.user_name),
+                        fontSize = 20,
+                    )
+                    BasicTextField(userName) { newUserName ->
+                        userName = newUserName
+                    }
 
-                BasicTitle(
-                    text = stringResource(R.string.password),
-                    fontSize = 20,
-                )
-                BasicTextField(password) { newPassword ->
-                    password = newPassword
-                }
+                    BasicTitle(
+                        text = stringResource(R.string.password),
+                        fontSize = 20,
+                    )
+                    BasicTextField(password) { newPassword ->
+                        password = newPassword
+                    }
 
-                BasicTitle(
-                    text = stringResource(R.string.port),
-                    fontSize = 20,
-                )
-                BasicTextField(port) { newPort ->
-                    port = newPort
+                    BasicTitle(
+                        text = stringResource(R.string.port),
+                        fontSize = 20,
+                    )
+                    BasicTextField(port) { newPort ->
+                        port = newPort
+                    }
                 }
             }
         }
-        item {
-            BasicConfirmButton(
-                text = stringResource(R.string.update_parameters),
-            ) {
-                viewModel.addDevice(ipAddress, topic, userName, password, port)
-                Toast.makeText(context, parametersUpdatedMessage, Toast.LENGTH_SHORT).show()
-            }
+        BasicConfirmButton(
+            text = stringResource(R.string.update_parameters),
+        ) {
+            viewModel.addDevice(ipAddress, topic, userName, password, port)
+            Toast.makeText(context, parametersUpdatedMessage, Toast.LENGTH_SHORT).show()
         }
     }
 

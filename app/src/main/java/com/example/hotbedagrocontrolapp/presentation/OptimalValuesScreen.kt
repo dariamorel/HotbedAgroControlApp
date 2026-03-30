@@ -20,18 +20,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
+import com.example.hotbedagrocontrolapp.presentation.components.ai.FixInChat
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicConfirmButton
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicDropDownButton
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTextField
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTitle
+import com.example.hotbedagrocontrolapp.ui.theme.DarkBlue
+import com.example.hotbedagrocontrolapp.ui.theme.LightBlue
+import com.example.hotbedagrocontrolapp.ui.theme.SkyBlue
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OptimalValuesScreen(
     viewModel: AgroControlViewModel,
+    navController: NavController,
     modifier: Modifier = Modifier
 ) {
 
@@ -57,102 +64,118 @@ fun OptimalValuesScreen(
         phOpt = optimalValues[Sensor.PH]?.toString().orEmpty()
     }
 
-    LazyColumn(
+    val messageForAi = stringResource(R.string.choose_optimal_values_ai_message)
+
+    Column(
         modifier = modifier.fillMaxWidth().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        item {
-            BasicTitle(
-                text = stringResource(R.string.optimal_values),
-            )
-        }
-        item {
-            BasicDropDownButton(
-                title = stringResource(R.string.what_is_it),
-                body = stringResource(R.string.what_is_optimal_values)
-            )
-        }
-        item {
-            Column(
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            item {
                 BasicTitle(
-                    text = stringResource(R.string.air_humidity_opt),
-                    fontSize = 20,
+                    text = stringResource(R.string.optimal_values),
                 )
-                BasicTextField(airHumidityOpt) { newAirHumidityOpt ->
-                    airHumidityOpt = newAirHumidityOpt
-                }
+            }
+            item {
+                BasicDropDownButton(
+                    title = stringResource(R.string.what_is_it),
+                    body = stringResource(R.string.what_is_optimal_values)
+                )
+            }
 
-                BasicTitle(
-                    text = stringResource(R.string.air_temperature_opt),
-                    fontSize = 20,
-                )
-                BasicTextField(airTemperatureOpt) { newAirTemperatureOpt ->
-                    airTemperatureOpt = newAirTemperatureOpt
-                }
-
-                BasicTitle(
-                    text = stringResource(R.string.fluid_temperature_opt),
-                    fontSize = 20,
-                )
-                BasicTextField(fluidTemperatureOpt) { newFluidTemperatureOpt ->
-                    fluidTemperatureOpt = newFluidTemperatureOpt
-                }
-
-                BasicTitle(
-                    text = stringResource(R.string.fluid_level_opt),
-                    fontSize = 20,
-                )
-                BasicTextField(fluidLevelOpt) { newFluidLevelOpt ->
-                    fluidLevelOpt = newFluidLevelOpt
-                }
-
-                BasicTitle(
-                    text = stringResource(R.string.ec_opt),
-                    fontSize = 20,
-                )
-                BasicTextField(ecOpt) { newEcOpt ->
-                    ecOpt = newEcOpt
-                }
-
-                BasicTitle(
-                    text = stringResource(R.string.lux_opt),
-                    fontSize = 20,
-                )
-                BasicTextField(luxOpt) { newLuxOpt ->
-                    luxOpt = newLuxOpt
-                }
-
-                BasicTitle(
-                    text = stringResource(R.string.ph_opt),
-                    fontSize = 20,
-                )
-                BasicTextField(phOpt) { newPhOpt ->
-                    phOpt = newPhOpt
+            item {
+                FixInChat(
+                    text = stringResource(R.string.choose_optimal_values_in_chat),
+                    modifier = Modifier.align(Alignment.Start),
+                    fontSize = 20.sp
+                ) {
+                    navController.navigate("${Screens.AI_CHAT.title}/$messageForAi")
                 }
             }
-        }
-        item {
-            BasicConfirmButton(
-                text = stringResource(R.string.update_parameters),
-            ) {
-                viewModel.saveOptimalValues(
-                    mapOf(
-                        Sensor.AIR_HUMIDITY to airHumidityOpt,
-                        Sensor.AIR_TEMPERATURE to airTemperatureOpt,
-                        Sensor.FLUID_TEMPERATURE to fluidTemperatureOpt,
-                        Sensor.FLUID_LEVEL to fluidLevelOpt,
-                        Sensor.EC to ecOpt,
-                        Sensor.LUX to luxOpt,
-                        Sensor.PH to phOpt
+
+            item {
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    BasicTitle(
+                        text = stringResource(R.string.air_humidity_opt),
+                        fontSize = 20,
                     )
-                )
-                Toast.makeText(context, parametersUpdatedMessage, Toast.LENGTH_SHORT).show()
+                    BasicTextField(airHumidityOpt) { newAirHumidityOpt ->
+                        airHumidityOpt = newAirHumidityOpt
+                    }
+
+                    BasicTitle(
+                        text = stringResource(R.string.air_temperature_opt),
+                        fontSize = 20,
+                    )
+                    BasicTextField(airTemperatureOpt) { newAirTemperatureOpt ->
+                        airTemperatureOpt = newAirTemperatureOpt
+                    }
+
+                    BasicTitle(
+                        text = stringResource(R.string.fluid_temperature_opt),
+                        fontSize = 20,
+                    )
+                    BasicTextField(fluidTemperatureOpt) { newFluidTemperatureOpt ->
+                        fluidTemperatureOpt = newFluidTemperatureOpt
+                    }
+
+                    BasicTitle(
+                        text = stringResource(R.string.fluid_level_opt),
+                        fontSize = 20,
+                    )
+                    BasicTextField(fluidLevelOpt) { newFluidLevelOpt ->
+                        fluidLevelOpt = newFluidLevelOpt
+                    }
+
+                    BasicTitle(
+                        text = stringResource(R.string.ec_opt),
+                        fontSize = 20,
+                    )
+                    BasicTextField(ecOpt) { newEcOpt ->
+                        ecOpt = newEcOpt
+                    }
+
+                    BasicTitle(
+                        text = stringResource(R.string.lux_opt),
+                        fontSize = 20,
+                    )
+                    BasicTextField(luxOpt) { newLuxOpt ->
+                        luxOpt = newLuxOpt
+                    }
+
+                    BasicTitle(
+                        text = stringResource(R.string.ph_opt),
+                        fontSize = 20,
+                    )
+                    BasicTextField(phOpt) { newPhOpt ->
+                        phOpt = newPhOpt
+                    }
+                }
             }
+
+        }
+        BasicConfirmButton(
+            text = stringResource(R.string.update_parameters),
+        ) {
+            viewModel.saveOptimalValues(
+                mapOf(
+                    Sensor.AIR_HUMIDITY to airHumidityOpt,
+                    Sensor.AIR_TEMPERATURE to airTemperatureOpt,
+                    Sensor.FLUID_TEMPERATURE to fluidTemperatureOpt,
+                    Sensor.FLUID_LEVEL to fluidLevelOpt,
+                    Sensor.EC to ecOpt,
+                    Sensor.LUX to luxOpt,
+                    Sensor.PH to phOpt
+                )
+            )
+            Toast.makeText(context, parametersUpdatedMessage, Toast.LENGTH_SHORT).show()
         }
     }
-
 }

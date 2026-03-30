@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -39,6 +40,7 @@ import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
 import com.example.hotbedagrocontrolapp.presentation.Screens
+import com.example.hotbedagrocontrolapp.presentation.components.ai.FixInChat
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicBodyText
 import com.example.hotbedagrocontrolapp.presentation.components.statistics.PointStatus
 import com.example.hotbedagrocontrolapp.presentation.components.statistics.pointStatus
@@ -102,27 +104,11 @@ fun WarningComponent(
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            Row(
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .clickable { navController.navigate("${Screens.AI_CHAT.title}/$messageForAi") }
-                    .padding(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            FixInChat(
+                text = stringResource(R.string.fix_in_chat),
+                modifier = Modifier.align(Alignment.End)
             ) {
-                Text(
-                    text = "решить в чате",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        textDecoration = TextDecoration.Underline
-                    ),
-                    textAlign = TextAlign.Left,
-                    color = DarkBlue,
-                )
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = "Open chat",
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = modifier.size(20.dp)
-                )
+                navController.navigate("${Screens.AI_CHAT.title}/$messageForAi")
             }
         }
     }

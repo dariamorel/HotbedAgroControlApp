@@ -203,6 +203,7 @@ fun MainScreen(
                 composable(Screens.OPTIMAL_VALUES.title) {
                     OptimalValuesScreen(
                         viewModel = agroControlViewModel,
+                        navController = navController,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

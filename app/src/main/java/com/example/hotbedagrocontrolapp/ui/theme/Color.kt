@@ -29,3 +29,4 @@ val SkyBlue = Color(0xFF23af92)
 val BasicButtonColor = Color.Black
 val DarkYellow = Color(0xfff7a500)
 val DarkBlue = Color(0xff0080db)
+val LightBlue = Color(0xff6ea9e0)

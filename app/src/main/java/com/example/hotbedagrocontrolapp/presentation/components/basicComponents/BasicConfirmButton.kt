@@ -13,13 +13,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hotbedagrocontrolapp.ui.theme.LightBlue
 import com.example.hotbedagrocontrolapp.ui.theme.LightGreen
 
 @Composable
 fun BasicConfirmButton(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = LightGreen,
+    color: Color = LightBlue,
     onClick: () -> Unit
 ) {
     Button(
