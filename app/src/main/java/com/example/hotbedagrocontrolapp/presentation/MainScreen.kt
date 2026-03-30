@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.hotbedagrocontrolapp.domain.viewModel.ai.AiChatViewModel
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
 import com.example.hotbedagrocontrolapp.domain.viewModel.statistics.StatisticsViewModel
 import kotlinx.coroutines.launch
@@ -47,7 +48,8 @@ import kotlinx.coroutines.launch
 enum class Screens(val title: String) {
     ELEMENTS("Показатели"), STATISTICS("Статистика"),
     EVENT_LOG("Журнал событий"), DEVICES("Управление устройством"),
-    MQTT_SETTINGS("Параметры конфигурации"), OPTIMAL_VALUES("Оптимальные значения датчиков")
+    MQTT_SETTINGS("Параметры конфигурации"), OPTIMAL_VALUES("Оптимальные значения датчиков"),
+    AI_CHAT("AI чат")
 }
 
 /**
@@ -59,7 +61,8 @@ enum class Screens(val title: String) {
 fun MainScreen(
     modifier: Modifier = Modifier,
     agroControlViewModel: AgroControlViewModel = hiltViewModel(),
-    statisticsViewModel: StatisticsViewModel = hiltViewModel()
+    statisticsViewModel: StatisticsViewModel = hiltViewModel(),
+    aiChatViewModel: AiChatViewModel = hiltViewModel()
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val navController = rememberNavController()
@@ -73,7 +76,7 @@ fun MainScreen(
                 drawerContainerColor = MaterialTheme.colorScheme.surface,
                 modifier = Modifier.width(320.dp)
             ) {
-                listOf(Screens.ELEMENTS, Screens.STATISTICS, Screens.EVENT_LOG, Screens.DEVICES).forEach { screen ->
+                listOf(Screens.ELEMENTS, Screens.STATISTICS, Screens.EVENT_LOG, Screens.DEVICES, Screens.AI_CHAT).forEach { screen ->
                     NavigationDrawerItem(
                         label = {
                             Text(
@@ -199,6 +202,14 @@ fun MainScreen(
                 composable(Screens.OPTIMAL_VALUES.title) {
                     OptimalValuesScreen(
                         viewModel = agroControlViewModel,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+
+                composable(Screens.AI_CHAT.title) {
+                    AiChatScreen(
+                        agroControlViewModel = agroControlViewModel,
+                        aiChatViewModel = aiChatViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

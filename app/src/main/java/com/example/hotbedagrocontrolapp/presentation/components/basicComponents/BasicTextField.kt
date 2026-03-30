@@ -18,9 +18,9 @@ fun BasicTextField(
         value = basicValue,
         onValueChange = { newValue -> onValueChange(newValue) },
         label = {},
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
 //            .clip(RoundedCornerShape(16.dp)),
-        colors = TextFieldDefaults.colors(focusedContainerColor = Color.LightGray, unfocusedContainerColor = MaterialTheme.colorScheme.surface)
+        colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.primaryContainer, unfocusedContainerColor = MaterialTheme.colorScheme.surface)
     )
 }

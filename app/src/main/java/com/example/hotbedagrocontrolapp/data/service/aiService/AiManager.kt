@@ -1,10 +1,13 @@
 package com.example.hotbedagrocontrolapp.data.service.aiService
 
+import android.util.Log
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatMessage
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatRequest
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatResponse
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiGenerateRequest
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiGenerateResponse
+import com.example.hotbedagrocontrolapp.domain.viewModel.ai.AiChatViewModel
+import com.example.hotbedagrocontrolapp.presentation.AiChatScreen
 import javax.inject.Inject
 
 class AiManager @Inject constructor(
@@ -33,6 +36,7 @@ class AiManager @Inject constructor(
             role = ROLE_USER,
             content = userMessage
         )
+        Log.d(AiChatViewModel.AI_TAG, "Content: $updatedHistory")
         val response = aiUserApi.chat(
             AiChatRequest(
                 model = DEFAULT_MODEL,
@@ -40,7 +44,6 @@ class AiManager @Inject constructor(
                 stream = false
             )
         )
-
         return updatedHistory + response.message
     }
 

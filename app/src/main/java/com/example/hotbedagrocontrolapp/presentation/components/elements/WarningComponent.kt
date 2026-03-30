@@ -109,7 +109,7 @@ fun WarningComponent(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,
                     contentDescription = "Open chat",
-                    tint = Color.Black,
+                    tint = MaterialTheme.colorScheme.onBackground,
                     modifier = modifier.size(20.dp)
                 )
             }

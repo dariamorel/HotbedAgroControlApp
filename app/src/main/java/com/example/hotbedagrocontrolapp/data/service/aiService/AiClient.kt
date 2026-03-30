@@ -23,6 +23,4 @@ object AiClient {
         .build()
 
     val aiUserApi: AiUserApi = retrofit.create(AiUserApi::class.java)
-
-    const val AI_SERVICE_TAG = "AiService"
 }

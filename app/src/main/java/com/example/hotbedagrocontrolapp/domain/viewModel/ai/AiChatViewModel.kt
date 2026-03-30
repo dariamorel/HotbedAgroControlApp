@@ -2,6 +2,7 @@ package com.example.hotbedagrocontrolapp.domain.viewModel.ai
 
 import android.app.Application
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.R
@@ -29,24 +30,20 @@ class AiChatViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    private val _lastResponse = MutableStateFlow<String?>(null)
-    val lastResponse = _lastResponse.asStateFlow()
+    private val _chatStarted = MutableStateFlow(false)
+    val charStarted = _chatStarted.asStateFlow()
 
-    fun startChat(introMessage: String, currentData: Map<Element, Response>, optimalValues: Map<Sensor, Double?>) {
+    fun startChat(introMessage: String?, currentData: Map<Element, Response>, optimalValues: Map<Sensor, Double?>) {
         val contextMessage = getContextMessage(currentData, optimalValues)
-        _chatHistory.value = listOf(
-            AiChatMessage(
-                role = AiManager.ROLE_USER,
-                content = contextMessage
-            )
-        )
+        _chatStarted.value = true
 
-        addMessage(introMessage)
+        addMessage(contextMessage)
+        introMessage?.let { addMessage(introMessage) }
     }
 
     fun clearChat() {
-        _lastResponse.value = null
         _chatHistory.value = emptyList()
+        _chatStarted.value = false
     }
 
     fun addMessage(
@@ -60,19 +57,16 @@ class AiChatViewModel @Inject constructor(
             _isLoading.value = true
 
             try {
+
                 val updatedHistory = aiManager.sendUserMessage(
                     history = _chatHistory.value,
                     userMessage = message,
                 )
-                val assistantMessage = updatedHistory.lastOrNull {
-                    it.role == AiManager.ROLE_ASSISTANT
-                }?.content
 
                 _chatHistory.value = updatedHistory
-                _lastResponse.value = assistantMessage
+                Log.d(AI_TAG, "History: ${_chatHistory.value.joinToString("\n")}")
             } catch (e: Exception) {
                 Log.d(AI_TAG, "Error while getting answer: ${e.message}.")
-                _lastResponse.value = e.message ?: "Unknown AI error"
             } finally {
                 _isLoading.value = false
             }
@@ -105,7 +99,6 @@ class AiChatViewModel @Inject constructor(
             controlsMessage,
             optimalMessage
         )
-        Log.d(AI_TAG, "Context message: $contextMessage")
         return contextMessage
     }
 
