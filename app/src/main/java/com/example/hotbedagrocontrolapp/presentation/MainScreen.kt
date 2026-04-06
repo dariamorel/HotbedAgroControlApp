@@ -204,6 +204,17 @@ fun MainScreen(
                     }
                 }
 
+                composable(Screens.OPTIMAL_VALUES.title) {
+                    val backScreen = Screens.DEVICES.title
+                    OptimalValuesScreen(
+                        viewModel = agroControlViewModel,
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding)
+                    ) {
+                        navController.navigate(backScreen)
+                    }
+                }
+
                 composable("${Screens.OPTIMAL_VALUES.title}/{back_screen}") { backStackEntry ->
                     val backScreen = backStackEntry.arguments?.getString("back_screen")
                     OptimalValuesScreen(

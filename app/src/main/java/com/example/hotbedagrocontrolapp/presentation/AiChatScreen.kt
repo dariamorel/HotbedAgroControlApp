@@ -26,7 +26,6 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -52,6 +51,7 @@ import com.example.hotbedagrocontrolapp.data.service.aiService.AiManager
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatMessage
 import com.example.hotbedagrocontrolapp.domain.viewModel.ai.AiChatViewModel
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
+import com.example.hotbedagrocontrolapp.presentation.components.ai.AssistantTypingIndicator
 import com.example.hotbedagrocontrolapp.presentation.components.ai.ChatFrame
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicBackArrow
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicOpenButton
@@ -90,9 +90,12 @@ fun AiChatScreen(
     }
 
     LaunchedEffect(visibleMessages.size, isLoading) {
-        if (visibleMessages.isNotEmpty()) {
-            listState.animateScrollToItem(visibleMessages.lastIndex)
+        val targetIndex = when {
+            isLoading -> visibleMessages.size
+            visibleMessages.isNotEmpty() -> visibleMessages.lastIndex
+            else -> return@LaunchedEffect
         }
+        listState.animateScrollToItem(targetIndex)
     }
 
     Column(
@@ -118,6 +121,11 @@ fun AiChatScreen(
                 items(visibleMessages) { item ->
                     val isUser = item.role == "user"
                     ChatFrame(item.content, isUser)
+                }
+                if (isLoading) {
+                    item {
+                        AssistantTypingIndicator()
+                    }
                 }
             }
             Row(

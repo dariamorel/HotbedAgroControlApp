@@ -68,7 +68,7 @@ fun ChatFrame(text: String, isUserMessage: Boolean, modifier: Modifier = Modifie
 }
 
 @Composable
-private fun Tail(
+fun Tail(
     color: Color,
     isRightSide: Boolean,
     modifier: Modifier = Modifier

@@ -30,21 +30,16 @@ class AiManager @Inject constructor(
 
     suspend fun sendUserMessage(
         history: List<AiChatMessage>,
-        userMessage: String,
     ): List<AiChatMessage> {
-        val updatedHistory = history + AiChatMessage(
-            role = ROLE_USER,
-            content = userMessage
-        )
-        Log.d(AiChatViewModel.AI_TAG, "Content: $updatedHistory")
+        Log.d(AiChatViewModel.AI_TAG, "Content: $history")
         val response = aiUserApi.chat(
             AiChatRequest(
                 model = DEFAULT_MODEL,
-                messages = updatedHistory,
+                messages = history,
                 stream = false
             )
         )
-        return updatedHistory + response.message
+        return history + response.message
     }
 
     companion object {

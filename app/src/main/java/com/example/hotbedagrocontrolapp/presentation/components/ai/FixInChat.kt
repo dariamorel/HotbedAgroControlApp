@@ -26,7 +26,7 @@ import com.example.hotbedagrocontrolapp.ui.theme.DarkBlue
 fun FixInChat(
     text: String,
     modifier: Modifier = Modifier,
-    style: TextStyle = MaterialTheme.typography.titleMedium,
+    style: TextStyle = MaterialTheme.typography.titleSmall,
     onClick: () -> Unit = {}
 ) {
     val density = LocalDensity.current

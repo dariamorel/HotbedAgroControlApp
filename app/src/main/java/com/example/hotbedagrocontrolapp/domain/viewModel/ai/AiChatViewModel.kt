@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.data.service.aiService.AiManager
+import com.example.hotbedagrocontrolapp.data.service.aiService.AiManager.Companion.ROLE_USER
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatMessage
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.plus
 
 @HiltViewModel
 class AiChatViewModel @Inject constructor(
@@ -67,9 +69,13 @@ class AiChatViewModel @Inject constructor(
         try {
             Log.d(AI_TAG, "Loading answer...")
 
+            _chatHistory.value = _chatHistory.value + AiChatMessage(
+                role = ROLE_USER,
+                content = message
+            )
+
             val updatedHistory = aiManager.sendUserMessage(
                 history = _chatHistory.value,
-                userMessage = message,
             )
 
             _chatHistory.value = updatedHistory

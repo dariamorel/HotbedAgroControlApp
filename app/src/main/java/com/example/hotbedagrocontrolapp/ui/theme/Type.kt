@@ -20,31 +20,36 @@ val Typography = Typography(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,
         fontSize = 18.sp,
-        letterSpacing = 0.2.sp
+        letterSpacing = 0.2.sp,
+        lineHeight = 22.sp,
     ),
     titleSmall = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
-        letterSpacing = 0.2.sp
+        letterSpacing = 0.2.sp,
+        lineHeight = 20.sp
     ),
     bodyLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Normal,
         fontSize = 22.sp,
-        letterSpacing = 0.4.sp
+        letterSpacing = 0.4.sp,
+        lineHeight = 28.sp,
     ),
     bodyMedium = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Normal,
         fontSize = 18.sp,
-        letterSpacing = 0.4.sp
+        letterSpacing = 0.4.sp,
+        lineHeight = 22.sp,
     ),
     bodySmall = TextStyle(
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
-        letterSpacing = 0.4.sp
+        letterSpacing = 0.4.sp,
+        lineHeight = 20.sp,
     ),
 //    labelSmall = TextStyle(
 //        fontFamily = FontFamily.Default,
