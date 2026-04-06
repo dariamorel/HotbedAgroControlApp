@@ -6,16 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -25,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -33,7 +28,7 @@ import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
 import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -44,10 +39,10 @@ fun ChooseDateTimeWheel(
     onDismissRequest: () -> Unit,
     onSelectedChange: (DateTime) -> Unit
 ) {
-    val initialMillis = dateTime.localDateTime
-      .atZone(ZoneId.systemDefault())
-      .toInstant()
-      .toEpochMilli()
+    val initialMillis = dateTime.localDateTime.toLocalDate()
+        .atStartOfDay(ZoneOffset.UTC)
+        .toInstant()
+        .toEpochMilli()
 
     val datePickerState = rememberDatePickerState(
       initialSelectedDateMillis = initialMillis
@@ -102,7 +97,7 @@ fun ChooseDateTimeWheel(
                         val selectedMillis = datePickerState.selectedDateMillis
                         if (selectedMillis != null) {
                             val selectedDate = Instant.ofEpochMilli(selectedMillis)
-                                .atZone(ZoneId.systemDefault())
+                                .atZone(ZoneOffset.UTC)
                                 .toLocalDate()
                             val newDateTime = LocalDateTime.of(
                                 selectedDate.year,

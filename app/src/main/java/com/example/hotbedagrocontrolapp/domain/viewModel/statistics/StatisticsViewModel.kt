@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
+import java.time.YearMonth
 import javax.inject.Inject
 
 /**
@@ -102,7 +103,19 @@ class StatisticsViewModel @Inject constructor(
         dateTime: DateTime
     ): Flow<Map<LocalDateTime, Response>> {
         return flow.map { list ->
-            val map = list.associate { when (dateTime.analiseType) {
+            val rowsFiltered = when (dateTime.analiseType) {
+                AnaliseType.DAY -> {
+                    val day = dateTime.localDateTime.toLocalDate()
+                    list.filter { it.first.toLocalDate() == day }
+                }
+                AnaliseType.HOUR -> {
+                    val start = dateTime.localDateTime
+                    val endExclusive = start.plusHours(1)
+                    list.filter { !it.first.isBefore(start) && it.first.isBefore(endExclusive) }
+                }
+                else -> list
+            }
+            val map = rowsFiltered.associate { when (dateTime.analiseType) {
                 AnaliseType.YEAR -> LocalDateTime.of(it.first.year, it.first.month, 1, 0, 0)
                 AnaliseType.MONTH -> LocalDateTime.of(it.first.year, it.first.month, it.first.dayOfMonth, 0, 0)
                 AnaliseType.DAY -> LocalDateTime.of(it.first.year, it.first.month, it.first.dayOfMonth, it.first.hour, 0)
@@ -112,7 +125,10 @@ class StatisticsViewModel @Inject constructor(
 
             val range = when (dateTime.analiseType) {
                 AnaliseType.YEAR -> 1L until 12L
-                AnaliseType.MONTH -> 0L until 30L
+                AnaliseType.MONTH -> {
+                    val days = YearMonth.from(dateTime.localDateTime).lengthOfMonth()
+                    0L until days.toLong()
+                }
                 AnaliseType.DAY -> 0L until 24L
                 AnaliseType.HOUR -> 0L until 60L
             }

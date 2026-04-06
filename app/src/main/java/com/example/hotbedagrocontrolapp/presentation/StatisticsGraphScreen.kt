@@ -52,9 +52,9 @@ fun StatisticsGraphScreen(
         val now = LocalDateTime.now()
         val newDateTime = if (when (newAnaliseType) {
                 AnaliseType.YEAR -> false
-                AnaliseType.MONTH -> dateTime.localDateTime.year == now.year
-                AnaliseType.DAY -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month
-                AnaliseType.HOUR -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.localDateTime.dayOfMonth == now.dayOfMonth
+                AnaliseType.MONTH -> dateTime.localDateTime.year == now.year && dateTime.analiseType == AnaliseType.YEAR
+                AnaliseType.DAY -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.analiseType == AnaliseType.MONTH
+                AnaliseType.HOUR -> dateTime.localDateTime.year == now.year && dateTime.localDateTime.month == now.month && dateTime.localDateTime.dayOfMonth == now.dayOfMonth && dateTime.analiseType == AnaliseType.DAY
             }) now else dateTime.localDateTime
         dateTime = DateTime(newAnaliseType, newDateTime)
     }
@@ -87,13 +87,33 @@ fun StatisticsGraphScreen(
 
         val labels = when (dateTime.analiseType) {
             AnaliseType.HOUR -> values.map { (key, _) ->
-                if (key.minute % 10 == 0) key.format(DateTimeFormatter.ofPattern("HH:mm")) else " "
+                when {
+                    key.minute == 59 ->
+                        key.plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm"))
+                    key.minute % 10 == 0 ->
+                        key.format(DateTimeFormatter.ofPattern("HH:mm"))
+                    else -> " "
+                }
             }
             AnaliseType.DAY -> values.map { (key, _) ->
-                if (key.hour % 3 == 0) key.format(DateTimeFormatter.ofPattern("HHч")) else " "
+                when {
+                    key.hour == 23 -> {
+                        "00ч"
+                    }
+                    key.hour % 3 == 0 -> key.format(DateTimeFormatter.ofPattern("HHч"))
+                    else -> " "
+                }
             }
-            AnaliseType.MONTH -> values.map { (key, _) ->
-                if ((key.dayOfMonth - 1) % 5 == 0) key.format(DateTimeFormatter.ofPattern("dd.MM")) else " "
+            AnaliseType.MONTH -> {
+                val lastDay = dateTime.localDateTime.toLocalDate().lengthOfMonth()
+                values.map { (key, _) ->
+                    val d = key.dayOfMonth
+                    if ((d - 1) % 5 == 0 || d == lastDay) {
+                        key.format(DateTimeFormatter.ofPattern("dd.MM"))
+                    } else {
+                        " "
+                    }
+                }
             }
             AnaliseType.YEAR -> values.map { (key, _) ->
                 key.format(DateTimeFormatter.ofPattern("LLLL", Locale("ru")))
