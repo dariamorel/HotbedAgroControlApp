@@ -37,10 +37,11 @@ class AiChatViewModel @Inject constructor(
         val contextMessage = getContextMessage(currentData, optimalValues)
         _chatStarted.value = true
 
-        viewModelScope.launch(Dispatchers.IO) {
-            sendUserMessage(contextMessage)
-            introMessage?.let { sendUserMessage(introMessage) }
-        }
+        _chatHistory.value = listOf(AiChatMessage(
+            role = AiManager.ROLE_USER,
+            content = contextMessage
+        ))
+        introMessage?.let { addMessage(introMessage) }
     }
 
     fun clearChat() {
@@ -64,6 +65,7 @@ class AiChatViewModel @Inject constructor(
         _isLoading.value = true
 
         try {
+            Log.d(AI_TAG, "Loading answer...")
 
             val updatedHistory = aiManager.sendUserMessage(
                 history = _chatHistory.value,
@@ -71,10 +73,11 @@ class AiChatViewModel @Inject constructor(
             )
 
             _chatHistory.value = updatedHistory
-            Log.d(AI_TAG, "History: ${_chatHistory.value.joinToString("\n")}")
+            Log.d(AI_TAG, "Got answer! Updated history: ${_chatHistory.value.joinToString("\n")}")
         } catch (e: Exception) {
             Log.d(AI_TAG, "Error while getting answer: ${e.message}.")
         } finally {
+            Log.d(AI_TAG, "Loading stoped")
             _isLoading.value = false
         }
     }

@@ -1,6 +1,7 @@
 package com.example.hotbedagrocontrolapp.presentation.components.elements
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -41,6 +43,9 @@ fun ControlComponent(
     modifier: Modifier = Modifier,
     onStatusChanged: (Boolean) -> Unit
 ) {
+    val density = LocalDensity.current
+    val iconSize = with(density) { MaterialTheme.typography.titleSmall.fontSize.toDp() * 2 }
+
     Box(
         modifier = modifier.fillMaxSize()
             .clip(RoundedCornerShape(30.dp))
@@ -50,20 +55,23 @@ fun ControlComponent(
             modifier = Modifier.padding(10.dp)
                 .align(Alignment.Center),
         ) {
-            Row{
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
                     painter = painterResource(control.iconInfo.resourceId),
                     contentDescription = "Иконка ${control.elementName}",
-                    modifier = Modifier.size(35.dp).align(Alignment.Top),
+                    modifier = Modifier.size(iconSize).align(Alignment.Top),
                     tint = control.iconInfo.tint
                 )
                 Box(
                     modifier = Modifier.fillMaxWidth().padding(5.dp),
-                    contentAlignment = Alignment.TopStart
+//                    contentAlignment = Alignment.TopStart
                 ) {
                     Text(
                         text = control.elementName,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleSmall,
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurface
                     )

@@ -67,8 +67,8 @@ fun SwitchElement(
         ) {
             Text(
                 text = selectedText,
-                color = DarkBrown,
-                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.titleSmall,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(1f)
             )

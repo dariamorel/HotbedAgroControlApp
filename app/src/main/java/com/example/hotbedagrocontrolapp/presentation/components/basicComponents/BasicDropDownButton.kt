@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -39,26 +40,21 @@ fun BasicDropDownButton(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-//            .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, Color.Black, RoundedCornerShape(16.dp))
-            .clickable { isOpened = !isOpened }
-            .padding(16.dp),
+            .clickable { isOpened = !isOpened },
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
-            modifier = modifier
-                .fillMaxWidth() ,
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = modifier,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontSize = 20.sp,
-                textAlign = TextAlign.Left,
-                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.titleMedium.copy(
+                    textDecoration = TextDecoration.Underline
+                ),
+                textAlign = TextAlign.Start,
+                modifier = Modifier,
                 color = MaterialTheme.colorScheme.onBackground
             )
             val icon =
@@ -72,7 +68,12 @@ fun BasicDropDownButton(
         }
 
         if (isOpened) {
-            BasicBodyText(body)
+            Text(
+                text = body,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Start,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
     }
 }

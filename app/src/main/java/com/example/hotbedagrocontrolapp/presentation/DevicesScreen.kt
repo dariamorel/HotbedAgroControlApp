@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,7 +31,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
@@ -65,8 +68,6 @@ fun DevicesScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        BasicTitle(stringResource(R.string.device_management))
-        Spacer(Modifier.size(8.dp))
         BasicOpenButton(
             text = stringResource(R.string.configuration_parameters),
         ) {
@@ -84,7 +85,6 @@ fun DevicesScreen(
             ) {
                 BasicConfirmButton(
                     text = stringResource(R.string.delete_device),
-                    color = Color.LightGray
                 ) {
                     isCheckBoxOpened = true
                 }
@@ -117,7 +117,12 @@ fun CheckBox(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        BasicTitle(stringResource(R.string.if_delete_device), fontSize = 20)
+        Text(
+            text = stringResource(R.string.if_delete_device),
+            style = MaterialTheme.typography.titleMedium,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground
+        )
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(20.dp)
@@ -127,12 +132,17 @@ fun CheckBox(
                     .width(60.dp)
                     .height(40.dp)
                     .clip(RoundedCornerShape(4.dp))
-                    .background(LightGreen)
+                    .background(DarkRed)
                     .clickable { onClickNo() }
                     .padding(4.dp),
                 contentAlignment = Alignment.Center
             ) {
-                BasicTitle(stringResource(R.string.no), fontSize = 20)
+                Text(
+                    text = stringResource(R.string.no),
+                    style = MaterialTheme.typography.titleSmall,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
             Box(
                 modifier = Modifier
@@ -144,7 +154,12 @@ fun CheckBox(
                     .padding(8.dp),
                 contentAlignment = Alignment.Center
             ) {
-                BasicTitle(stringResource(R.string.yes), fontSize = 20)
+                Text(
+                    text = stringResource(R.string.yes),
+                    style = MaterialTheme.typography.titleSmall,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
         }
     }

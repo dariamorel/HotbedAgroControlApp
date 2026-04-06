@@ -33,19 +33,17 @@ fun Event(
     Column(modifier.fillMaxWidth()
         .clip(RoundedCornerShape(20.dp))
         .background(MaterialTheme.colorScheme.surface)
-        .padding(10.dp)
+        .padding(16.dp)
     ) {
         Text(
             text = "${dateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))}",
             style = MaterialTheme.typography.titleSmall,
-            fontSize = 15.sp,
             textAlign = TextAlign.Left,
             color = MaterialTheme.colorScheme.onPrimary
         )
         Text(
             text = "${control.elementName} - ${response.dataToString}",
             style = MaterialTheme.typography.titleSmall,
-            fontSize = 15.sp,
             textAlign = TextAlign.Left,
             color = MaterialTheme.colorScheme.onPrimary
         )

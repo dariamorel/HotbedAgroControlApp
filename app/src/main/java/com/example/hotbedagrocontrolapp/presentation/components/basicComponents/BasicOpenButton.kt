@@ -41,10 +41,9 @@ fun BasicOpenButton(
         Text(
             text = text,
             style = MaterialTheme.typography.titleMedium,
-            fontSize = 20.sp,
             textAlign = TextAlign.Left,
             modifier = Modifier.weight(1f),
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onSurface
         )
         Icon(
             imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,

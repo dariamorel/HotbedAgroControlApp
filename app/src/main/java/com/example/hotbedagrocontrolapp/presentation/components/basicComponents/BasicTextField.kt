@@ -21,10 +21,10 @@ fun BasicTextField(
     TextField(
         value = basicValue,
         onValueChange = { newValue -> onValueChange(newValue) },
-        label = {},
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(4.dp)),
-        colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.primaryContainer, unfocusedContainerColor = MaterialTheme.colorScheme.surface)
+            .clip(RoundedCornerShape(8.dp)),
+        colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.primaryContainer, unfocusedContainerColor = MaterialTheme.colorScheme.surface),
+        textStyle = MaterialTheme.typography.bodySmall
     )
 }

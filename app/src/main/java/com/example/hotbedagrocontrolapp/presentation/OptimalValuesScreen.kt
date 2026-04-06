@@ -5,9 +5,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -19,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -74,20 +78,27 @@ fun OptimalValuesScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        BasicBackArrow(Modifier.align(Alignment.Start)) { onBack() }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            BasicBackArrow(Modifier) { onBack() }
+            Text(
+                text = stringResource(R.string.optimal_values),
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
         LazyColumn(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            item {
-                BasicTitle(
-                    text = stringResource(R.string.optimal_values),
-                )
-            }
             item {
                 BasicDropDownButton(
                     title = stringResource(R.string.what_is_it),
-                    body = stringResource(R.string.what_is_optimal_values)
+                    body = stringResource(R.string.what_is_optimal_values),
+                    modifier = Modifier.align(Alignment.Start)
                 )
             }
 
@@ -95,7 +106,6 @@ fun OptimalValuesScreen(
                 FixInChat(
                     text = stringResource(R.string.choose_optimal_values_in_chat),
                     modifier = Modifier.align(Alignment.Start),
-                    fontSize = 20.sp
                 ) {
                     navController.navigate("${Screens.AI_CHAT.title}/$messageForAi/$backScreen")
                 }
@@ -106,57 +116,71 @@ fun OptimalValuesScreen(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.air_humidity_opt),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Left,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(airHumidityOpt) { newAirHumidityOpt ->
                         airHumidityOpt = newAirHumidityOpt
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.air_temperature_opt),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Left,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(airTemperatureOpt) { newAirTemperatureOpt ->
                         airTemperatureOpt = newAirTemperatureOpt
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.fluid_temperature_opt),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Left,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(fluidTemperatureOpt) { newFluidTemperatureOpt ->
                         fluidTemperatureOpt = newFluidTemperatureOpt
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.fluid_level_opt),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Left,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(fluidLevelOpt) { newFluidLevelOpt ->
                         fluidLevelOpt = newFluidLevelOpt
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.ec_opt),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Left,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(ecOpt) { newEcOpt ->
                         ecOpt = newEcOpt
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.lux_opt),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Left,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(luxOpt) { newLuxOpt ->
                         luxOpt = newLuxOpt
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.ph_opt),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Left,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(phOpt) { newPhOpt ->
                         phOpt = newPhOpt

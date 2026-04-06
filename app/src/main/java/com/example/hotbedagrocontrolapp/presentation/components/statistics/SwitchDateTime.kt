@@ -44,8 +44,8 @@ fun SwitchDateTime(
         )
         Text(
             text = dateTime.fullString,
-            color = DarkBrown,
-            style = MaterialTheme.typography.titleMedium.copy(
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.titleSmall.copy(
                 textDecoration = TextDecoration.Underline
             ),
             modifier = Modifier.clickable { isOpen = true }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
@@ -25,24 +26,23 @@ import com.example.hotbedagrocontrolapp.ui.theme.DarkBlue
 fun FixInChat(
     text: String,
     modifier: Modifier = Modifier,
-    fontSize: TextUnit = 16.sp,
+    style: TextStyle = MaterialTheme.typography.titleMedium,
     onClick: () -> Unit = {}
 ) {
     val density = LocalDensity.current
 
     Row(
         modifier = modifier
-            .clickable { onClick() }
-            .padding(10.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+            .clickable { onClick() },
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.titleMedium.copy(
+            style = style.copy(
                 textDecoration = TextDecoration.Underline
             ),
             textAlign = TextAlign.Right,
-            fontSize = fontSize,
             color = DarkBlue,
         )
         Icon(
@@ -50,7 +50,7 @@ fun FixInChat(
             contentDescription = "Open chat",
             tint = MaterialTheme.colorScheme.onBackground,
             modifier = modifier.size(
-                with(density) { fontSize.toDp() }
+                with(density) { MaterialTheme.typography.titleMedium.fontSize.toDp() }
             ),
         )
     }

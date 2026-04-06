@@ -5,9 +5,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.viewModel.elements.AgroControlViewModel
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicBackArrow
@@ -35,17 +40,17 @@ fun MqttSettingsScreen(
 ) {
     val mqttSettings = viewModel.mqttSettings
 
-    val default_ip_address = mqttSettings.ipAddress.ifEmpty { stringResource(R.string.default_ip_address) }
-    val default_topic = mqttSettings.mainTopic.ifEmpty { stringResource(R.string.default_topic) }
-    val default_user_name = mqttSettings.userName.ifEmpty { stringResource(R.string.default_user_name) }
-    val default_password = mqttSettings.password.ifEmpty { stringResource(R.string.default_password) }
-    val default_port = mqttSettings.port.ifEmpty { stringResource(R.string.default_port) }
+    val defaultIpAddress = mqttSettings.ipAddress.ifEmpty { stringResource(R.string.default_ip_address) }
+    val defaultTopic = mqttSettings.mainTopic.ifEmpty { stringResource(R.string.default_topic) }
+    val defaultUserName = mqttSettings.userName.ifEmpty { stringResource(R.string.default_user_name) }
+    val defaultPassword = mqttSettings.password.ifEmpty { stringResource(R.string.default_password) }
+    val defaultPort = mqttSettings.port.ifEmpty { stringResource(R.string.default_port) }
 
-    var ipAddress by remember { mutableStateOf(default_ip_address) }
-    var topic by remember { mutableStateOf(default_topic) }
-    var userName by remember { mutableStateOf(default_user_name) }
-    var password by remember { mutableStateOf(default_password) }
-    var port by remember { mutableStateOf(default_port) }
+    var ipAddress by remember { mutableStateOf(defaultIpAddress) }
+    var topic by remember { mutableStateOf(defaultTopic) }
+    var userName by remember { mutableStateOf(defaultUserName) }
+    var password by remember { mutableStateOf(defaultPassword) }
+    var port by remember { mutableStateOf(defaultPort) }
 
     val context = LocalContext.current
     val parametersUpdatedMessage = stringResource(R.string.parameters_successfully_updated)
@@ -55,21 +60,28 @@ fun MqttSettingsScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        BasicBackArrow(Modifier.align(Alignment.Start)) { onBack() }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            BasicBackArrow(Modifier) { onBack() }
+            Text(
+                text = stringResource(R.string.configuration_parameters),
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
         LazyColumn(
             modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item {
-                BasicTitle(
-                    text = stringResource(R.string.configuration_parameters),
-                )
-            }
-            item {
                 BasicDropDownButton(
                     title = stringResource(R.string.what_is_it),
-                    body = stringResource(R.string.what_is_mqtt)
+                    body = stringResource(R.string.what_is_mqtt),
+                    modifier = Modifier.align(Alignment.Start)
                 )
             }
             item {
@@ -77,41 +89,51 @@ fun MqttSettingsScreen(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.ip_address),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(ipAddress) { newIpAddress ->
                         ipAddress = newIpAddress
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.topic),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(topic) { newTopic ->
                         topic = newTopic
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.user_name),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(userName) { newUserName ->
                         userName = newUserName
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.password),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(password) { newPassword ->
                         password = newPassword
                     }
 
-                    BasicTitle(
+                    Text(
                         text = stringResource(R.string.port),
-                        fontSize = 20,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                     BasicTextField(port) { newPort ->
                         port = newPort

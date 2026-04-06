@@ -81,7 +81,8 @@ fun MainScreen(
                         label = {
                             Text(
                                 text = screen.title,
-                                style = MaterialTheme.typography.titleMedium
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onSurface
                             ) },
                         selected = screen == selectedScreen,
                         onClick = {
@@ -101,7 +102,7 @@ fun MainScreen(
                 TopAppBar(
                     title = {
                         Text(
-                            text = "HotBed Agro Control App",
+                            text = selectedScreen.title,
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onBackground,
                             textAlign = TextAlign.Center

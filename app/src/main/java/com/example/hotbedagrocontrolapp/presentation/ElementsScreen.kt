@@ -10,12 +10,16 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
 import com.example.hotbedagrocontrolapp.domain.entities.elements.ControlResponse
@@ -42,7 +46,6 @@ fun ElementsScreen(
     val currentData by viewModel.currentData.collectAsState()
     val isConnected by viewModel.isConnected.collectAsState()
     val optimalValues by viewModel.optimalValues.collectAsState()
-    val backScreen = Screens.ELEMENTS.title
 
     Column(modifier = modifier.fillMaxWidth()
         .padding(20.dp),
@@ -58,7 +61,12 @@ fun ElementsScreen(
                 WarningComponent(viewModel, navController)
             }
             item {
-                BasicTitle("Датчики")
+                Text(
+                    text = "Датчики",
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
             for (i in 0 until Sensor.entries.size step 2) {
                 item {
@@ -106,7 +114,12 @@ fun ElementsScreen(
                 }
             }
             item {
-                BasicTitle("Элементы управления")
+                Text(
+                    text = "Элементы управления",
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
             for (i in 0 until Control.entries.size step 2) {
                 item {

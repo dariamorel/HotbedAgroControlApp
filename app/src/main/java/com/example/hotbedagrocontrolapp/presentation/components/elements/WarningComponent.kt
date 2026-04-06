@@ -86,7 +86,8 @@ fun WarningComponent(
             .background(LightRed)
     ) {
         Column(
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Row(
                 modifier = Modifier,
@@ -100,14 +101,15 @@ fun WarningComponent(
                 )
                 Text(
                     text = message,
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.titleSmall,
                     textAlign = TextAlign.Left,
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
             FixInChat(
                 text = stringResource(R.string.fix_in_chat),
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier.align(Alignment.End),
+                style = MaterialTheme.typography.titleSmall
             ) {
                 navController.navigate("${Screens.AI_CHAT.title}/$messageForAi/$backScreen")
             }

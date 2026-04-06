@@ -1,6 +1,7 @@
 package com.example.hotbedagrocontrolapp.presentation.components.elements
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -54,6 +57,8 @@ fun SensorComponent(
         defaultBackground = MaterialTheme.colorScheme.surface,
         defaultValueColor = MaterialTheme.colorScheme.onSurface
     )
+    val density = LocalDensity.current
+    val iconSize = with(density) { MaterialTheme.typography.titleSmall.fontSize.toDp() * 2 }
 
     Box(
         modifier = modifier.fillMaxSize()
@@ -64,20 +69,23 @@ fun SensorComponent(
             modifier = Modifier.padding(10.dp)
                 .align(Alignment.Center)
         ) {
-            Row{
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
                     painter = painterResource(sensor.iconInfo.resourceId),
                     contentDescription = "Иконка ${sensor.elementName}",
-                    modifier = Modifier.size(35.dp).align(Alignment.Top),
+                    modifier = Modifier.size(iconSize).align(Alignment.Top),
                     tint = sensor.iconInfo.tint
                 )
                 Box(
                     modifier = Modifier.fillMaxWidth().padding(5.dp),
-                    contentAlignment = Alignment.TopStart
+//                    contentAlignment = Alignment.TopStart
                 ) {
                     Text(
                         text = sensor.elementName,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleSmall,
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -90,7 +98,7 @@ fun SensorComponent(
                     modifier = Modifier.align(Alignment.Center),
                     text = "${response.data}",
                     fontSize = 30.sp,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = valueColor
                 )
             }

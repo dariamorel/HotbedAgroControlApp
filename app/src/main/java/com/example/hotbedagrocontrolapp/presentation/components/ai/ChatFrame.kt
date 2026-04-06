@@ -53,7 +53,7 @@ fun ChatFrame(text: String, isUserMessage: Boolean, modifier: Modifier = Modifie
             Text(
                 text = text,
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodySmall
             )
         }
 

@@ -20,7 +20,7 @@ import com.example.hotbedagrocontrolapp.ui.theme.LightGreen
 fun BasicConfirmButton(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = LightBlue,
+    color: Color = MaterialTheme.colorScheme.primaryContainer,
     onClick: () -> Unit
 ) {
     Button(
@@ -33,9 +33,8 @@ fun BasicConfirmButton(
         Text(
             text = text,
             style = MaterialTheme.typography.titleMedium,
-            fontSize = 20.sp,
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

@@ -76,7 +76,7 @@ fun AiChatScreen(
     val isLoading by aiChatViewModel.isLoading.collectAsState()
     val chatStarted by aiChatViewModel.charStarted.collectAsState()
     val listState = rememberLazyListState()
-    val visibleMessages = if (chatHistory.size > 2) chatHistory.drop(2) else emptyList()
+    val visibleMessages = if (chatHistory.size > 1) chatHistory.drop(1) else emptyList()
 
     var message by remember { mutableStateOf(introMessage ?: "") }
 
@@ -173,10 +173,9 @@ fun CloseButton(
         ) {
             Text(
                 text = stringResource(R.string.ai_chat_clear),
-                style = MaterialTheme.typography.titleMedium.copy(
+                style = MaterialTheme.typography.titleSmall.copy(
                     textDecoration = TextDecoration.Underline
                 ),
-                fontSize = 16.sp,
                 textAlign = TextAlign.End,
                 color = DarkBlue
             )
