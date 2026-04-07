@@ -3,11 +3,9 @@ package com.example.hotbedagrocontrolapp.data.service.aiService
 import android.util.Log
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatMessage
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatRequest
-import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatResponse
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiGenerateRequest
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiGenerateResponse
 import com.example.hotbedagrocontrolapp.domain.viewModel.ai.AiChatViewModel
-import com.example.hotbedagrocontrolapp.presentation.AiChatScreen
 import javax.inject.Inject
 
 class AiManager @Inject constructor(
@@ -31,7 +29,10 @@ class AiManager @Inject constructor(
     suspend fun sendUserMessage(
         history: List<AiChatMessage>,
     ): List<AiChatMessage> {
-        Log.d(AiChatViewModel.AI_TAG, "Content: $history")
+        Log.d(
+            AiChatViewModel.AI_TAG,
+            "Sending chat request. model=$DEFAULT_MODEL, messages=${history.size}"
+        )
         val response = aiUserApi.chat(
             AiChatRequest(
                 model = DEFAULT_MODEL,
@@ -39,11 +40,16 @@ class AiManager @Inject constructor(
                 stream = false
             )
         )
+        Log.d(
+            AiChatViewModel.AI_TAG,
+            "Chat response received. done=${response.done}, reason=${response.doneReason}, role=${response.message.role}"
+        )
         return history + response.message
     }
 
     companion object {
-        const val DEFAULT_MODEL = "gemma2:latest"
+        const val DEFAULT_MODEL = "qwen3:1.7b"
         const val ROLE_USER = "user"
+        const val ROLE_ASSISTANT = "assistant"
     }
 }

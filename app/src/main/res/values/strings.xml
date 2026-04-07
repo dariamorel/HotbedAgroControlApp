@@ -48,6 +48,8 @@
     <string name="choose_optimal_values_in_chat">Подобрать параметры в чате</string>
     <string name="values_in_red_zone_ai_message">Как видно, значение %1$s сильно ниже, чем должно быть. Что можно сделать, чтобы вернуть их к оптимальному значению, учитывая текущие значения датчиков?</string>
     <string name="choose_optimal_values_ai_message">Помоги выбрать оптимальные параметры для моего растения. Если я не укажу вид растения, то попроси меня это сделать.</string>
+    <string name="ai_chat_timeout_error">Модель слишком долго не отвечает. Попробуй повторить запрос чуть позже.</string>
+    <string name="ai_chat_request_error">Не удалось получить ответ от модели. Проверь соединение и доступность сервера.</string>
 
     <!-- Warning -->
     <string name="values_in_red_zone">"Сильное отклонение от оптимальных значений у датчиков:\n- %1$s</string>

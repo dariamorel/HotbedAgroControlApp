@@ -2,11 +2,11 @@ package com.example.hotbedagrocontrolapp.domain.viewModel.ai
 
 import android.app.Application
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.data.service.aiService.AiManager
+import com.example.hotbedagrocontrolapp.data.service.aiService.AiManager.Companion.ROLE_ASSISTANT
 import com.example.hotbedagrocontrolapp.data.service.aiService.AiManager.Companion.ROLE_USER
 import com.example.hotbedagrocontrolapp.data.service.aiService.entities.AiChatMessage
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Control
@@ -18,8 +18,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import javax.inject.Inject
-import kotlin.collections.plus
 
 @HiltViewModel
 class AiChatViewModel @Inject constructor(
@@ -74,16 +74,30 @@ class AiChatViewModel @Inject constructor(
                 content = message
             )
 
-            val updatedHistory = aiManager.sendUserMessage(
-                history = _chatHistory.value,
-            )
+            val historyBeforeRequest = _chatHistory.value
+            Log.d(AI_TAG, "Calling aiManager.sendUserMessage()...")
+            val updatedHistory = withTimeout(CHAT_TIMEOUT_MS) {
+                aiManager.sendUserMessage(
+                    history = historyBeforeRequest,
+                )
+            }
+            Log.d(AI_TAG, "aiManager.sendUserMessage() finished successfully.")
 
             _chatHistory.value = updatedHistory
             Log.d(AI_TAG, "Got answer! Updated history: ${_chatHistory.value.joinToString("\n")}")
         } catch (e: Exception) {
-            Log.d(AI_TAG, "Error while getting answer: ${e.message}.")
+            Log.e(AI_TAG, "Error while getting answer.", e)
+            val errorText = if (e is kotlinx.coroutines.TimeoutCancellationException) {
+                application.getString(R.string.ai_chat_timeout_error)
+            } else {
+                application.getString(R.string.ai_chat_request_error)
+            }
+            _chatHistory.value = _chatHistory.value + AiChatMessage(
+                role = ROLE_ASSISTANT,
+                content = errorText
+            )
         } finally {
-            Log.d(AI_TAG, "Loading stoped")
+            Log.d(AI_TAG, "Loading stopped")
             _isLoading.value = false
         }
     }
@@ -119,5 +133,6 @@ class AiChatViewModel @Inject constructor(
 
     companion object {
         const val AI_TAG = "AIChat"
+        private const val CHAT_TIMEOUT_MS = 90_000L
     }
 }
