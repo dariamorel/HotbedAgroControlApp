@@ -1,8 +1,10 @@
 package com.example.hotbedagrocontrolapp.presentation.components.basicComponents
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -68,12 +70,19 @@ fun BasicDropDownButton(
         }
 
         if (isOpened) {
-            Text(
-                text = body,
-                style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Start,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(MaterialTheme.colorScheme.surface)
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = body,
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Start,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
         }
     }
 }

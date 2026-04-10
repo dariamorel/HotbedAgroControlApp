@@ -84,7 +84,10 @@ fun SwitchElement(
         ) {
             options.forEach {
                 DropdownMenuItem(
-                    text = { Text(text = it.elementName) },
+                    text = { Text(
+                        text = it.elementName,
+                        style = MaterialTheme.typography.titleSmall
+                    ) },
                     onClick = {
                         selectedText = it.elementName
                         expanded = false

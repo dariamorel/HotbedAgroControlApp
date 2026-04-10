@@ -37,10 +37,12 @@ fun EventLogScreen(
     val values by viewModel.getDataHistory(control, dateTime).collectAsState()
     var historyReady by remember { mutableStateOf(false) }
 
-    LaunchedEffect(control, dateTime) {
-        historyReady = false
+    LaunchedEffect(Unit) {
         viewModel.updateDataBase(control, dateTime)
-        historyReady = true
+    }
+
+    LaunchedEffect(control, dateTime) {
+        viewModel.updateDataBase(control, dateTime)
     }
 
     Column(
@@ -67,7 +69,7 @@ fun EventLogScreen(
         }
 
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             values.forEach { (localDateTime, response) ->
                 item {

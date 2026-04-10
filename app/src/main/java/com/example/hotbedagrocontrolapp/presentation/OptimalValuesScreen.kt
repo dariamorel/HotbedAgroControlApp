@@ -6,10 +6,15 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,6 +27,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -79,13 +87,15 @@ fun OptimalValuesScreen(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Row(
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.Start
         ) {
             BasicBackArrow(Modifier) { onBack() }
+            Spacer((Modifier.size(4.dp)))
             Text(
                 text = stringResource(R.string.optimal_values),
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -116,75 +126,138 @@ fun OptimalValuesScreen(
                     horizontalAlignment = Alignment.Start,
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(
-                        text = stringResource(R.string.air_humidity_opt),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Left,
-                        color = MaterialTheme.colorScheme.onPrimary
+                    OutlinedTextField(
+                        value = airHumidityOpt,
+                        textStyle = MaterialTheme.typography.bodySmall,
+                        onValueChange = { newAirHumidity ->
+                            airHumidityOpt = newAirHumidity
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(
+                            text = stringResource(R.string.air_humidity_opt),
+                            style = MaterialTheme.typography.bodySmall
+                        ) },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        )
                     )
-                    BasicTextField(airHumidityOpt) { newAirHumidityOpt ->
-                        airHumidityOpt = newAirHumidityOpt
-                    }
 
-                    Text(
-                        text = stringResource(R.string.air_temperature_opt),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Left,
-                        color = MaterialTheme.colorScheme.onPrimary
+                    OutlinedTextField(
+                        value = airTemperatureOpt,
+                        textStyle = MaterialTheme.typography.bodySmall,
+                        onValueChange = { newAirTemperature ->
+                            airTemperatureOpt = newAirTemperature
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(
+                            text = stringResource(R.string.air_temperature_opt),
+                            style = MaterialTheme.typography.bodySmall
+                        ) },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        )
                     )
-                    BasicTextField(airTemperatureOpt) { newAirTemperatureOpt ->
-                        airTemperatureOpt = newAirTemperatureOpt
-                    }
 
-                    Text(
-                        text = stringResource(R.string.fluid_temperature_opt),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Left,
-                        color = MaterialTheme.colorScheme.onPrimary
+                    OutlinedTextField(
+                        value = fluidTemperatureOpt,
+                        textStyle = MaterialTheme.typography.bodySmall,
+                        onValueChange = { newFluidTemperature ->
+                            fluidTemperatureOpt = newFluidTemperature
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(
+                            text = stringResource(R.string.fluid_temperature_opt),
+                            style = MaterialTheme.typography.bodySmall
+                        ) },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        )
                     )
-                    BasicTextField(fluidTemperatureOpt) { newFluidTemperatureOpt ->
-                        fluidTemperatureOpt = newFluidTemperatureOpt
-                    }
 
-                    Text(
-                        text = stringResource(R.string.fluid_level_opt),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Left,
-                        color = MaterialTheme.colorScheme.onPrimary
+                    OutlinedTextField(
+                        value = fluidLevelOpt,
+                        textStyle = MaterialTheme.typography.bodySmall,
+                        onValueChange = { newFluidLevel ->
+                            fluidLevelOpt = newFluidLevel
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(
+                            text = stringResource(R.string.fluid_level_opt),
+                            style = MaterialTheme.typography.bodySmall
+                        ) },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        )
                     )
-                    BasicTextField(fluidLevelOpt) { newFluidLevelOpt ->
-                        fluidLevelOpt = newFluidLevelOpt
-                    }
 
-                    Text(
-                        text = stringResource(R.string.ec_opt),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Left,
-                        color = MaterialTheme.colorScheme.onPrimary
+                    OutlinedTextField(
+                        value = ecOpt,
+                        textStyle = MaterialTheme.typography.bodySmall,
+                        onValueChange = { newEc ->
+                            ecOpt = newEc
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(
+                            text = stringResource(R.string.ec_opt),
+                            style = MaterialTheme.typography.bodySmall
+                        ) },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        )
                     )
-                    BasicTextField(ecOpt) { newEcOpt ->
-                        ecOpt = newEcOpt
-                    }
 
-                    Text(
-                        text = stringResource(R.string.lux_opt),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Left,
-                        color = MaterialTheme.colorScheme.onPrimary
+                    OutlinedTextField(
+                        value = luxOpt,
+                        textStyle = MaterialTheme.typography.bodySmall,
+                        onValueChange = { newLux ->
+                            luxOpt = newLux
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(
+                            text = stringResource(R.string.lux_opt),
+                            style = MaterialTheme.typography.bodySmall
+                        ) },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        )
                     )
-                    BasicTextField(luxOpt) { newLuxOpt ->
-                        luxOpt = newLuxOpt
-                    }
 
-                    Text(
-                        text = stringResource(R.string.ph_opt),
-                        style = MaterialTheme.typography.titleMedium,
-                        textAlign = TextAlign.Left,
-                        color = MaterialTheme.colorScheme.onPrimary
+                    OutlinedTextField(
+                        value = phOpt,
+                        textStyle = MaterialTheme.typography.bodySmall,
+                        onValueChange = { newPh ->
+                            phOpt = newPh
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        label = { Text(
+                            text = stringResource(R.string.ph_opt),
+                            style = MaterialTheme.typography.bodySmall
+                        ) },
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next
+                        )
                     )
-                    BasicTextField(phOpt) { newPhOpt ->
-                        phOpt = newPhOpt
-                    }
                 }
             }
 

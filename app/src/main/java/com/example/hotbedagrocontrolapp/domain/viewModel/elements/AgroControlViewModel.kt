@@ -18,12 +18,14 @@ import com.example.hotbedagrocontrolapp.domain.interfaces.entities.elements.Elem
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Response
 import com.example.hotbedagrocontrolapp.domain.entities.elements.Sensor
 import com.example.hotbedagrocontrolapp.domain.entities.elements.SensorResponse
+import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 /**
@@ -38,6 +40,7 @@ class AgroControlViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager,
     private val mqttClient: MqttClient,
     private val dataRepository: DataServiceManager,
+    private val dataServiceManager: DataServiceManager,
     @ApplicationContext private val ctx: Context
 ) : ViewModel() {
     private val _currentData = MutableStateFlow<MutableMap<Element, Response>>(mutableMapOf())
@@ -45,6 +48,9 @@ class AgroControlViewModel @Inject constructor(
 
     private val _isConnected = MutableStateFlow(false)
     val isConnected = _isConnected.asStateFlow()
+
+    private val _connectionError = MutableStateFlow(false)
+    val connectionError = _connectionError.asStateFlow()
 
     private val prefs = ctx.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
@@ -76,8 +82,10 @@ class AgroControlViewModel @Inject constructor(
             try {
                 mqttClient.connect(::onMessageReceived) { _isConnected.value = false }
                 _isConnected.value = true
+                _connectionError.value = false
                 Log.d(MqttClient.Companion.CLIENT_TAG, "Connected!")
             } catch (e: Exception) {
+                _connectionError.value = true
                 Log.e(MqttClient.Companion.CLIENT_TAG, "Connection error: ${e.message}")
             }
         }
@@ -165,6 +173,11 @@ class AgroControlViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 mqttClient.publish(control.topic, status.message)
+                dataServiceManager.getDataHistory(
+                    control,
+                    LocalDateTime.now(),
+                    AnaliseType.DAY
+                )
             } catch (e: Exception) {
                 Log.e(MqttClient.Companion.CLIENT_TAG, "Error while publishing data: ${e.message}.")
             }

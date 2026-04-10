@@ -21,9 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.example.hotbedagrocontrolapp.R
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.AnaliseType
 import com.example.hotbedagrocontrolapp.domain.entities.statistics.DateTime
 import java.time.Instant
@@ -90,7 +92,7 @@ fun ChooseDateTimeWheel(
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(onClick = onDismissRequest) {
-                    Text("Отмена", color = MaterialTheme.colorScheme.onSurface)
+                    Text(stringResource(R.string.cancel), color = MaterialTheme.colorScheme.onSurface)
                 }
                 TextButton(
                     onClick = {

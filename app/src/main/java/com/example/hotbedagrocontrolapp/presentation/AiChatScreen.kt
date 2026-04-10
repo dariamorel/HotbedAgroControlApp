@@ -79,6 +79,7 @@ fun AiChatScreen(
     val visibleMessages = if (chatHistory.size > 1) chatHistory.drop(1) else emptyList()
 
     var message by remember { mutableStateOf(introMessage ?: "") }
+    val introMessage = stringResource(R.string.ai_chat_intro_message)
 
     LaunchedEffect(chatStarted) {
         if (!chatStarted) {
@@ -118,6 +119,9 @@ fun AiChatScreen(
                 state = listState,
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                item {
+                    ChatFrame(introMessage, false)
+                }
                 items(visibleMessages) { item ->
                     val isUser = item.role == "user"
                     ChatFrame(item.content, isUser)

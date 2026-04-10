@@ -31,7 +31,7 @@ fun Event(
     modifier: Modifier = Modifier
 ) {
     Column(modifier.fillMaxWidth()
-        .clip(RoundedCornerShape(20.dp))
+        .clip(RoundedCornerShape(10.dp))
         .background(MaterialTheme.colorScheme.surface)
         .padding(16.dp)
     ) {

@@ -14,10 +14,10 @@ object AiClient {
     }
 
     private val okHttp = OkHttpClient.Builder()
-        .connectTimeout(15, TimeUnit.SECONDS)
-        .readTimeout(90, TimeUnit.SECONDS)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(120, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
-        .callTimeout(100, TimeUnit.SECONDS)
+        .callTimeout(180, TimeUnit.SECONDS)
         .addInterceptor(logging)
         .build()
 

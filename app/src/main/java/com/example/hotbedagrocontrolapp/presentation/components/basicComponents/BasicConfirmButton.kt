@@ -20,12 +20,12 @@ import com.example.hotbedagrocontrolapp.ui.theme.LightGreen
 fun BasicConfirmButton(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.primaryContainer,
+    color: Color = MaterialTheme.colorScheme.surface,
     onClick: () -> Unit
 ) {
     Button(
         onClick = { onClick() },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(30.dp)),
         colors = ButtonDefaults.buttonColors(containerColor = color)

@@ -54,11 +54,6 @@ fun DevicesScreen(
     viewModel: AgroControlViewModel,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
-    val deviceDeletedMessage = stringResource(R.string.device_successfully_deleted)
-
-    val isDeviceAdded by viewModel.isDeviceAdded.collectAsState()
-    var isCheckBoxOpened by remember { mutableStateOf(false) }
     val backScreen = Screens.DEVICES.title
 
     Column(
@@ -77,90 +72,6 @@ fun DevicesScreen(
             text = stringResource(R.string.optimal_values),
         ) {
             navController.navigate("${Screens.OPTIMAL_VALUES.title}/$backScreen")
-        }
-        if (isDeviceAdded) {
-            Spacer(Modifier.weight(1f))
-            Box(
-                contentAlignment = Alignment.BottomCenter
-            ) {
-                BasicConfirmButton(
-                    text = stringResource(R.string.delete_device),
-                ) {
-                    isCheckBoxOpened = true
-                }
-                if (isCheckBoxOpened) {
-                    CheckBox(
-                        onClickNo = { isCheckBoxOpened = false },
-                        onClickYes = {
-                            viewModel.deleteDevice()
-                            Toast.makeText(context, deviceDeletedMessage, Toast.LENGTH_SHORT).show()
-                            isCheckBoxOpened = false
-                        }
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun CheckBox(
-    modifier: Modifier = Modifier,
-    onClickYes: () -> Unit = {},
-    onClickNo: () -> Unit = {}
-) {
-    Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(R.string.if_delete_device),
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(40.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(DarkRed)
-                    .clickable { onClickNo() }
-                    .padding(4.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.no),
-                    style = MaterialTheme.typography.titleSmall,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(40.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(Color.LightGray)
-                    .clickable { onClickYes() }
-                    .padding(8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.yes),
-                    style = MaterialTheme.typography.titleSmall,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
         }
     }
 }
