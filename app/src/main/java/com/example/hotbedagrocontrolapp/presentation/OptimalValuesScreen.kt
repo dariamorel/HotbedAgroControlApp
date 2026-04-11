@@ -82,7 +82,9 @@ fun OptimalValuesScreen(
     val backScreen = Screens.OPTIMAL_VALUES.title
 
     Column(
-        modifier = modifier.fillMaxWidth().padding(16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -263,7 +265,7 @@ fun OptimalValuesScreen(
 
         }
         BasicConfirmButton(
-            text = stringResource(R.string.update_parameters),
+            text = stringResource(R.string.update_values),
         ) {
             viewModel.saveOptimalValues(
                 mapOf(

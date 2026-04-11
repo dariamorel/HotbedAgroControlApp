@@ -38,7 +38,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AgroControlViewModel @Inject constructor(
     private val dataBaseManager: DataBaseManager,
-    private val mqttClient: MqttClient,
     private val dataRepository: DataServiceManager,
     private val dataServiceManager: DataServiceManager,
     @ApplicationContext private val ctx: Context
@@ -54,10 +53,11 @@ class AgroControlViewModel @Inject constructor(
 
     private val prefs = ctx.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
-    private val _isDeviceAdded = MutableStateFlow(prefs.getString("ip_address", null) != null)
+    private val _isDeviceAdded = MutableStateFlow(hasSavedMqttSettings())
     val isDeviceAdded = _isDeviceAdded.asStateFlow()
     private val _optimalValues = MutableStateFlow(loadOptimalValues())
     val optimalValues = _optimalValues.asStateFlow()
+    private var currentMqttClient: MqttClient? = null
 
     val mqttSettings: MqttSettings
         get() = MqttSettings(
@@ -70,24 +70,44 @@ class AgroControlViewModel @Inject constructor(
 
     init {
         if (_isDeviceAdded.value) {
-            connect()
+            viewModelScope.launch(Dispatchers.IO) {
+                connect(mqttSettings)
+            }
         }
     }
 
     /**
      * Подключиться к устройству по Mqtt.
      */
-    private fun connect() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                mqttClient.connect(::onMessageReceived) { _isConnected.value = false }
-                _isConnected.value = true
-                _connectionError.value = false
-                Log.d(MqttClient.Companion.CLIENT_TAG, "Connected!")
-            } catch (e: Exception) {
-                _connectionError.value = true
-                Log.e(MqttClient.Companion.CLIENT_TAG, "Connection error: ${e.message}")
+    private suspend fun connect(settings: MqttSettings): Boolean {
+        try {
+            currentMqttClient?.disconnect()
+        } catch (_: Exception) {
+        }
+
+        val mqttClient = MqttClient(
+            settings.ipAddress,
+            settings.mainTopic,
+            settings.userName,
+            settings.password,
+            settings.port
+        )
+
+        return try {
+            mqttClient.connect(::onMessageReceived) {
+                _isConnected.value = false
             }
+            currentMqttClient = mqttClient
+            _isConnected.value = true
+            _connectionError.value = false
+            Log.d(MqttClient.Companion.CLIENT_TAG, "Connected!")
+            true
+        } catch (e: Exception) {
+            currentMqttClient = null
+            _isConnected.value = false
+            _connectionError.value = true
+            Log.e(MqttClient.Companion.CLIENT_TAG, "Connection error: ${e.message}")
+            false
         }
     }
 
@@ -101,26 +121,26 @@ class AgroControlViewModel @Inject constructor(
      */
     fun addDevice(ipAddress: String, mainTopic: String, userName: String, password: String, port: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                dataRepository.deleteUser()
-            } catch (e: Exception) {
-                Log.e(DataServiceClient.DATA_SERVICE_TAG, "Error while deleting user: ${e.message}.")
+            removeConnectionError()
+
+            val settings = MqttSettings(
+                ipAddress = ipAddress,
+                mainTopic = mainTopic,
+                userName = userName,
+                password = password,
+                port = port
+            )
+
+            val isConnected = connect(settings)
+            if (!isConnected) {
+                _isDeviceAdded.value = false
+                return@launch
             }
-            prefs.edit {
-                clear()
-            }
-            _optimalValues.value = loadOptimalValues()
-            disconnect()
-            prefs.edit {
-                putString("ip_address", ipAddress)
-                putString("main_topic", mainTopic)
-                putString("user_name", userName)
-                putString("password", password)
-                putString("port", port)
-            }
+
+            saveMqttSettings(settings)
             _isDeviceAdded.value = true
             Log.d(MqttClient.Companion.CLIENT_TAG, "Device was added!")
-            connect()
+
             try {
                 dataRepository.createUser(ipAddress, mainTopic, userName, password, port.toInt())
             } catch (e: Exception) {
@@ -134,6 +154,7 @@ class AgroControlViewModel @Inject constructor(
      */
     fun deleteDevice() {
         viewModelScope.launch(Dispatchers.IO) {
+            disconnect()
             try {
                 dataRepository.deleteUser()
             } catch (e: Exception) {
@@ -142,10 +163,11 @@ class AgroControlViewModel @Inject constructor(
             prefs.edit {
                 clear()
             }
+            _currentData.value = mutableMapOf()
             _optimalValues.value = loadOptimalValues()
             _isDeviceAdded.value = false
+            _connectionError.value = false
             Log.d(MqttClient.Companion.CLIENT_TAG, "Device was deleted!")
-            disconnect()
         }
     }
 
@@ -172,7 +194,7 @@ class AgroControlViewModel @Inject constructor(
     fun publish(control: Control, status: ControlResponse.Status) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                mqttClient.publish(control.topic, status.message)
+                currentMqttClient?.publish(control.topic, status.message)
                 dataServiceManager.getDataHistory(
                     control,
                     LocalDateTime.now(),
@@ -256,21 +278,44 @@ class AgroControlViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        disconnect()
+        viewModelScope.launch(Dispatchers.IO) {
+            disconnect()
+        }
     }
 
     /**
      * Отсоединиться от Mosquitto.
      */
-    fun disconnect() {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                mqttClient.disconnect()
-                _isConnected.value = false
-                Log.d(MqttClient.Companion.CLIENT_TAG, "Disconnected!")
-            } catch (e: Exception) {
-                Log.e(MqttClient.Companion.CLIENT_TAG, "Disconnection error: ${e.message}")
-            }
+    suspend fun disconnect() {
+        try {
+            currentMqttClient?.disconnect()
+            currentMqttClient = null
+            _isConnected.value = false
+            Log.d(MqttClient.Companion.CLIENT_TAG, "Disconnected!")
+        } catch (e: Exception) {
+            Log.e(MqttClient.Companion.CLIENT_TAG, "Disconnection error: ${e.message}")
+        }
+    }
+
+    fun removeConnectionError() {
+        _connectionError.value = false
+    }
+
+    private fun hasSavedMqttSettings(): Boolean {
+        return mqttSettings.ipAddress.isNotBlank() &&
+                mqttSettings.mainTopic.isNotBlank() &&
+                mqttSettings.userName.isNotBlank() &&
+                mqttSettings.password.isNotBlank() &&
+                mqttSettings.port.isNotBlank()
+    }
+
+    private fun saveMqttSettings(settings: MqttSettings) {
+        prefs.edit {
+            putString("ip_address", settings.ipAddress)
+            putString("main_topic", settings.mainTopic)
+            putString("user_name", settings.userName)
+            putString("password", settings.password)
+            putString("port", settings.port)
         }
     }
 

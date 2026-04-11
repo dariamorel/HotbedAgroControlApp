@@ -40,6 +40,7 @@ class DataServiceManager @Inject constructor(
             )
         )
         prefs.edit {
+            Log.d(DataServiceClient.DATA_SERVICE_TAG, "User id: ${userResponse.id}")
             putLong("user_id", userResponse.id)
         }
     }

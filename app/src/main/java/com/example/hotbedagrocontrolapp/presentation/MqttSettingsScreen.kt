@@ -87,11 +87,20 @@ fun MqttSettingsScreen(
     var isCheckBoxOpened by remember { mutableStateOf(false) }
     val connectionError by viewModel.connectionError.collectAsState()
     val isConnected by viewModel.isConnected.collectAsState()
+    val isDeviceAdded by viewModel.isDeviceAdded.collectAsState()
     var showToast by remember { mutableStateOf(false) }
 
+    val readOnly = isDeviceAdded
+
     LaunchedEffect(connectionError) {
-        if (connectionError) {
+        if (connectionError && showToast) {
             Toast.makeText(context, connectionErrorMessage, Toast.LENGTH_SHORT).show()
+            viewModel.removeConnectionError()
+            ipAddress = ""
+            topic = ""
+            userName = ""
+            password = ""
+            port = ""
         }
     }
 
@@ -161,6 +170,7 @@ fun MqttSettingsScreen(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     },
+                    readOnly = readOnly
                 )
             }
             item {
@@ -190,6 +200,7 @@ fun MqttSettingsScreen(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     },
+                    readOnly = readOnly
                 )
             }
             item {
@@ -219,6 +230,7 @@ fun MqttSettingsScreen(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     },
+                    readOnly = readOnly
                 )
             }
             item {
@@ -248,6 +260,7 @@ fun MqttSettingsScreen(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     },
+                    readOnly = readOnly
                 )
             }
             item {
@@ -277,57 +290,61 @@ fun MqttSettingsScreen(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     },
+                    readOnly = readOnly
                 )
             }
         }
-        BasicConfirmButton(
-            text = stringResource(R.string.update_parameters),
-        ) {
-            if (ipAddress.isBlank()) {
-                showIpAddressError = true
-            }
-            if (topic.isBlank()) {
-                showTopicError = true
-            }
-            if (userName.isBlank()) {
-                showUserNameError = true
-            }
-            if (password.isBlank()) {
-                showPasswordError = true
-            }
-            if (port.isBlank()) {
-                showPortError = true
-            }
-            if (!showIpAddressError && !showTopicError && !showUserNameError && !showPasswordError && !showPortError) {
-                viewModel.addDevice(ipAddress, topic, userName, password, port)
-                showToast = true
-            }
-        }
-
-        Box(
-            contentAlignment = Alignment.TopCenter
-        ) {
+        if (!isDeviceAdded) {
             BasicConfirmButton(
-                text = stringResource(R.string.delete_device),
-                color = DarkRed
+                text = stringResource(R.string.update_parameters),
             ) {
-                isCheckBoxOpened = true
+                if (ipAddress.isBlank()) {
+                    showIpAddressError = true
+                }
+                if (topic.isBlank()) {
+                    showTopicError = true
+                }
+                if (userName.isBlank()) {
+                    showUserNameError = true
+                }
+                if (password.isBlank()) {
+                    showPasswordError = true
+                }
+                if (port.isBlank()) {
+                    showPortError = true
+                }
+                if (!showIpAddressError && !showTopicError && !showUserNameError && !showPasswordError && !showPortError) {
+                    viewModel.addDevice(ipAddress, topic, userName, password, port)
+                    showToast = true
+                }
             }
-            if (isCheckBoxOpened) {
-                CheckBox(
-                    onClickNo = { isCheckBoxOpened = false },
-                    onClickYes = {
-                        viewModel.deleteDevice()
-                        Toast.makeText(context, deviceDeletedMessage, Toast.LENGTH_SHORT)
-                            .show()
-                        isCheckBoxOpened = false
-                        ipAddress = ""
-                        topic = ""
-                        userName = ""
-                        password = ""
-                        port = ""
-                    }
-                )
+        } else {
+
+            Box(
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                BasicConfirmButton(
+                    text = stringResource(R.string.delete_device),
+                    color = DarkRed
+                ) {
+                    isCheckBoxOpened = true
+                }
+                if (isCheckBoxOpened) {
+                    CheckBox(
+                        onClickNo = { isCheckBoxOpened = false },
+                        onClickYes = {
+                            viewModel.deleteDevice()
+                            Toast.makeText(context, deviceDeletedMessage, Toast.LENGTH_SHORT)
+                                .show()
+                            isCheckBoxOpened = false
+                            ipAddress = ""
+                            topic = ""
+                            userName = ""
+                            password = ""
+                            port = ""
+                        }
+                    )
+                }
             }
         }
     }

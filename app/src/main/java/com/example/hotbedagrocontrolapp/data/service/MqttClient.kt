@@ -58,7 +58,7 @@ class MqttClient(
             ) {
                 val topicString = topic.toString()
                 val messageString = message.toString()
-                Log.e(CLIENT_TAG, "Message received: $topicString, $messageString.")
+                Log.d(CLIENT_TAG, "Message received: $topicString, $messageString.")
                 if (topicString.isEmpty()) {
                     Log.e(CLIENT_TAG, "Received topic is null or empty.")
                     return
