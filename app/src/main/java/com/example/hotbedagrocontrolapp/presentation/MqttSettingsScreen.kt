@@ -18,6 +18,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -34,11 +37,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hotbedagrocontrolapp.R
@@ -49,6 +54,7 @@ import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTextField
 import com.example.hotbedagrocontrolapp.presentation.components.basicComponents.BasicTitle
 import com.example.hotbedagrocontrolapp.ui.theme.DarkBlue
+import com.example.hotbedagrocontrolapp.ui.theme.DarkGreen
 import com.example.hotbedagrocontrolapp.ui.theme.DarkRed
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -91,16 +97,18 @@ fun MqttSettingsScreen(
     var showToast by remember { mutableStateOf(false) }
 
     val readOnly = isDeviceAdded
+    val density = LocalDensity.current
+    val iconSize = with(density) { MaterialTheme.typography.bodySmall.fontSize.toDp() }
 
     LaunchedEffect(connectionError) {
         if (connectionError && showToast) {
             Toast.makeText(context, connectionErrorMessage, Toast.LENGTH_SHORT).show()
             viewModel.removeConnectionError()
-            ipAddress = ""
-            topic = ""
-            userName = ""
-            password = ""
-            port = ""
+            showIpAddressError = true
+            showTopicError = true
+            showUserNameError = true
+            showPasswordError = true
+            showPortError = true
         }
     }
 
@@ -142,6 +150,16 @@ fun MqttSettingsScreen(
                     body = stringResource(R.string.what_is_mqtt),
                     modifier = Modifier.align(Alignment.Start)
                 )
+            }
+            item {
+                if (isDeviceAdded) {
+                    Text(
+                        text = "✅ " + stringResource(R.string.connection_got),
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Start
+                    )
+                }
             }
             item {
                 OutlinedTextField(
@@ -260,7 +278,7 @@ fun MqttSettingsScreen(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
                     },
-                    readOnly = readOnly
+                    readOnly = readOnly,
                 )
             }
             item {

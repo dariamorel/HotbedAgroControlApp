@@ -48,7 +48,7 @@ class AiManager @Inject constructor(
     }
 
     companion object {
-        const val DEFAULT_MODEL = "qwen3:1.7b"
+        const val DEFAULT_MODEL = "gemma2:stable"
         const val ROLE_USER = "user"
         const val ROLE_ASSISTANT = "assistant"
     }
