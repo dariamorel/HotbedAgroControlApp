@@ -44,7 +44,9 @@ fun ElementsScreen(
     modifier: Modifier = Modifier
 ) {
     val currentData by viewModel.currentData.collectAsState()
+
     val isConnected by viewModel.isConnected.collectAsState()
+
     val optimalValues by viewModel.optimalValues.collectAsState()
 
     Column(modifier = modifier.fillMaxWidth()

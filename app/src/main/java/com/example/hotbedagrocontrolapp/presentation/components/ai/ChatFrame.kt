@@ -51,7 +51,7 @@ fun ChatFrame(text: String, isUserMessage: Boolean, modifier: Modifier = Modifie
                 .padding(horizontal = 14.dp, vertical = 10.dp)
         ) {
             Text(
-                text = text,
+                text = text.trim(),
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodySmall
             )
